@@ -21,6 +21,7 @@ public abstract class CharacterMove : MonoBehaviour {
 
     protected virtual void Start() {
         rbody = GetComponent<Rigidbody2D>();
+        damageable = GetComponent<Damageable>();
     }
 
     protected virtual void Update()
@@ -86,7 +87,7 @@ public abstract class CharacterMove : MonoBehaviour {
             if (current.xPosition == xDest && current.yPosition == yDest) { 
                 Debug.Log("Found destination!");
                 while (current.previous != null) {
-                    path.Push(GameManager.GetWorldSpace(current.xPosition, current.yPosition)); // add current position to the stack
+                    path.Push(new Vector2(current.xPosition, current.yPosition)); // add current position to the stack
                     current = current.previous; // backtrack to previous position, this means the first object in stack is the starting point
                     yield return null;
                 }
@@ -97,7 +98,10 @@ public abstract class CharacterMove : MonoBehaviour {
             foreach (Vector2 dir in dirs) {
                 int newX = current.xPosition + Mathf.RoundToInt(dir.x);
                 int newY = current.yPosition + Mathf.RoundToInt(dir.y);
-                if (GameManager.Instance.grid[newX, newY] != null || beenThere.Contains(new Vector2(newX, newY))) { continue; } // skip this location if it's blocked or we've been there
+
+                if (newX >= GameManager.Instance.mapWidth || newX < 0 || 
+                    newY >= GameManager.Instance.mapHeight || newY < 0 ||
+                    GameManager.Instance.grid[newX, newY] != null || beenThere.Contains(new Vector2(newX, newY))) { continue; } // skip this location if it's blocked or we've been there
 
                 Vertex newVertex = Vertex.GenerateVertex(toBeVisited, newX, newY);
                 newVertex.xPosition = newX;
@@ -139,13 +143,13 @@ public abstract class CharacterMove : MonoBehaviour {
             // current = Vertex.GetSmallestDistanceScore(toBeVisited);
             current = toBeVisited[0];
             toBeVisited.Remove(current);
-            beenThere.Add(current.position);
+            beenThere.Add(new Vector2(current.xPosition, current.yPosition));
 
             // you've found a new position
             if (current.distanceFromStart == steps) {
                 Debug.Log("Found destination!");
                 while (current.previous != null) {
-                    path.Push(current.position); // add current position to the stack
+                    path.Push(new Vector2(current.xPosition, current.yPosition)); // add current position to the stack
                     current = current.previous; // backtrack to previous position, this means the first object in stack is the starting point
                     yield return null;
                 }
@@ -153,15 +157,28 @@ public abstract class CharacterMove : MonoBehaviour {
             }
 
             // check every direction for possible movement
-            foreach (Vector2 dir in dirs) {
-                Vector2 newLoc = GetRoundedPosition(current.position + dir);
-                bool isObstructed = GameManager.Instance.obstructions.Contains(newLoc); // ignore this direction if path is blocked
-                if (isObstructed || beenThere.Contains(newLoc)) { continue; } // skip this location if it's blocked or we've been there
 
-                Vertex newVertex = Vertex.GenerateVertex(toBeVisited, newLoc);
-                newVertex.position = newLoc;
+            for(int i = 0; i < dirs.Length; i++) {
+                Vector2 temp = dirs[i];
+                int rand = Random.Range(0, dirs.Length);
+                dirs[i] = dirs[rand];
+                dirs[rand] = temp;
+            }
+
+            foreach (Vector2 dir in dirs) {
+                int newX = current.xPosition + Mathf.RoundToInt(dir.x);
+                int newY = current.yPosition + Mathf.RoundToInt(dir.y);
+
+                if (newX >= GameManager.Instance.mapWidth || newX < 0 ||
+                    newY >= GameManager.Instance.mapHeight || newY < 0 ||
+                    GameManager.Instance.grid[newX, newY] != null || beenThere.Contains(new Vector2(newX, newY))) { continue; } // skip this location if it's blocked or we've been there
+
+                Vertex newVertex = Vertex.GenerateVertex(toBeVisited, newX, newY);
+                newVertex.xPosition = newX;
+                newVertex.yPosition = newY;
                 newVertex.manhattanDistanceToDestination = 0;
                 newVertex.distanceFromStart = current.distanceFromStart + 1;
+                newVertex.distanceScore = newVertex.manhattanDistanceToDestination + newVertex.distanceFromStart;
                 newVertex.previous = current;
 
                 if (!toBeVisited.Contains(newVertex)) { toBeVisited.Add(newVertex); }
@@ -175,16 +192,16 @@ public abstract class CharacterMove : MonoBehaviour {
 
     // where we move the character
     protected IEnumerator TravelProcess() {
-
+        Debug.Log("Starting at " + transform.position);
         while (path.Count != 0) {
-            float time = 0f;
-            Vector2 startPos = transform.position;
-            Vector2 dest = path.Peek();
-            while (time < 1f) {
-                time += Time.deltaTime * speed;
-                Vector2 curr = Vector2.Lerp(startPos, dest, time);
-                // transform.up = Vector2.Lerp(transform.up, curr - (Vector2)transform.position, 0.75f);
-                rbody.MovePosition(curr);
+            Vector2 gridDest = path.Peek();
+            int newX = Mathf.RoundToInt(gridDest.x);
+            int newY = Mathf.RoundToInt(gridDest.y);
+            Vector2 currDest = GameManager.GetWorldSpace(newX, newY);
+            damageable.SetPosition(newX, newY); // update current grid position
+            Debug.Log(currDest);
+            while (Vector2.Distance(transform.position, currDest) > 0.1f) {
+                rbody.MovePosition(rbody.position + (currDest - rbody.position).normalized * Time.deltaTime * speed);
                 yield return null;
             }
             path.Pop();
@@ -194,8 +211,7 @@ public abstract class CharacterMove : MonoBehaviour {
     }
 
     // this returns the integer position of the character
-    public static Vector2 GetRoundedPosition(Vector2 position)
-    {
+    public static Vector2 GetRoundedPosition(Vector2 position) {
         return new Vector2(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
     }
 

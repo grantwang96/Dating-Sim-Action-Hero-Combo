@@ -21,7 +21,7 @@ public class CivilianBrain : Brain {
             Debug.Log("No obstacles!");
         }
         Debug.Log(loc);
-        myCharMove.SetDestination(loc);
+        myCharMove.SetDestination(Mathf.RoundToInt(loc.x), Mathf.RoundToInt(loc.y));
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {

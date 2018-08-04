@@ -8,11 +8,14 @@ public class Damageable : MonoBehaviour {
     public int health { get { return _health; } }
 
     // stores the location information for the grid
-    private int xPos; public int XPos { get { return xPos; } }
-    private int yPos; public int YPos { get { return YPos; } }
+    protected int xPos; public int XPos { get { return xPos; } }
+    protected int yPos; public int YPos { get { return yPos; } }
     public void SetPosition(int newX, int newY) { xPos = newX; yPos = newY; }
 
-    private void Start() {
+    protected virtual void Start() {
+        xPos = GameManager.GetGridSpaceX(transform.position.x);
+        yPos = GameManager.GetGridSpaceY(transform.position.y);
+        Debug.Log(xPos + ", " + yPos);
         if(GameManager.Instance != null) {
             GameManager.Instance.grid[xPos, yPos] = this;
         }

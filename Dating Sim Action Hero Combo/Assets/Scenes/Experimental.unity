@@ -1365,9 +1365,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4963ebe076fc8ee41ada4abcd27860c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapWidth: 16
-  _mapHeight: 9
-  obstructions: []
+  _mapWidth: 42
+  _mapHeight: 24
+  entities: []
 --- !u!114 &1188312493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1379,6 +1379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077a16e04ab7e65448a73fc0d0a3107b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyMission: []
+  spawnpoints: []
 --- !u!4 &1239479126 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4342438562630794, guid: f501acabbb544f84987be8a1b8557c4d,
