@@ -9,6 +9,8 @@ public abstract class CharacterMove : MonoBehaviour {
 
     [SerializeField] protected Rigidbody2D rbody;
     protected Stack<Vector2> path = new Stack<Vector2>();
+    private Vector2 _currentDestination;
+    public Vector2 currentDestination { get { return _currentDestination; } }
 
     [SerializeField] protected float _speed;
     public float speed { get { return _speed; } }
@@ -19,13 +21,16 @@ public abstract class CharacterMove : MonoBehaviour {
     [SerializeField] private GameObject markerPrefab;
     private Damageable damageable;
 
-    protected virtual void Start() {
+    protected virtual void Awake() {
         rbody = GetComponent<Rigidbody2D>();
         damageable = GetComponent<Damageable>();
     }
 
-    protected virtual void Update()
-    {
+    protected virtual void Start() {
+
+    }
+
+    protected virtual void Update() {
         
     }
 
@@ -54,9 +59,16 @@ public abstract class CharacterMove : MonoBehaviour {
         _movementRoutine = StartCoroutine(TravelProcess());
     }
 
+    // cancels the current path and current movement
+    public void CancelDestination() {
+        if(movementRoutine != null) { StopCoroutine(_movementRoutine); }
+        path.Clear();
+        _movementRoutine = null;
+    }
+
     // this hard sets the rotation of the character
     public void SetRotation(Vector2 dir) {
-        if (_movementRoutine == null) { transform.up = dir; }
+        transform.up = dir;
     }
 
     // this coroutine will figure out a path for the character
@@ -192,16 +204,14 @@ public abstract class CharacterMove : MonoBehaviour {
 
     // where we move the character
     protected IEnumerator TravelProcess() {
-        Debug.Log("Starting at " + transform.position);
         while (path.Count != 0) {
             Vector2 gridDest = path.Peek();
             int newX = Mathf.RoundToInt(gridDest.x);
             int newY = Mathf.RoundToInt(gridDest.y);
-            Vector2 currDest = GameManager.GetWorldSpace(newX, newY);
+            _currentDestination = GameManager.GetWorldSpace(newX, newY);
             damageable.SetPosition(newX, newY); // update current grid position
-            Debug.Log(currDest);
-            while (Vector2.Distance(transform.position, currDest) > 0.1f) {
-                rbody.MovePosition(rbody.position + (currDest - rbody.position).normalized * Time.deltaTime * speed);
+            while (Vector2.Distance(transform.position, currentDestination) > 0.1f) {
+                rbody.MovePosition(rbody.position + (currentDestination - rbody.position).normalized * Time.deltaTime * speed);
                 yield return null;
             }
             path.Pop();

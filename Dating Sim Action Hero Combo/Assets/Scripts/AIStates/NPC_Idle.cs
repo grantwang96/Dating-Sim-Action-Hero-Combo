@@ -11,13 +11,13 @@ public class NPC_Idle : BrainState {
     private float speed = .5f;
     private float range = 60f;
 
-    public override Vector3 Enter(Brain brain) {
+    public override void Enter(Brain brain) {
         myBrain = brain;
         lookRoutine = myBrain.StartCoroutine(lookAround(brain.transform.eulerAngles.z));
-        return brain.transform.position;
     }
 
     public override void Execute() {
+        base.Execute();
         if(lookRoutine == null) {
             myBrain.ChangeStates(new NPC_Wander());
         }

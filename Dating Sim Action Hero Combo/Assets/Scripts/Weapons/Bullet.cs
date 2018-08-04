@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
+    private Vector2 spawnpoint;
     private float lifeTime;
     public float maxLifeTime;
 
@@ -19,6 +20,7 @@ public class Bullet : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        spawnpoint = transform.position;
         lifeTime = 0f;
 	}
 	
@@ -34,7 +36,7 @@ public class Bullet : MonoBehaviour {
 
         try {
             Damageable dam = collision.transform.GetComponent<Damageable>();
-            dam.TakeDamage(damage);
+            dam.TakeDamage(damage, spawnpoint);
         }
         catch {
             

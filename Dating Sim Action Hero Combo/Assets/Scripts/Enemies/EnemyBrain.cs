@@ -5,14 +5,14 @@ using UnityEngine;
 public class EnemyBrain : Brain{
 
     [SerializeField] protected WeaponType heldWeapon;
-    [SerializeField] private bool canFire = true;
-    [SerializeField] private int _currentClip;
-    [SerializeField] private BulletNoise gunBarrel;
-
-    [SerializeField] private Vector2 targetLastSpotted;
+    [SerializeField] protected bool canFire = true;
+    [SerializeField] protected int _currentClip;
+    [SerializeField] protected BulletNoise gunBarrel;
 
     // Use this for initialization
     protected override void Start () {
+        if (!enemies.Contains(PlayerDamageable.Instance)) { enemies.Add(PlayerDamageable.Instance); }
+
         base.Start();
         _currentClip = heldWeapon.clipCapacity;
 
@@ -24,12 +24,15 @@ public class EnemyBrain : Brain{
         base.Update();
 	}
 
-    protected override void React(Vector2 dir) {
-        myCharMove.SetRotation(dir);
+    public override void React(Transform target) {
+
+    }
+
+    public override void MainAction() {
         FireGun();
     }
-    
-    private void FireGun() {
+
+    protected void FireGun() {
         if (!canFire) { return; }
         if (!heldWeapon) { return; }
 
@@ -44,7 +47,7 @@ public class EnemyBrain : Brain{
         StartCoroutine(WaitToFire(coolDown));
     }
 
-    private IEnumerator WaitToFire(float time) {
+    protected IEnumerator WaitToFire(float time) {
         canFire = false;
         yield return new WaitForSeconds(time);
         canFire = true;

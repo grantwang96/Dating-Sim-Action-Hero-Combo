@@ -8,10 +8,9 @@ public class NPC_Wander : BrainState {
 
     private bool searchingForPath = true;
 
-    public override Vector3 Enter(Brain brain) {
+    public override void Enter(Brain brain) {
 
-        brain.MyCharacterMove.SetDestination(4);
-        return base.Enter(brain);
+        brain.MyCharacterMove.SetDestination(8);
     }
 
     public override void Execute() {

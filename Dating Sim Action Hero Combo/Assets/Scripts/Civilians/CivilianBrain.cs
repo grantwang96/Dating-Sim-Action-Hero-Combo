@@ -10,8 +10,13 @@ public class CivilianBrain : Brain {
         base.Update();
     }
 
-    protected override void React(Vector2 dir) {
+    public override void MainAction() {
+        Debug.Log(name + "Merp");
+    }
+
+    public override void React(Transform target) {
         Debug.Log(transform.name + " is panicked!");
+        Vector2 dir = target.position - transform.position;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, panicRadius);
         Vector2 loc = (Vector2)transform.position + dir * panicRadius;
         try {
@@ -26,7 +31,7 @@ public class CivilianBrain : Brain {
 
     private void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "BulletSound") {
-            React((collider.transform.position - transform.position).normalized);
+            React(collider.transform);
         }
     }
 }

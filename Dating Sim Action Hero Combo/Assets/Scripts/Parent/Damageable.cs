@@ -10,18 +10,21 @@ public class Damageable : MonoBehaviour {
     // stores the location information for the grid
     protected int xPos; public int XPos { get { return xPos; } }
     protected int yPos; public int YPos { get { return yPos; } }
-    public void SetPosition(int newX, int newY) { xPos = newX; yPos = newY; }
+    public void SetPosition(int newX, int newY) {
+        GameManager.Instance.grid[xPos, yPos] = null;
+        xPos = newX;
+        yPos = newY;
+    }
 
     protected virtual void Start() {
         xPos = GameManager.GetGridSpaceX(transform.position.x);
         yPos = GameManager.GetGridSpaceY(transform.position.y);
-        Debug.Log(xPos + ", " + yPos);
         if(GameManager.Instance != null) {
             GameManager.Instance.grid[xPos, yPos] = this;
         }
     }
 
-    public virtual void TakeDamage(int damage) {
+    public virtual void TakeDamage(int damage, Vector2 sourcePoint) {
         _health -= damage;
 
         if(_health <= 0) {

@@ -13,6 +13,8 @@ public abstract class Brain : MonoBehaviour {
     public CharacterMove MyCharacterMove { get { return myCharMove; } }
 
     [SerializeField] protected List<Damageable> enemies = new List<Damageable>();
+    public List<Damageable> Enemies { get { return enemies; } }
+    public Transform currentTarget;
     [SerializeField] protected float rangeOfVision; // the maximum distance this character can see
     [SerializeField] protected float coneOfVision; // the maximum angle away this character can see
 
@@ -23,17 +25,12 @@ public abstract class Brain : MonoBehaviour {
         if (currentState != null) { currentState.Enter(this); }
     }
 
-    // Update is called once per frame
+    // Updat eis called once per frame
     protected virtual void Update() {
         if (currentState != null) { currentState.Execute(); }
-        Transform target = CheckVision(); // check vision for enemies
-        if(target != null) {
-            Damageable dam = target.GetComponent<Damageable>();
-            if (dam && enemies.Contains(dam)) { React((target.position - transform.position).normalized); }
-        }
     }
 
-    protected virtual Transform CheckVision() { // check the vision of the character and returns enemy transform if found
+    public virtual Transform CheckVision() { // check the vision of the character and returns enemy transform if found
         foreach (Damageable enemy in enemies) {
             if (Vector2.Angle(enemy.transform.position - transform.position, transform.up) < coneOfVision &&
                Vector2.Distance(enemy.transform.position, transform.position) < rangeOfVision) {
@@ -46,7 +43,19 @@ public abstract class Brain : MonoBehaviour {
         return hit.transform;
     }
 
-    protected abstract void React(Vector2 dir);
+    public virtual bool CheckVision(Transform enemy) {
+        if(enemy == null) { return false; }
+        if (Vector2.Angle(enemy.position - transform.position, transform.up) < coneOfVision &&
+               Vector2.Distance(enemy.position, transform.position) < rangeOfVision) {
+            RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.position - transform.position, rangeOfVision);
+            if (rayhit.transform == enemy) { return true; }
+        }
+        return false;
+    }
+
+    public abstract void React(Transform target);
+
+    public abstract void MainAction();
 
     public virtual void ChangeStates(BrainState newState) {
         if(currentState != null) { currentState.Exit(); }
