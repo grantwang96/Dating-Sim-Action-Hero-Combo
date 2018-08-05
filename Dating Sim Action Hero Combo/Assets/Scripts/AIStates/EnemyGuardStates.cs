@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Enemy guard patrols to next path point in route
+/// </summary>
 public class EnemyGuard_Patrol : BrainState {
 
     EnemyBrain_Guard guardBrain;
@@ -26,7 +29,9 @@ public class EnemyGuard_Patrol : BrainState {
                 guardBrain.MyCharacterMove.MoveToDestination();
             } else {
                 guardBrain.IncrementPathIndex();
+                guardBrain.MyCharacterMove.SetRotation(guardBrain.patrolPath[guardBrain.pathIndex].up);
                 guardBrain.ChangeStates(new EnemyGuard_Scan());
+                return;
             }
         }
         if (!searching) {
@@ -39,6 +44,9 @@ public class EnemyGuard_Patrol : BrainState {
     }
 }
 
+/// <summary>
+/// Enemy guard scans area for threats
+/// </summary>
 public class EnemyGuard_Scan : BrainState {
     private Coroutine lookRoutine;
     private float speed = .5f;
@@ -50,13 +58,14 @@ public class EnemyGuard_Scan : BrainState {
     }
 
     public override void Execute() {
+        base.Execute();
         if (lookRoutine == null) {
             myBrain.ChangeStates(new EnemyGuard_Patrol());
         }
     }
 
     public override void Exit() {
-        if (lookRoutine != null) { }
+        if (lookRoutine != null) { myBrain.StopCoroutine(lookRoutine); }
     }
 
     private IEnumerator lookAround(float startingAngle) {
@@ -82,6 +91,9 @@ public class EnemyGuard_Scan : BrainState {
     }
 }
 
+/// <summary>
+/// How enemy guards process threats
+/// </summary>
 public class EnemyGuard_Aggro : BrainState {
 
     public Vector2 targetLastSpotted;
