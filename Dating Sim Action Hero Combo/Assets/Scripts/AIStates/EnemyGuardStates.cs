@@ -41,6 +41,7 @@ public class EnemyGuard_Patrol : BrainState {
 
     public override void Exit() {
         base.Exit();
+        guardBrain.MyCharacterMove.SetRotation(guardBrain.patrolPath[guardBrain.pathIndex].up);
     }
 }
 

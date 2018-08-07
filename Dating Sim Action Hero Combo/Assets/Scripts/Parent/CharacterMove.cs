@@ -69,6 +69,7 @@ public abstract class CharacterMove : MonoBehaviour {
     // this hard sets the rotation of the character
     public void SetRotation(Vector2 dir) {
         transform.up = dir;
+        Debug.Log(transform.up);
     }
 
     // this coroutine will figure out a path for the character
@@ -77,7 +78,7 @@ public abstract class CharacterMove : MonoBehaviour {
         path.Clear(); // clear our current path (if we have one)
         List<Vertex> toBeVisited = new List<Vertex>(); // queue for vertices that we have yet to visit
         List<Vector2> beenThere = new List<Vector2>(); // list to make sure we don't repeat locations
-
+        
         Vector2[] dirs = { Vector2.left, Vector2.right, Vector2.up, Vector2.down };
 
         Vertex current = new Vertex();
