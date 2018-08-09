@@ -10,9 +10,8 @@ public class GameManager : MonoBehaviour {
     public int mapWidth { get { return _mapWidth; } }
     [SerializeField] private int _mapHeight; // half-height of the map
     public int mapHeight { get { return _mapHeight; } }
-
-    public List<Damageable> entities = new List<Damageable>();
-    public Damageable[,] grid;
+    
+    public Damageable[,] grid; // holds the map data
 
 	// Use this for initialization
 	void Awake () {
@@ -29,15 +28,6 @@ public class GameManager : MonoBehaviour {
 		
 	}
     
-    // returns whether an entity is occupying this space
-    public bool LocationOccupied(Vector2 location) {
-        for(int i = 0; i < entities.Count; i++) {
-            Vector2 pos = CharacterMove.GetRoundedPosition(entities[0].transform.position);
-            if(pos == location) { return true; }
-        }
-        return false;
-    }
-
     // returns the location from grid space to world space
     public static Vector2 GetWorldSpace(int x, int y) {
         return new Vector2(x - (Instance._mapWidth / 2), y - (Instance._mapHeight / 2));

@@ -5,8 +5,10 @@ using UnityEngine;
 public class CivilianBrain : Brain {
 
     [SerializeField] private float panicRadius;
+    [SerializeField] private bool occupied;
 
     protected override void Update() {
+        if (occupied) { return; }
         base.Update();
     }
 

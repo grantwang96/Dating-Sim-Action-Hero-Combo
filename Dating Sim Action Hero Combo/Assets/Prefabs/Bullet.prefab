@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 58487133260499340}
   - component: {fileID: 50997861971459112}
   - component: {fileID: 114665952277084030}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,8 +93,6 @@ MonoBehaviour:
   soundRadius: 0
   srend: {fileID: 212384625849227870}
   _damage: 1
-  bulletNoisePrefab: {fileID: 114535752584061500, guid: 46853a9cf6019bd42afcb1d9e4f93cf1,
-    type: 2}
 --- !u!212 &212384625849227870
 SpriteRenderer:
   m_ObjectHideFlags: 1

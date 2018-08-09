@@ -15,6 +15,8 @@ public abstract class Brain : MonoBehaviour {
     [SerializeField] protected List<Damageable> enemies = new List<Damageable>();
     public List<Damageable> Enemies { get { return enemies; } }
     public Transform currentTarget;
+
+    [SerializeField] protected LayerMask visionMask;
     [SerializeField] protected float rangeOfVision; // the maximum distance this character can see
     [SerializeField] protected float coneOfVision; // the maximum angle away this character can see
 
@@ -35,19 +37,19 @@ public abstract class Brain : MonoBehaviour {
             if (Vector2.Angle(enemy.transform.position - transform.position, transform.up) < coneOfVision &&
                Vector2.Distance(enemy.transform.position, transform.position) < rangeOfVision) {
 
-                RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.transform.position - transform.position, rangeOfVision);
+                RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.transform.position - transform.position, rangeOfVision, visionMask);
                 if (rayhit.transform == enemy.transform) { return enemy.transform; }
             }
         }
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, rangeOfVision);
-        return hit.transform;
+        return null;
     }
 
     public virtual bool CheckVision(Transform enemy) {
         if(enemy == null) { return false; }
         if (Vector2.Angle(enemy.position - transform.position, transform.up) < coneOfVision &&
                Vector2.Distance(enemy.position, transform.position) < rangeOfVision) {
-            RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.position - transform.position, rangeOfVision);
+            RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.position - transform.position, rangeOfVision, visionMask);
+            Debug.Log(rayhit.transform);
             if (rayhit.transform == enemy) { return true; }
         }
         return false;

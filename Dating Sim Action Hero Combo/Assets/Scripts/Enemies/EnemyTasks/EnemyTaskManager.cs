@@ -5,9 +5,7 @@ using UnityEngine;
 public class EnemyTaskManager : MonoBehaviour {
 
     public static EnemyTaskManager Instance;
-
-    public List<EnemyTask> enemyMission = new List<EnemyTask>(); // stores the list of tasks for the enemies
-
+    public EnemyTask currentTask; // holds the current task for the enemies
     public Transform[] spawnpoints; // the list of spawnpoints for enemy units
 
     private void Awake() {

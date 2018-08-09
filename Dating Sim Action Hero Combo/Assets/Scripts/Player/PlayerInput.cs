@@ -29,8 +29,7 @@ public class PlayerInput : MonoBehaviour {
     [SerializeField] private float switchTime;
     [SerializeField] private bool _switchingOutfits = false;
     public bool switchingOutfits { get { return _switchingOutfits; } }
-
-
+    
     // Use this for initialization
     void Start () {
         Instance = this;

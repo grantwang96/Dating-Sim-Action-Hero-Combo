@@ -93,6 +93,29 @@ public class EnemyGuard_Scan : BrainState {
 }
 
 /// <summary>
+/// Enemy guard has seen a threat
+/// </summary>
+public class EnemyGuard_Alert : BrainState {
+
+    float time = 0f;
+    private Vector2 targetLastSpotted;
+
+    public override void Enter(Brain brain)
+    {
+        base.Enter(brain);
+        Debug.Log("Alert!");
+    }
+
+    public override void Execute() {
+        targetLastSpotted = myBrain.currentTarget.position;
+        myBrain.MyCharacterMove.SetRotation(targetLastSpotted - (Vector2)myBrain.transform.position);
+
+        time += Time.deltaTime;
+        if(time > 2f) { myBrain.ChangeStates(new EnemyGuard_Aggro()); return; }
+    }
+}
+
+/// <summary>
 /// How enemy guards process threats
 /// </summary>
 public class EnemyGuard_Aggro : BrainState {
@@ -107,10 +130,12 @@ public class EnemyGuard_Aggro : BrainState {
     public override void Execute() {
         targetLastSpotted = myBrain.currentTarget.position;
         myBrain.MyCharacterMove.SetRotation(targetLastSpotted - (Vector2)myBrain.transform.position);
+
         if (!myBrain.CheckVision(myBrain.currentTarget)) { // if we lose sight of the target
-            myBrain.ChangeStates(new EnemyGuard_Chase());
+            Debug.Log("Lost sight of target");
+            myBrain.ChangeStates(new EnemyGuard_Chase()); // chase after them
         } else {
-            myBrain.MainAction();
+            myBrain.MainAction(); // attempt to attack
         }
     }
 

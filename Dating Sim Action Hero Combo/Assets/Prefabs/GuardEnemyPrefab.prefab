@@ -186,13 +186,17 @@ MonoBehaviour:
   myDamageable: {fileID: 0}
   myCharMove: {fileID: 0}
   enemies: []
+  currentTarget: {fileID: 0}
+  visionMask:
+    serializedVersion: 2
+    m_Bits: 4294966783
   rangeOfVision: 0
   coneOfVision: 0
   heldWeapon: {fileID: 0}
   canFire: 1
   _currentClip: 0
   gunBarrel: {fileID: 0}
-  targetLastSpotted: {x: 0, y: 0}
+  pathSet: {fileID: 0}
   patrolPath: []
 --- !u!114 &114838696804535046
 MonoBehaviour:

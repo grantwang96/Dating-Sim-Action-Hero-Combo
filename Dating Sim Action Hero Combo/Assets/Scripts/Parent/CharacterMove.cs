@@ -69,7 +69,6 @@ public abstract class CharacterMove : MonoBehaviour {
     // this hard sets the rotation of the character
     public void SetRotation(Vector2 dir) {
         transform.up = dir;
-        Debug.Log(transform.up);
     }
 
     // this coroutine will figure out a path for the character
@@ -230,55 +229,7 @@ public abstract class CharacterMove : MonoBehaviour {
     public static int GetManhattanDistance(int startX, int startY, int endX, int endY) {
         return Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY);
     }
-
-    /*
-    protected static Vertex GetSmallestDistanceScore(List<Vertex> vertices) {
-        Vertex smallest = vertices[0];
-        for(int i = 0; i < vertices.Count; i++) {
-            if(vertices[i].distanceScore < smallest.distanceScore) { smallest = vertices[i]; }
-        }
-        return smallest;
-    }
-
-    protected static Vertex GenerateVertex(List<Vertex> vertices, Vector2 location) {
-        for(int i = 0; i < vertices.Count; i++) { if (vertices[i].position == location) { return vertices[i]; } }
-        return new Vertex();
-    }
     
-    protected static void Split(List<Vertex> list, int l, int r) {
-        if (l == r) { return; }
-        int middle = (l + r) / 2;
-        Split(list, l, middle);
-        Split(list, middle + 1, r);
-        Merge(list, l, middle, r);
-    }
-
-    protected static void Merge(List<Vertex> list, int l, int m, int r) {
-        int i, j;
-        Vertex[] lArr = new Vertex[m - l + 1];
-        Vertex[] rArr = new Vertex[r - m];
-
-        for (i = 0; i < lArr.Length; i++) { lArr[i] = list[i]; }
-        for (j = 0; j < rArr.Length; j++) { rArr[j] = list[m + 1 + j]; }
-
-        i = 0;
-        j = 0;
-        int k = 0;
-        while (i < lArr.Length && j < rArr.Length)
-        {
-            if (lArr[i].distanceScore < rArr[j].distanceScore) {
-                list[k] = lArr[i];
-                i++;
-            } else {
-                list[k] = rArr[j];
-                j++;
-            }
-            k++;
-        }
-        while (i < lArr.Length) { list[k] = lArr[i]; i++; k++; }
-        while (j < rArr.Length) { list[k] = rArr[j]; j++; k++; }
-    }
-    */
 }
 
 /// <summary>

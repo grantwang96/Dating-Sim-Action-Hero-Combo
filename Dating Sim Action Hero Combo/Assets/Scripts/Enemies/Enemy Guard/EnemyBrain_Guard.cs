@@ -25,8 +25,9 @@ public class EnemyBrain_Guard : EnemyBrain {
 
     public override void React(Transform target) {
         currentTarget = target;
-        if(currentState.GetType() == typeof(EnemyGuard_Aggro)) { return; }
-        ChangeStates(new EnemyGuard_Aggro());
+        System.Type stateType = currentState.GetType();
+        if (stateType == typeof(EnemyGuard_Aggro) || stateType == typeof(EnemyGuard_Alert)) { return; }
+        ChangeStates(new EnemyGuard_Alert());
     }
 
     public void IncrementPathIndex() {
