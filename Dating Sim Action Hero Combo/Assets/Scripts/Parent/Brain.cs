@@ -49,7 +49,6 @@ public abstract class Brain : MonoBehaviour {
         if (Vector2.Angle(enemy.position - transform.position, transform.up) < coneOfVision &&
                Vector2.Distance(enemy.position, transform.position) < rangeOfVision) {
             RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.position - transform.position, rangeOfVision, visionMask);
-            Debug.Log(rayhit.transform);
             if (rayhit.transform == enemy) { return true; }
         }
         return false;

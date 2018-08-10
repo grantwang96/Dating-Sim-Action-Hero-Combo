@@ -26,7 +26,7 @@ public class EnemyGuard_Patrol : BrainState {
         if(guardBrain.MyCharacterMove.movementRoutine == null) {
             if (searching) {
                 searching = false;
-                guardBrain.MyCharacterMove.MoveToDestination();
+                guardBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed);
             } else {
                 guardBrain.IncrementPathIndex();
                 guardBrain.MyCharacterMove.SetRotation(guardBrain.patrolPath[guardBrain.pathIndex].up);
@@ -156,11 +156,18 @@ public class EnemyGuard_Chase : BrainState {
     public override void Execute() {
         base.Execute();
         if(myBrain.MyCharacterMove.movementRoutine == null) {
-            if (searching) { searching = false; myBrain.MyCharacterMove.MoveToDestination(); }
+            if (searching) {
+                searching = false; myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.runSpeed);
+            }
             else { myBrain.ChangeStates(new EnemyGuard_Scan()); }
         }
         if (!searching) {
             myBrain.MyCharacterMove.SetRotation(myBrain.MyCharacterMove.currentDestination - (Vector2)myBrain.transform.position);
         }
+    }
+
+    public override void Exit() {
+        base.Exit();
+        Debug.Log("Ahh!");
     }
 }

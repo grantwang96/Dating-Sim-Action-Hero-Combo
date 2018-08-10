@@ -73,7 +73,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1191700582154324}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 8, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4057804742908842}
@@ -118,7 +118,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 30
   m_LinearDrag: 1
   m_AngularDrag: 1
   m_GravityScale: 0
@@ -169,7 +169,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rbody: {fileID: 0}
-  _speed: 5
+  _walkSpeed: 3
+  _runSpeed: 6
   markerPrefab: {fileID: 1305129920698028, guid: f4a7836dcc3afd54aae3565a864bfd71,
     type: 2}
 --- !u!114 &114571588006788544
@@ -190,12 +191,12 @@ MonoBehaviour:
   visionMask:
     serializedVersion: 2
     m_Bits: 4294966783
-  rangeOfVision: 0
-  coneOfVision: 0
-  heldWeapon: {fileID: 0}
+  rangeOfVision: 20
+  coneOfVision: 60
+  heldWeapon: {fileID: 11400000, guid: 3ea5cba8f255347478f4378f100c39e5, type: 2}
   canFire: 1
-  _currentClip: 0
-  gunBarrel: {fileID: 0}
+  _currentClip: 100
+  gunBarrel: {fileID: 114838696804535046}
   pathSet: {fileID: 0}
   patrolPath: []
 --- !u!114 &114838696804535046
@@ -222,6 +223,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 10
+  xPos: 0
+  yPos: 0
 --- !u!212 &212273425974219226
 SpriteRenderer:
   m_ObjectHideFlags: 1

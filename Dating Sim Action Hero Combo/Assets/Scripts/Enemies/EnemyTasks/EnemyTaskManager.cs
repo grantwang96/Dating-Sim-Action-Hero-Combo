@@ -5,7 +5,14 @@ using UnityEngine;
 public class EnemyTaskManager : MonoBehaviour {
 
     public static EnemyTaskManager Instance;
-    public EnemyTask currentTask; // holds the current task for the enemies
+    [SerializeField] private EnemyTask _currentTask; // holds the current task for the enemies
+    public EnemyTask currentTask {
+        get { return _currentTask; }
+        set {
+            _currentTask = value;
+        }
+    }
+
     public Transform[] spawnpoints; // the list of spawnpoints for enemy units
 
     private void Awake() {

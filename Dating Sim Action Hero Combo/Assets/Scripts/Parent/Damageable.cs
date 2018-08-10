@@ -8,8 +8,8 @@ public class Damageable : MonoBehaviour {
     public int health { get { return _health; } }
 
     // stores the location information for the grid
-    protected int xPos; public int XPos { get { return xPos; } }
-    protected int yPos; public int YPos { get { return yPos; } }
+    [SerializeField] protected int xPos; public int XPos { get { return xPos; } }
+    [SerializeField] protected int yPos; public int YPos { get { return yPos; } }
     public void SetPosition(int newX, int newY) {
         GameManager.Instance.grid[xPos, yPos] = null;
         xPos = newX;

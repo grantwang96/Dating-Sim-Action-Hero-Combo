@@ -28,6 +28,7 @@ public class WeaponType : ScriptableObject {
         bullet.srend.sprite = _bulletSprite;
         bullet.maxLifeTime = _bulletLifeTime;
         bullet.soundRadius = _noiseRadius;
+        bullet.damage = _damage;
 
         try {
             Rigidbody2D newBullet = bullet.GetComponent<Rigidbody2D>();

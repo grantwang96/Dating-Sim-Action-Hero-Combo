@@ -27,12 +27,17 @@ public class GameManager : MonoBehaviour {
     void Update () {
 		
 	}
-    
+
+    // checks if coordinate is within map
+    public bool IsWithinGridSpace(int x, int y) {
+        return (x >= 0 && x < Instance.mapWidth && y >= 0 && y < Instance.mapHeight);
+    }
+
     // returns the location from grid space to world space
     public static Vector2 GetWorldSpace(int x, int y) {
         return new Vector2(x - (Instance._mapWidth / 2), y - (Instance._mapHeight / 2));
     }
-
+    
     public static int GetGridSpaceX(float x) { return Mathf.RoundToInt(x) + (Instance.mapWidth / 2); }
 
     public static int GetGridSpaceY(float y) { return Mathf.RoundToInt(y) + (Instance.mapHeight / 2); }

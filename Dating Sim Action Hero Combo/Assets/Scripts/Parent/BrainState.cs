@@ -14,6 +14,7 @@ public class BrainState {
     }
 
     public virtual void Execute() { // the update loop of the brain state
+
         Transform target = myBrain.CheckVision(); // check vision for enemies
         if (target != null) {
             Damageable dam = target.GetComponent<Damageable>();
