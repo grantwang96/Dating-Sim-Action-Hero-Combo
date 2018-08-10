@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
-    public Transform owner;
+    public Damageable owner;
     private float lifeTime;
     public float maxLifeTime;
 

@@ -18,7 +18,7 @@ public class BrainState {
         Transform target = myBrain.CheckVision(); // check vision for enemies
         if (target != null) {
             Damageable dam = target.GetComponent<Damageable>();
-            if (dam && myBrain.Enemies.Contains(dam)) { myBrain.React(target); }
+            if (dam && myBrain.Enemies.Contains(dam)) { myBrain.React(dam); }
         }
     }
 

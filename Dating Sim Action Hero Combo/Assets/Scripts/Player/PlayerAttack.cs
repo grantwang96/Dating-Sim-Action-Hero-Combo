@@ -50,7 +50,7 @@ public class PlayerAttack : MonoBehaviour {
     private void FireGun() { // fires your currently held weapon
         if (!canFire || !heldWeapon) { return; }
 
-        float coolDown = heldWeapon.Fire(transform.position + transform.up, transform.up, transform);
+        float coolDown = heldWeapon.Fire(transform.position + transform.up, transform.up, PlayerDamageable.Instance);
         gunBarrel.Noise(heldWeapon.noiseRadius);
         _currentClip--;
         

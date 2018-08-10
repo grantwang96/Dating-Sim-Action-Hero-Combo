@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272c560ddbbbfd54980ba211fc101783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 3
+  _health: 10
   xPos: 0
   yPos: 0
 --- !u!212 &212789716063777824

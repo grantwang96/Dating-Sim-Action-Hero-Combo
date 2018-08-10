@@ -14,7 +14,7 @@ public abstract class Brain : MonoBehaviour {
 
     [SerializeField] protected List<Damageable> enemies = new List<Damageable>();
     public List<Damageable> Enemies { get { return enemies; } }
-    public Transform currentTarget;
+    public Damageable currentTarget;
 
     [SerializeField] protected LayerMask visionMask;
     [SerializeField] protected float rangeOfVision; // the maximum distance this character can see
@@ -54,7 +54,7 @@ public abstract class Brain : MonoBehaviour {
         return false;
     }
 
-    public abstract void React(Transform target);
+    public abstract void React(Damageable target);
 
     public abstract void MainAction();
 

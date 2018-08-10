@@ -1746,49 +1746,6 @@ Transform:
   m_Father: {fileID: 1527068193}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1282322464 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1697515828205738, guid: 1df0a6dabb03e4940b06359b60726c0d,
-    type: 2}
-  m_PrefabInternal: {fileID: 1916528870}
---- !u!114 &1282322465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1282322464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781814c1d1d912c458f502133206cfdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rbody: {fileID: 0}
-  _walkSpeed: 0
-  _runSpeed: 0
-  markerPrefab: {fileID: 1305129920698028, guid: f4a7836dcc3afd54aae3565a864bfd71,
-    type: 2}
---- !u!114 &1282322466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1282322464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcccd0b048afc9247ad4b9b1b105adc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myDamageable: {fileID: 0}
-  myCharMove: {fileID: 0}
-  enemies: []
-  currentTarget: {fileID: 0}
-  visionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  rangeOfVision: 10
-  coneOfVision: 50
-  panicRadius: 10
-  occupied: 0
 --- !u!1001 &1285713758
 Prefab:
   m_ObjectHideFlags: 0
@@ -1833,15 +1790,6 @@ Prefab:
       propertyPath: pathSet
       value: 
       objectReference: {fileID: 201803877}
-    - target: {fileID: 114838696804535046, guid: 47970b7e4fb52214b975740902ec62e5,
-        type: 2}
-      propertyPath: startColor.a
-      value: 0.19607843
-      objectReference: {fileID: 0}
-    - target: {fileID: 1191700582154324, guid: 47970b7e4fb52214b975740902ec62e5, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47970b7e4fb52214b975740902ec62e5, type: 2}
   m_IsPrefabParent: 0
@@ -2450,10 +2398,6 @@ Prefab:
     - target: {fileID: 4127429971350388, guid: 1df0a6dabb03e4940b06359b60726c0d, type: 2}
       propertyPath: m_RootOrder
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1697515828205738, guid: 1df0a6dabb03e4940b06359b60726c0d, type: 2}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1df0a6dabb03e4940b06359b60726c0d, type: 2}

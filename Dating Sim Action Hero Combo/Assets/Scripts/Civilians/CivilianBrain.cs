@@ -7,6 +7,11 @@ public class CivilianBrain : Brain {
     [SerializeField] private float panicRadius;
     [SerializeField] private bool occupied;
 
+    protected override void Start() {
+        currentState = new NPC_Idle();
+        base.Start();
+    }
+
     protected override void Update() {
         if (occupied) { return; }
         base.Update();
@@ -16,24 +21,14 @@ public class CivilianBrain : Brain {
         Debug.Log(name + "Merp");
     }
 
-    public override void React(Transform target) {
-        Debug.Log(transform.name + " is panicked!");
-        Vector2 dir = target.position - transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, panicRadius);
-        Vector2 loc = (Vector2)transform.position + dir * panicRadius;
-        try {
-            loc = (Vector2)hit.transform.position + hit.normal;
-        }
-        catch {
-            Debug.Log("No obstacles!");
-        }
-        Debug.Log(loc);
-        myCharMove.SetDestination(Mathf.RoundToInt(loc.x), Mathf.RoundToInt(loc.y));
+    public override void React(Damageable target) {
+        Debug.Log("Ah! " + target.name);
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "BulletSound") {
-            React(collider.transform);
+            BulletNoise bn = collider.GetComponent<BulletNoise>();
+            React(bn.owner);
         }
     }
 }

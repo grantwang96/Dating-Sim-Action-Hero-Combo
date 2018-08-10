@@ -24,7 +24,7 @@ public class Damageable : MonoBehaviour {
         }
     }
 
-    public virtual void TakeDamage(int damage, Transform source) {
+    public virtual void TakeDamage(int damage, Damageable source) {
         _health -= damage;
 
         if(_health <= 0) {

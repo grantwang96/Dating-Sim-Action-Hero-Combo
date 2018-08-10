@@ -107,7 +107,7 @@ public class EnemyGuard_Alert : BrainState {
     }
 
     public override void Execute() {
-        targetLastSpotted = myBrain.currentTarget.position;
+        targetLastSpotted = myBrain.currentTarget.transform.position;
         myBrain.MyCharacterMove.SetRotation(targetLastSpotted - (Vector2)myBrain.transform.position);
 
         time += Time.deltaTime;
@@ -128,10 +128,10 @@ public class EnemyGuard_Aggro : BrainState {
     }
 
     public override void Execute() {
-        targetLastSpotted = myBrain.currentTarget.position;
+        targetLastSpotted = myBrain.currentTarget.transform.position;
         myBrain.MyCharacterMove.SetRotation(targetLastSpotted - (Vector2)myBrain.transform.position);
 
-        if (!myBrain.CheckVision(myBrain.currentTarget)) { // if we lose sight of the target
+        if (!myBrain.CheckVision(myBrain.currentTarget.transform)) { // if we lose sight of the target
             myBrain.ChangeStates(new EnemyGuard_Chase()); // chase after them
         } else {
             myBrain.MainAction(); // attempt to attack

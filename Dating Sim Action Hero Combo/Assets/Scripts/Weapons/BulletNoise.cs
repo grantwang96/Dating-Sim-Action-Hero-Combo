@@ -5,6 +5,7 @@ using UnityEngine;
 public class BulletNoise : MonoBehaviour {
 
     private float radius;
+    public Damageable owner;
 
     private Collider2D coll;
     private SpriteRenderer srend;
@@ -19,6 +20,7 @@ public class BulletNoise : MonoBehaviour {
         srend = GetComponent<SpriteRenderer>();
         coll.enabled = false;
         srend.enabled = false;
+        owner = transform.parent.GetComponent<Damageable>();
 	}
 
     public void Noise(float newRadius) {

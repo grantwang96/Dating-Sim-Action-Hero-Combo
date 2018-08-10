@@ -41,7 +41,7 @@ public class PlayerDamageable : Damageable {
         armorRecoverRoutine = StartCoroutine(RecoverArmor());
     }
 
-    public override void TakeDamage(int damage, Transform source) {
+    public override void TakeDamage(int damage, Damageable source) {
         if(armor > 0) {
             _armor -= damage;
             if(armorRecoverRoutine != null) { StopCoroutine(armorRecoverRoutine); }

@@ -18,7 +18,7 @@ public class EnemyBrain_Grunt : EnemyBrain {
     }
 
     // grunts will run away upon first seeing a threat. Afterwards defends against threat.
-    public override void React(Transform target) {
+    public override void React(Damageable target) {
         System.Type stateType = currentState.GetType();
         if (stateType == typeof(GruntTakeCover) || stateType == typeof(GruntDefend)) { return; }
         currentTarget = target;

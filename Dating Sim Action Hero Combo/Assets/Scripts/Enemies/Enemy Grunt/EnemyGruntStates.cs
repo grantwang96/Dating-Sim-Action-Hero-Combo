@@ -116,7 +116,7 @@ public class GruntTakeCover : BrainState {
     public override void Enter(Brain brain) {
         base.Enter(brain);
 
-        Vector2 threatDir = myBrain.currentTarget.position - myBrain.transform.position;
+        Vector2 threatDir = myBrain.currentTarget.transform.position - myBrain.transform.position;
         threatDir = threatDir.normalized;
 
         threatDir.x = Mathf.Round(threatDir.x);
@@ -138,7 +138,7 @@ public class GruntTakeCover : BrainState {
         }
 
         // always look at the target
-        myBrain.MyCharacterMove.SetRotation(myBrain.currentTarget.position - myBrain.transform.position);
+        myBrain.MyCharacterMove.SetRotation(myBrain.currentTarget.transform.position - myBrain.transform.position);
     }
 
     public override void Exit() {
@@ -167,10 +167,10 @@ public class GruntDefend : BrainState {
             return;
         }
 
-        targetLastSpotted = myBrain.currentTarget.position;
+        targetLastSpotted = myBrain.currentTarget.transform.position;
         myBrain.MyCharacterMove.SetRotation(targetLastSpotted - (Vector2)myBrain.transform.position);
 
-        if (!myBrain.CheckVision(myBrain.currentTarget)) {
+        if (!myBrain.CheckVision(myBrain.currentTarget.transform)) {
             time += Time.deltaTime;
         } else {
             time = 0f;

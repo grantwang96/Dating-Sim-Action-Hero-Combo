@@ -24,7 +24,7 @@ public class EnemyBrain : Brain{
         base.Update();
 	}
 
-    public override void React(Transform target) {
+    public override void React(Damageable target) {
 
     }
 
@@ -36,7 +36,7 @@ public class EnemyBrain : Brain{
         if (!canFire) { return; }
         if (!heldWeapon) { return; }
 
-        float coolDown = heldWeapon.Fire(transform.position + transform.up, transform.up, transform);
+        float coolDown = heldWeapon.Fire(transform.position + transform.up, transform.up, myDamageable);
         gunBarrel.Noise(heldWeapon.noiseRadius);
         _currentClip--;
 

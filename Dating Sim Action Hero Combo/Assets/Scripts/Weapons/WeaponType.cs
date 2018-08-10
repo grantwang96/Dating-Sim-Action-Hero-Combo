@@ -22,7 +22,7 @@ public class WeaponType : ScriptableObject {
     [SerializeField] protected int _clipCapacity;
     public int clipCapacity { get { return _clipCapacity; } }
 
-    public virtual float Fire(Vector2 firingPoint, Vector2 firingDir, Transform source) {
+    public virtual float Fire(Vector2 firingPoint, Vector2 firingDir, Damageable source) {
 
         Bullet bullet = Instantiate(_bulletPrefab, firingPoint, Quaternion.Euler(0f, 0f, Mathf.Atan2(firingDir.y, firingDir.x)));
         bullet.srend.sprite = _bulletSprite;

@@ -41,6 +41,8 @@ GameObject:
   - component: {fileID: 50633553795333786}
   - component: {fileID: 58201016527308854}
   - component: {fileID: 114916615276590292}
+  - component: {fileID: 114341700690146314}
+  - component: {fileID: 114936017219220810}
   m_Layer: 0
   m_Name: CivilianPrefab
   m_TagString: Enemy
@@ -155,6 +157,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &114341700690146314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697515828205738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 781814c1d1d912c458f502133206cfdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rbody: {fileID: 0}
+  _walkSpeed: 3
+  _runSpeed: 5
+  markerPrefab: {fileID: 1305129920698028, guid: f4a7836dcc3afd54aae3565a864bfd71,
+    type: 2}
 --- !u!114 &114910742699686720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -179,6 +197,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 1
+  xPos: 0
+  yPos: 0
+--- !u!114 &114936017219220810
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697515828205738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcccd0b048afc9247ad4b9b1b105adc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myDamageable: {fileID: 0}
+  myCharMove: {fileID: 0}
+  enemies: []
+  currentTarget: {fileID: 0}
+  visionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rangeOfVision: 10
+  coneOfVision: 50
+  panicRadius: 10
+  occupied: 0
 --- !u!212 &212002726221313830
 SpriteRenderer:
   m_ObjectHideFlags: 1

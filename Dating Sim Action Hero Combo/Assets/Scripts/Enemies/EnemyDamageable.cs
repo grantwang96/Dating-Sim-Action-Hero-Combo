@@ -15,10 +15,11 @@ public class EnemyDamageable : Damageable {
         _health = GetComponent<EnemyMovement>().enemyData.maxHealth;
     }
 
-    public override void TakeDamage(int damage, Transform source) {
+    public override void TakeDamage(int damage, Damageable source) {
         
         base.TakeDamage(damage, source);
         if(myBrain != null) {
+            Damageable dam = source.GetComponent<Damageable>();
             myBrain.React(source);
         }
     }

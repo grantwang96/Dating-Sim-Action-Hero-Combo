@@ -23,7 +23,7 @@ public class EnemyBrain_Guard : EnemyBrain {
         ChangeStates(new EnemyGuard_Patrol());
     }
 
-    public override void React(Transform target) {
+    public override void React(Damageable target) {
         currentTarget = target;
         System.Type stateType = currentState.GetType();
         if (stateType == typeof(EnemyGuard_Aggro) || stateType == typeof(EnemyGuard_Alert)) { return; }

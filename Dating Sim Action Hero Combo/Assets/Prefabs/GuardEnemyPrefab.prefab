@@ -173,6 +173,7 @@ MonoBehaviour:
   _runSpeed: 6
   markerPrefab: {fileID: 1305129920698028, guid: f4a7836dcc3afd54aae3565a864bfd71,
     type: 2}
+  _enemyData: {fileID: 11400000, guid: 7892e04fe5658a9469b7805afd8ee846, type: 2}
 --- !u!114 &114571588006788544
 MonoBehaviour:
   m_ObjectHideFlags: 1
