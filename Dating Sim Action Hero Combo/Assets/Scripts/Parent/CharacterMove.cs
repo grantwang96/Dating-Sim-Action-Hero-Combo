@@ -407,6 +407,5 @@ public class Vertex {
         if(y != 0 && GameManager.Instance.IsWithinGridSpace(xPosition, yPosition + y) && GameManager.Instance.grid[xPosition, yPosition + y]) {
             coverScore += (x == 0) ? 2 : 1; // add 2 if x cover is not necessary
         }
-        Debug.Log(xPosition + ", " + yPosition + " score: " + coverScore);
     }
 }

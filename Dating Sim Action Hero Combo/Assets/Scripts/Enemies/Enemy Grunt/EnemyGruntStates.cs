@@ -31,7 +31,7 @@ public class GruntTravel : BrainState {
                 searching = false;
                 myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed);
             } else {
-                myBrain.ChangeStates(EnemyTaskManager.Instance.currentTask.PerformAction()); // perform current action
+                myBrain.ChangeStates(EnemyTaskManager.Instance.currentTask.PerformAction(myBrain)); // perform current action
                 return;
             }
         }
@@ -159,9 +159,17 @@ public class GruntDefend : BrainState {
     }
 
     public override void Execute() {
+        
+        // if our target is already dead
+        if(myBrain.currentTarget != null && !myBrain.currentTarget.gameObject.activeInHierarchy) {
+            myBrain.currentTarget = null;
+            myBrain.ChangeStates(new GruntTravel());
+            return;
+        }
 
         targetLastSpotted = myBrain.currentTarget.position;
         myBrain.MyCharacterMove.SetRotation(targetLastSpotted - (Vector2)myBrain.transform.position);
+
         if (!myBrain.CheckVision(myBrain.currentTarget)) {
             time += Time.deltaTime;
         } else {

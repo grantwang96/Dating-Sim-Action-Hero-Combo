@@ -1917,6 +1917,68 @@ Transform:
   m_PrefabParentObject: {fileID: 4342438562630794, guid: f501acabbb544f84987be8a1b8557c4d,
     type: 2}
   m_PrefabInternal: {fileID: 1417798811}
+--- !u!1001 &1401828487
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114002987962368772, guid: 7219e067dceb8064aace98a841737ef3,
+        type: 2}
+      propertyPath: enemies.Array.data[0]
+      value: 
+      objectReference: {fileID: 1648668955}
+    - target: {fileID: 114002987962368772, guid: 7219e067dceb8064aace98a841737ef3,
+        type: 2}
+      propertyPath: enemies.Array.data[1]
+      value: 
+      objectReference: {fileID: 1401828488}
+    - target: {fileID: 1977594996585916, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+      propertyPath: m_Name
+      value: GruntEnemyPrefab (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
+  m_IsPrefabParent: 0
+--- !u!114 &1401828488 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114044911251149500, guid: 7219e067dceb8064aace98a841737ef3,
+    type: 2}
+  m_PrefabInternal: {fileID: 1401828487}
+  m_Script: {fileID: 11500000, guid: c2c40398d69468b46b1ac7ce377a5dff, type: 3}
 --- !u!1001 &1417798811
 Prefab:
   m_ObjectHideFlags: 0
@@ -2064,6 +2126,7 @@ MonoBehaviour:
   currentProgress: 0
   enemiesRequired:
   - {fileID: 441121292}
+  - {fileID: 1401828488}
   NextTaskSuccess: {fileID: 0}
   NextTaskFail: {fileID: 0}
   points: []
@@ -2111,6 +2174,11 @@ Prefab:
       propertyPath: enemies.Array.data[0]
       value: 
       objectReference: {fileID: 1648668955}
+    - target: {fileID: 114002987962368772, guid: 7219e067dceb8064aace98a841737ef3,
+        type: 2}
+      propertyPath: enemies.Array.data[1]
+      value: 
+      objectReference: {fileID: 441121292}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
   m_IsPrefabParent: 0

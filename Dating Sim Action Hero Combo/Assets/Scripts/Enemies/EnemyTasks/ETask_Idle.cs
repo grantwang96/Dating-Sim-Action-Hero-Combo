@@ -61,8 +61,7 @@ public class ETask_Idle : EnemyTask {
         }
     }
 
-    public override BrainState PerformAction() {
-        Debug.Log("Do nothing.");
+    public override BrainState PerformAction(Brain brain) {
         return new GruntIdle();
     }
 }

@@ -30,5 +30,5 @@ public abstract class EnemyTask : MonoBehaviour { // stores information about th
     public abstract Vector2 GetLocation();
 
     // what the enemy should do when they have reached the task location
-    public abstract BrainState PerformAction();
+    public abstract BrainState PerformAction(Brain brain);
 }
