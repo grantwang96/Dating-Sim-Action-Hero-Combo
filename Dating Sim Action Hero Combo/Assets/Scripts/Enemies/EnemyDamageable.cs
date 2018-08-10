@@ -4,14 +4,30 @@ using UnityEngine;
 
 public class EnemyDamageable : Damageable {
 
-    public override void TakeDamage(int damage, Vector2 sourcePoint) {
+    EnemyBrain myBrain;
+
+    private void Awake() {
+        myBrain = GetComponent<EnemyBrain>();
+    }
+
+    protected override void Start() {
+        base.Start();
+        _health = GetComponent<EnemyMovement>().enemyData.maxHealth;
+    }
+
+    public override void TakeDamage(int damage, Transform source) {
         
-        base.TakeDamage(damage, sourcePoint);
+        base.TakeDamage(damage, source);
+        if(myBrain != null) {
+            myBrain.React(source);
+        }
     }
 
     protected override void Die() {
         base.Die();
         GameManager.Instance.grid[xPos, yPos] = null;
         gameObject.SetActive(false);
+
+        EnemyTaskManager.Instance.EnemyKilled(this);
     }
 }

@@ -22,13 +22,14 @@ public class WeaponType : ScriptableObject {
     [SerializeField] protected int _clipCapacity;
     public int clipCapacity { get { return _clipCapacity; } }
 
-    public virtual float Fire(Vector2 firingPoint, Vector2 firingDir) {
+    public virtual float Fire(Vector2 firingPoint, Vector2 firingDir, Transform source) {
 
         Bullet bullet = Instantiate(_bulletPrefab, firingPoint, Quaternion.Euler(0f, 0f, Mathf.Atan2(firingDir.y, firingDir.x)));
         bullet.srend.sprite = _bulletSprite;
         bullet.maxLifeTime = _bulletLifeTime;
         bullet.soundRadius = _noiseRadius;
         bullet.damage = _damage;
+        bullet.owner = source;
 
         try {
             Rigidbody2D newBullet = bullet.GetComponent<Rigidbody2D>();

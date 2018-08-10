@@ -212,6 +212,7 @@ MonoBehaviour:
   _runSpeed: 6
   markerPrefab: {fileID: 1305129920698028, guid: f4a7836dcc3afd54aae3565a864bfd71,
     type: 2}
+  _enemyData: {fileID: 11400000, guid: b3e5a24afc176ad4fa11a9a46f8790bd, type: 2}
 --- !u!114 &114168724626078496
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -223,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e63d2c66abab441b92867b5523e669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startColor: {r: 1, g: 0, b: 0, a: 0.39215687}
+  startColor: {r: 1, g: 0, b: 0, a: 0.19607843}
 --- !u!212 &212369311398540524
 SpriteRenderer:
   m_ObjectHideFlags: 1

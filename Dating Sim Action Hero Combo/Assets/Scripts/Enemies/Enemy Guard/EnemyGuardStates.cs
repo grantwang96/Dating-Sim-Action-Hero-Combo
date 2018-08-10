@@ -132,7 +132,6 @@ public class EnemyGuard_Aggro : BrainState {
         myBrain.MyCharacterMove.SetRotation(targetLastSpotted - (Vector2)myBrain.transform.position);
 
         if (!myBrain.CheckVision(myBrain.currentTarget)) { // if we lose sight of the target
-            Debug.Log("Lost sight of target");
             myBrain.ChangeStates(new EnemyGuard_Chase()); // chase after them
         } else {
             myBrain.MainAction(); // attempt to attack

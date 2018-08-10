@@ -50,7 +50,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1523051958999692}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 53e062345ab307e4db98e22c1d88da20, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -79,6 +79,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 3
+  xPos: 0
+  yPos: 0
 --- !u!212 &212789716063777824
 SpriteRenderer:
   m_ObjectHideFlags: 1

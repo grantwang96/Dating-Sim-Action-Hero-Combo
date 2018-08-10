@@ -9,11 +9,17 @@ public abstract class EnemyTask : MonoBehaviour { // stores information about th
     public float timeToComplete; // how much time it takes to complete
     public float currentProgress; // the amount of time already put into the task(all start at 0)
 
-    public EnemyDamageable[] enemiesRequired;
+    protected bool _successful; // was this task successfully completed?
+    public bool successful { get { return _successful; } } 
+
+    public List<Damageable> enemiesRequired = new List<Damageable>();
 
     [SerializeField] protected EnemyTask NextTaskSuccess; // the next task if the enemies succeed(gameover if null)
     [SerializeField] protected EnemyTask NextTaskFail; // the next task if the enemies fail(win if null)
-    
+
+    // when an enemy grunt or VIP dies
+    public abstract void OnEnemyDeath(Damageable enemy);
+
     // if the enemies succeed in this task
     public abstract void OnSucceed();
 

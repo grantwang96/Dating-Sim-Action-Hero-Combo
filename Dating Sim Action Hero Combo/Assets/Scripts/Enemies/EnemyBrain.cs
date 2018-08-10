@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyBrain : Brain{
 
-    [SerializeField] protected WeaponType heldWeapon;
+    public WeaponType heldWeapon;
     [SerializeField] protected bool canFire = true;
     [SerializeField] protected int _currentClip;
     [SerializeField] protected BulletNoise gunBarrel;
@@ -36,7 +36,7 @@ public class EnemyBrain : Brain{
         if (!canFire) { return; }
         if (!heldWeapon) { return; }
 
-        float coolDown = heldWeapon.Fire(transform.position + transform.up, transform.up);
+        float coolDown = heldWeapon.Fire(transform.position + transform.up, transform.up, transform);
         gunBarrel.Noise(heldWeapon.noiseRadius);
         _currentClip--;
 

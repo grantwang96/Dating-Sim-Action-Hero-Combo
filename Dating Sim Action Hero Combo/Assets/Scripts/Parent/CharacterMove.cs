@@ -38,9 +38,8 @@ public abstract class CharacterMove : MonoBehaviour {
 
     // this sets the destination of the character and calls the CalculatePath coroutine
     public void SetDestination(int newX, int newY) {
-        // if (GameManager.Instance.LocationOccupied(newDestination)) { Debug.Log("Blocked!"); return; }
-        if(GameManager.Instance.grid[newX, newY] != null) { Debug.Log("Blocked!"); return; }
-        if(!GameManager.Instance.IsWithinGridSpace(newX, newY)) { return; }
+        if (!GameManager.Instance.IsWithinGridSpace(newX, newY)) { return; }
+        if (GameManager.Instance.grid[newX, newY] != null) { Debug.Log("Blocked!"); return; }
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
 
         // Calculate path

@@ -8,7 +8,7 @@ public class ETask_Idle : EnemyTask {
 
     [SerializeField] private List<Transform> points = new List<Transform>();
 
-    private void Start() {
+    private void Awake() {
         foreach(Transform child in transform) { points.Add(child); }
     }
 
@@ -27,14 +27,24 @@ public class ETask_Idle : EnemyTask {
             int x = GameManager.GetGridSpaceX(points[i].position.x);
             int y = GameManager.GetGridSpaceY(points[i].position.y);
             if(GameManager.Instance.grid[x, y] == null) {
+                Debug.Log(points[i] + " " + x + ", " + y);
+                Debug.Log("Space empty: " + GameManager.Instance.grid[x, y] == null);
                 return new Vector2(x, y);
             }
         }
         return new Vector2(-1, -1);
     }
 
+    public override void OnEnemyDeath(Damageable enemy) {
+        Debug.Log(enemy.name);
+        if (enemiesRequired.Contains(enemy)) {
+            enemiesRequired.Remove(enemy);
+        }
+        if(enemiesRequired.Count == 0) { OnFailed(); }
+    }
+
     public override void OnSucceed() {
-        if(NextTaskSuccess == null) { Debug.Log("Gameover!"); }
+        _successful = true;
         try {
             EnemyTaskManager.Instance.currentTask = NextTaskSuccess;
         } catch {
@@ -43,7 +53,7 @@ public class ETask_Idle : EnemyTask {
     }
 
     public override void OnFailed() {
-        if (NextTaskFail == null) { Debug.Log("Gameover!"); }
+        _successful = false;
         try {
             EnemyTaskManager.Instance.currentTask = NextTaskFail;
         } catch {

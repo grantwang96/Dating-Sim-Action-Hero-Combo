@@ -136,6 +136,9 @@ public class GruntTakeCover : BrainState {
                 return;
             }
         }
+
+        // always look at the target
+        myBrain.MyCharacterMove.SetRotation(myBrain.currentTarget.position - myBrain.transform.position);
     }
 
     public override void Exit() {
