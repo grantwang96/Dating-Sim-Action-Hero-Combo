@@ -16,7 +16,7 @@ public class EnemyBrain : Brain{
         base.Start();
         _currentClip = heldWeapon.clipCapacity;
 
-        ChangeStates(new NPC_Idle());
+        ChangeStates(new Civilian_Idle());
 	}
 	
 	// Update is called once per frame

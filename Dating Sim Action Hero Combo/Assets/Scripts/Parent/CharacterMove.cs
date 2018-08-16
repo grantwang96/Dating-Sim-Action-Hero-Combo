@@ -17,11 +17,11 @@ public abstract class CharacterMove : MonoBehaviour {
     [SerializeField] protected float _runSpeed;
     public float runSpeed { get { return _runSpeed; } }
 
-    private Coroutine _movementRoutine;
+    protected Coroutine _movementRoutine;
     public Coroutine movementRoutine { get { return _movementRoutine; } }
 
     [SerializeField] private GameObject markerPrefab;
-    private Damageable damageable;
+    protected Damageable damageable;
 
     protected virtual void Awake() {
         rbody = GetComponent<Rigidbody2D>();
@@ -35,51 +35,93 @@ public abstract class CharacterMove : MonoBehaviour {
     protected virtual void Update() {
         
     }
-
-    // this sets the destination of the character and calls the CalculatePath coroutine
+    
+    /// <summary>
+    /// this sets the destination of the character by calling the CalculatePath coroutine
+    /// </summary>
+    /// <param name="newX"></param>
+    /// <param name="newY"></param>
     public void SetDestination(int newX, int newY) {
         if (!GameManager.Instance.IsWithinGridSpace(newX, newY)) { return; }
-        if (GameManager.Instance.grid[newX, newY] != null) { Debug.Log("Blocked!"); return; }
+        if (GameManager.Instance.grid[newX, newY] != null) { return; }
+        if(damageable.XPos == newX && damageable.YPos == newY) { return; }
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
 
         // Calculate path
         _movementRoutine = StartCoroutine(CalculatePath(newX, newY));
     }
-
-    // this makes the character wander a random path
+    
+    /// <summary>
+    /// this makes the character wander a random path within a given number of steps
+    /// </summary>
+    /// <param name="steps"></param>
     public void SetDestination(int steps) {
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
         _movementRoutine = StartCoroutine(CalculatePathRandom(steps));
     }
-
-    // this initiates the search for a point with the best cover
-    public void SetDestination(Vector2 desiredCover) {
+    
+    /// <summary>
+    /// this initiates the search for a point with the best cover using a Vector2 that determines the direction of the threat
+    /// </summary>
+    /// <param name="desiredCover"></param>
+    public void SetDestination(Vector2 desiredCover, int range) {
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
-        _movementRoutine = StartCoroutine(CalculatePathCover(desiredCover));
+        _movementRoutine = StartCoroutine(CalculatePathCover(desiredCover, range));
+    }
+    
+    /// <summary>
+    /// this calls the TravelProcess coroutine to move the character, if it has a path
+    /// </summary>
+    /// <param name="speed"></param>
+    /// <param name="forwardLook"></param>
+    public void MoveToDestination(float speed, bool forwardLook) {
+        if(path.Count == 0) { Debug.Log("Empty path!"); return; }
+        if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
+
+        _movementRoutine = StartCoroutine(TravelProcess(speed, forwardLook));
+    }
+    
+    /// <summary>
+    /// manually move the character one space in some direction
+    /// </summary>
+    /// <param name="newX"></param>
+    /// <param name="newY"></param>
+    public void MoveToDestination(Vector2 dir, bool lookForward, float speed) {
+
+        if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
+
+        dir.x = Mathf.Clamp(dir.x, -1, 1);
+        dir.y = Mathf.Clamp(dir.y, -1, 1);
+        int newX = Mathf.RoundToInt(dir.x) + damageable.XPos;
+        int newY = Mathf.RoundToInt(dir.y) + damageable.YPos;
+
+        if(GameManager.Instance.IsWithinGridSpace(newX, newY)) {
+            path.Clear();
+            path.Push(new Vector2(newX, newY));
+        }
+        _movementRoutine = StartCoroutine(TravelProcess(speed, lookForward));
     }
 
-    // this calls the TravelProcess coroutine to move the player, if it has a path
-    public void MoveToDestination(float speed) {
-        if(path.Count == 0) { return; }
-        if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
-
-        _movementRoutine = StartCoroutine(TravelProcess(speed));
-    }
-
-    // cancels the current path and current movement
+    /// <summary>
+    /// Cancels the current path and current movement
+    /// </summary>
     public void CancelDestination() {
         if(movementRoutine != null) { StopCoroutine(_movementRoutine); }
         path.Clear();
+        rbody.velocity = Vector2.zero;
         _movementRoutine = null;
     }
-
-    // this hard sets the rotation of the character
+    
+    /// <summary>
+    ///  this hard sets the rotation of the character
+    /// </summary>
+    /// <param name="dir"></param>
     public void SetRotation(Vector2 dir) {
         transform.up = dir;
     }
 
     // gets a path to a specific point on the grid
-    protected IEnumerator CalculatePath(int xDest, int yDest) {
+    protected virtual IEnumerator CalculatePath(int xDest, int yDest) {
         Debug.Log("Calculating path for " + name + "...");
         path.Clear(); // clear our current path (if we have one)
         List<Vertex> toBeVisited = new List<Vertex>(); // queue for vertices that we have yet to visit
@@ -130,13 +172,13 @@ public abstract class CharacterMove : MonoBehaviour {
             }
 
             // Vertex.Split(toBeVisited, 0, toBeVisited.Count - 1); // sort list by lowest distance score(faux priority queue)
-            yield return new WaitForSeconds(.01f);
+            yield return null;
         }
         _movementRoutine = null;
     }
 
     // gets a random location from the starting point. Used for wandering
-    protected IEnumerator CalculatePathRandom(int steps) {
+    protected virtual IEnumerator CalculatePathRandom(int steps) {
         Debug.Log("Calculating random path for " + name + "...");
         path.Clear(); // clear our current path (if we have one)
 
@@ -197,13 +239,13 @@ public abstract class CharacterMove : MonoBehaviour {
             }
 
             // Vertex.Split(toBeVisited, 0, toBeVisited.Count - 1); // sort list by lowest distance score(faux priority queue)
-            yield return new WaitForSeconds(.01f);
+            yield return null;
         }
         _movementRoutine = null;
     }
 
     // finds the nearest point of cover on the map based on desired direction
-    protected IEnumerator CalculatePathCover(Vector2 desiredCover) {
+    protected virtual IEnumerator CalculatePathCover(Vector2 desiredCover, int range) {
         Debug.Log("Calculating cover path for " + name + "...");
         path.Clear(); // clear our current path (if we have one)
         List<Vertex> toBeVisited = new List<Vertex>(); // queue for vertices that we have yet to visit
@@ -230,7 +272,7 @@ public abstract class CharacterMove : MonoBehaviour {
 
             // you've found a new position
             if (current.coverScore >= 2) {
-                Debug.Log("Found destination!");
+                Debug.Log("Destination: " + current.xPosition + ", " + current.yPosition);
                 GeneratePath(current);
                 break; // leave this while loop
             }
@@ -259,17 +301,20 @@ public abstract class CharacterMove : MonoBehaviour {
             }
 
             // Vertex.Split(toBeVisited, 0, toBeVisited.Count - 1); // sort list by lowest distance score(faux priority queue)
-            yield return new WaitForSeconds(.01f);
+            yield return null;
         }
 
         // if we did not find perfect cover
         if(path.Count == 0) {
             for(int i = 0; i < beenThere.Count; i++) {
-                if (beenThere[i].coverScore == 1) { GeneratePath(beenThere[i]); break; }
+                if (beenThere[i].coverScore == 1) {
+                    GeneratePath(beenThere[i]);
+                    Debug.Log("Destination: " + beenThere[i]);
+                    break; }
             }
         }
 
-        Debug.Log("Finished calculating path");
+        Debug.Log("Finished calculating path: ");
         _movementRoutine = null;
     }
 
@@ -282,11 +327,13 @@ public abstract class CharacterMove : MonoBehaviour {
     }
 
     // where we move the character
-    protected IEnumerator TravelProcess(float speed) {
+    protected IEnumerator TravelProcess(float speed, bool forwardLook) {
+        Debug.Log("Started moving...");
         while (path.Count != 0) {
             Vector2 gridDest = path.Peek();
             int newX = Mathf.RoundToInt(gridDest.x);
             int newY = Mathf.RoundToInt(gridDest.y);
+            Debug.Log(newX + ", " + newY);
 
             // the space has been occupied by something else
             if(GameManager.Instance.grid[newX, newY] != null) {
@@ -296,14 +343,18 @@ public abstract class CharacterMove : MonoBehaviour {
 
             _currentDestination = GameManager.GetWorldSpace(newX, newY);
             damageable.SetPosition(newX, newY); // update current grid position
+
             while (Vector2.Distance(transform.position, currentDestination) > 0.1f) {
-                rbody.MovePosition(rbody.position + (currentDestination - rbody.position).normalized * Time.deltaTime * speed);
-                yield return null;
+                // rbody.MovePosition(rbody.position + (currentDestination - rbody.position).normalized/* * Time.deltaTime * speed*/); // move character here
+                rbody.velocity = (currentDestination - rbody.position).normalized * speed;
+                if (forwardLook) { SetRotation(currentDestination - rbody.position); }
+                yield return new WaitForEndOfFrame();
             }
             path.Pop();
             yield return null;
         }
         _movementRoutine = null;
+        Debug.Log("Finished moving...");
     }
 
     // this returns the integer position of the character

@@ -18,7 +18,9 @@ public abstract class Brain : MonoBehaviour {
 
     [SerializeField] protected LayerMask visionMask;
     [SerializeField] protected float rangeOfVision; // the maximum distance this character can see
+    public float RangeOfVision { get { return rangeOfVision; } }
     [SerializeField] protected float coneOfVision; // the maximum angle away this character can see
+    public float ConeOfVision { get { return coneOfVision; } }
 
     // Use this for initialization
     protected virtual void Start() {

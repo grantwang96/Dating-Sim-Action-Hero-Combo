@@ -8,7 +8,7 @@ public class CivilianBrain : Brain {
     [SerializeField] private bool occupied;
 
     protected override void Start() {
-        currentState = new NPC_Idle();
+        currentState = new Civilian_Idle();
         base.Start();
     }
 
@@ -17,12 +17,21 @@ public class CivilianBrain : Brain {
         base.Update();
     }
 
+    public override bool CheckVision(Transform enemy) {
+        RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.position - transform.position, rangeOfVision, visionMask);
+        Debug.DrawLine(transform.position, enemy.position, Color.blue, 10f);
+        return rayhit.transform == enemy;
+    }
+
     public override void MainAction() {
         Debug.Log(name + "Merp");
     }
 
     public override void React(Damageable target) {
-        Debug.Log("Ah! " + target.name);
+        System.Type stateType = currentState.GetType();
+        if (stateType == typeof(Civilian_RunAway) || stateType == typeof(Civilian_Panic)) { return; }
+        currentTarget = target;
+        ChangeStates(new Civilian_RunAway());
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {

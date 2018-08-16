@@ -118,7 +118,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 100
   m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e63d2c66abab441b92867b5523e669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   startColor: {r: 1, g: 0, b: 0, a: 0.39215687}
 --- !u!114 &114916615276590292
 MonoBehaviour:
@@ -216,7 +217,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   visionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294966783
   rangeOfVision: 10
   coneOfVision: 50
   panicRadius: 10

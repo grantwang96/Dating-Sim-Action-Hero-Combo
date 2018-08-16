@@ -29,15 +29,11 @@ public class GruntTravel : BrainState {
         if(myBrain.MyCharacterMove.movementRoutine == null) {
             if (searching) {
                 searching = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed, true);
             } else {
                 myBrain.ChangeStates(EnemyTaskManager.Instance.currentTask.PerformAction(myBrain)); // perform current action
                 return;
             }
-        }
-
-        if (!searching) {
-            myBrain.MyCharacterMove.SetRotation(myBrain.MyCharacterMove.currentDestination - (Vector2)myBrain.transform.position);
         }
     }
 
@@ -93,14 +89,10 @@ public class GruntWander : BrainState {
         if(myBrain.MyCharacterMove.movementRoutine == null) {
             if (searching) {
                 searching = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed, true);
             } else {
                 myBrain.ChangeStates(new GruntIdle());
             }
-        }
-
-        if (!searching) {
-            myBrain.MyCharacterMove.SetRotation(myBrain.MyCharacterMove.currentDestination - (Vector2)myBrain.transform.position);
         }
     }
 
@@ -123,14 +115,14 @@ public class GruntTakeCover : BrainState {
         threatDir.y = Mathf.Round(threatDir.y);
         Debug.Log(threatDir);
 
-        myBrain.MyCharacterMove.SetDestination(threatDir);
+        myBrain.MyCharacterMove.SetDestination(threatDir, Mathf.RoundToInt(myBrain.RangeOfVision));
     }
 
     public override void Execute() {
         if(myBrain.MyCharacterMove.movementRoutine == null) {
             if (searching) {
                 searching = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.runSpeed);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.runSpeed, false);
             } else {
                 myBrain.ChangeStates(new GruntDefend());
                 return;
