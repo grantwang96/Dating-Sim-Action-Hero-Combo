@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
         Instance = this;
         rbody = GetComponent<Rigidbody2D>();
+        PlayerDamageable.Instance.OnPlayerDeath += OnPlayerDeath;
 	}
 	
 	// Update is called once per frame
@@ -24,5 +25,11 @@ public class PlayerMovement : MonoBehaviour {
 
         Vector2 input = PlayerInput.Instance.moveVector;
         rbody.velocity = input * runSpeed;
+    }
+
+    private void OnPlayerDeath() {
+        rbody.velocity = Vector2.zero;
+        rbody.isKinematic = true;
+        this.enabled = false;
     }
 }

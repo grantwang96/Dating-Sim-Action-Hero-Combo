@@ -217,7 +217,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   visionMask:
     serializedVersion: 2
-    m_Bits: 4294966783
+    m_Bits: 4294966271
   rangeOfVision: 10
   coneOfVision: 50
   panicRadius: 10

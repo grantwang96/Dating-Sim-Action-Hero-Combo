@@ -25,7 +25,7 @@ public class PlayerAttack : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        PlayerDamageable.Instance.OnPlayerDeath += OnPlayerDeath; // subscribe the player death functionality
 	}
 	
 	// Update is called once per frame
@@ -83,5 +83,9 @@ public class PlayerAttack : MonoBehaviour {
             _totalAmmo = 0;
         }
         canFire = true;
+    }
+
+    public void OnPlayerDeath() {
+        this.enabled = false;
     }
 }

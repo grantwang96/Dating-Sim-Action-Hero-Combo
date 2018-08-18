@@ -24,7 +24,7 @@ public class Civilian_Idle : BrainState {
     }
 
     public override void Exit() {
-        if(lookRoutine != null) {  }
+        if(lookRoutine != null) { myBrain.StopCoroutine(lookRoutine); }
     }
 
     private IEnumerator lookAround(float startingAngle) {
@@ -78,6 +78,41 @@ public class Civilian_Wander : BrainState {
 
     public override void Exit() {
         base.Exit();
+    }
+}
+
+/// <summary>
+/// This has the civilian move to a specific location
+/// </summary>
+public class Civilian_Travel : BrainState {
+
+    private bool searchingForPath = true;
+    int newX;
+    int newY;
+
+    Civilian_Travel(int xPos, int yPos) {
+        newX = xPos;
+        newY = yPos;
+    }
+
+    public override void Enter(Brain brain) {
+        base.Enter(brain);
+    }
+
+    public override void Execute() {
+        base.Execute();
+
+        if (myBrain.MyCharacterMove.movementRoutine == null) {
+            if (searchingForPath) {
+                searchingForPath = false;
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed, true);
+            } else {
+                myBrain.ChangeStates(new Civilian_Idle());
+            }
+        }
+        if (!searchingForPath) {
+            myBrain.MyCharacterMove.SetRotation(myBrain.MyCharacterMove.currentDestination - (Vector2)myBrain.transform.position);
+        }
     }
 }
 
@@ -155,10 +190,16 @@ public class Civilian_Hide : BrainState {
     float time = 0f;
     float maxTime = 20f;
 
+    float speed = 1f;
+    float range = 60f;
+    Coroutine lookRoutine;
+
     public override void Enter(Brain brain) {
         base.Enter(brain);
         Damageable dam = myBrain.GetComponent<Damageable>();
         SetDirection(dam.XPos, dam.YPos);
+
+        myBrain.StartCoroutine(lookAround(dam.transform.eulerAngles.z));
     }
 
     public override void Execute() {
@@ -167,6 +208,10 @@ public class Civilian_Hide : BrainState {
 
         if(time >= maxTime) {
             myBrain.ChangeStates(new Civilian_Idle());
+        }
+
+        if(lookRoutine == null) {
+            lookRoutine = myBrain.StartCoroutine(lookAround(myBrain.transform.eulerAngles.z));
         }
     }
 
@@ -190,5 +235,27 @@ public class Civilian_Hide : BrainState {
                 return;
             }
         }
+    }
+
+    private IEnumerator lookAround(float startingAngle) {
+        float time = 0f;
+        while (time < 1f) {
+            myBrain.transform.eulerAngles = new Vector3(0f, 0f, Mathf.LerpAngle(startingAngle, startingAngle + range, time));
+            time += Time.deltaTime * speed;
+            yield return null;
+        }
+        time = 0f;
+        while (time < 1f) {
+            myBrain.transform.eulerAngles = new Vector3(0f, 0f, Mathf.LerpAngle(startingAngle + range, startingAngle - range, time));
+            time += Time.deltaTime * speed / 2;
+            yield return null;
+        }
+        time = 0f;
+        while (time < 1f) {
+            myBrain.transform.eulerAngles = new Vector3(0f, 0f, Mathf.LerpAngle(startingAngle - 60f, startingAngle, time));
+            time += Time.deltaTime * speed;
+            yield return null;
+        }
+        lookRoutine = null;
     }
 }

@@ -28,6 +28,7 @@ public class CivilianBrain : Brain {
     }
 
     public override void React(Damageable target) {
+
         System.Type stateType = currentState.GetType();
         if (stateType == typeof(Civilian_RunAway) || stateType == typeof(Civilian_Panic)) { return; }
         currentTarget = target;

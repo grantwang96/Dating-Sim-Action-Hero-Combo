@@ -175,7 +175,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   visionMask:
     serializedVersion: 2
-    m_Bits: 4294966783
+    m_Bits: 4294965759
   rangeOfVision: 20
   coneOfVision: 60
   heldWeapon: {fileID: 11400000, guid: 0bbab2541ae5cd74687364fcb17f06f4, type: 2}
@@ -224,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e63d2c66abab441b92867b5523e669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   startColor: {r: 1, g: 0, b: 0, a: 0.19607843}
 --- !u!212 &212369311398540524
 SpriteRenderer:

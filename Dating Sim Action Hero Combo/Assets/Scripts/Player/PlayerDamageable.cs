@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerDamageable : Damageable {
 
@@ -15,6 +16,8 @@ public class PlayerDamageable : Damageable {
     [SerializeField] private float recoverRate;
 
     private Coroutine armorRecoverRoutine;
+    public delegate void PlayerDeath();
+    public event PlayerDeath OnPlayerDeath;
 
     private void Awake() {
         Instance = this;
@@ -57,5 +60,14 @@ public class PlayerDamageable : Damageable {
 
     protected override void Die() {
         base.Die();
+
+        OnPlayerDeath(); // call all player death behaviors
+    }
+
+    public override bool IsThreat(string otherTag) {
+        if(otherTag == "Civilian" || otherTag == "Enemy") {
+            return PlayerInput.Instance.agentModeOn;
+        }
+        return false;
     }
 }

@@ -24,6 +24,24 @@ public class EnemyBrain : Brain{
         base.Update();
 	}
 
+    public override Transform CheckVision() {
+        foreach (Damageable enemy in enemies) {
+            if (Vector2.Angle(enemy.transform.position - transform.position, transform.up) < coneOfVision &&
+               Vector2.Distance(enemy.transform.position, transform.position) < rangeOfVision) {
+
+                RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.transform.position - transform.position, rangeOfVision, visionMask);
+                if (rayhit.transform == enemy.transform) {
+                    return enemy.transform;
+                }
+            }
+        }
+        return null;
+    }
+
+    protected void ShooCivilian(Damageable dam) {
+
+    }
+
     public override void React(Damageable target) {
 
     }

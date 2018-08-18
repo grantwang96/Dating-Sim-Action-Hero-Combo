@@ -23,6 +23,7 @@ public class PlayerInput : MonoBehaviour {
     protected bool AgentModeOn {
         set {
             _agentModeOn = value;
+            gameObject.layer = (_agentModeOn) ? 8 : 9;
             srend.color = (agentModeOn) ? Color.black : Color.white;
         }
     }

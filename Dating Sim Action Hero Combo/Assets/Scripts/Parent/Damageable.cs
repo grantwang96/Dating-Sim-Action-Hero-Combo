@@ -10,6 +10,7 @@ public class Damageable : MonoBehaviour {
     // stores the location information for the grid
     [SerializeField] protected int xPos; public int XPos { get { return xPos; } }
     [SerializeField] protected int yPos; public int YPos { get { return yPos; } }
+
     public void SetPosition(int newX, int newY) {
         GameManager.Instance.grid[xPos, yPos] = null;
         xPos = newX;
@@ -34,5 +35,10 @@ public class Damageable : MonoBehaviour {
 
     protected virtual void Die() {
         Debug.Log(transform.name + " died!");
+    }
+
+    public virtual bool IsThreat(string tag) {
+
+        return false;
     }
 }

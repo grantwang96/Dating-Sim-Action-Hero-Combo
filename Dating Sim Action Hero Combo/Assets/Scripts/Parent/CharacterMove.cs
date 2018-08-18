@@ -65,6 +65,7 @@ public abstract class CharacterMove : MonoBehaviour {
     /// </summary>
     /// <param name="desiredCover"></param>
     public void SetDestination(Vector2 desiredCover, int range) {
+        if (damageable.health <= 0) { return; }
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
         _movementRoutine = StartCoroutine(CalculatePathCover(desiredCover, range));
     }

@@ -24,6 +24,13 @@ public class EnemyBrain_Guard : EnemyBrain {
     }
 
     public override void React(Damageable target) {
+
+        if(target.tag == "Player") {
+
+        } else if(target.tag == "Civilian") {
+
+        }
+
         currentTarget = target;
         System.Type stateType = currentState.GetType();
         if (stateType == typeof(EnemyGuard_Aggro) || stateType == typeof(EnemyGuard_Alert)) { return; }

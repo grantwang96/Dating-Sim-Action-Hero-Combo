@@ -29,7 +29,7 @@ public abstract class Brain : MonoBehaviour {
         if (currentState != null) { currentState.Enter(this); }
     }
 
-    // Updat eis called once per frame
+    // Update is called once per frame
     protected virtual void Update() {
         if (currentState != null) { currentState.Execute(); }
     }
@@ -40,7 +40,9 @@ public abstract class Brain : MonoBehaviour {
                Vector2.Distance(enemy.transform.position, transform.position) < rangeOfVision) {
 
                 RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.transform.position - transform.position, rangeOfVision, visionMask);
-                if (rayhit.transform == enemy.transform) { return enemy.transform; }
+                if (rayhit.transform == enemy.transform) {
+                    return enemy.transform;
+                }
             }
         }
         return null;
@@ -55,7 +57,7 @@ public abstract class Brain : MonoBehaviour {
         }
         return false;
     }
-
+    
     public abstract void React(Damageable target);
 
     public abstract void MainAction();
