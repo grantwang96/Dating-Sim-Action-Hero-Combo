@@ -29,6 +29,8 @@ public abstract class EnemyTask : MonoBehaviour { // stores information about th
     // gets the location for the enemy unit to go to
     public abstract Vector2 GetLocation();
 
+    public abstract bool InValidSpace(int brainX, int brainY);
+
     // what the enemy should do when they have reached the task location
-    public abstract BrainState PerformAction(Brain brain);
+    public abstract bool PerformAction(Brain brain);
 }

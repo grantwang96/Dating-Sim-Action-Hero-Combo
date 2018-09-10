@@ -66,7 +66,7 @@ public class Civilian_Wander : BrainState {
         if (myBrain.MyCharacterMove.movementRoutine == null) {
             if (searchingForPath) {
                 searchingForPath = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed, true);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyBluePrint.walkSpeed, true);
             } else {
                 myBrain.ChangeStates(new Civilian_Idle());
             }
@@ -105,7 +105,7 @@ public class Civilian_Travel : BrainState {
         if (myBrain.MyCharacterMove.movementRoutine == null) {
             if (searchingForPath) {
                 searchingForPath = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed, true);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyBluePrint.walkSpeed, true);
             } else {
                 myBrain.ChangeStates(new Civilian_Idle());
             }
@@ -130,7 +130,7 @@ public class Civilian_Panic : BrainState {
         threatDir.x = Mathf.Round(threatDir.x);
         threatDir.y = Mathf.Round(threatDir.y);
 
-        myBrain.MyCharacterMove.MoveToDestination(threatDir, true, myBrain.MyCharacterMove.runSpeed);
+        myBrain.MyCharacterMove.MoveToDestination(threatDir, true, myBrain.MyBluePrint.runSpeed);
         // myBrain.MyCharacterMove.SetDestination(threatDir, Mathf.RoundToInt(myBrain.RangeOfVision));
     }
 
@@ -161,7 +161,7 @@ public class Civilian_RunAway : BrainState {
         threatDir.x = Mathf.Round(threatDir.x);
         threatDir.y = Mathf.Round(threatDir.y);
 
-        myBrain.MyCharacterMove.MoveToDestination(threatDir, true, myBrain.MyCharacterMove.runSpeed);
+        myBrain.MyCharacterMove.MoveToDestination(threatDir, true, myBrain.MyBluePrint.runSpeed);
         // myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.runSpeed, true);
     }
 

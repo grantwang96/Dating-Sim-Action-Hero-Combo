@@ -86,7 +86,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1977594996585916}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 5, z: 0}
+  m_LocalPosition: {x: -6, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4929924464704598}
@@ -119,7 +119,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 30
-  m_LinearDrag: 1
+  m_LinearDrag: 10
   m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -150,7 +150,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 1977594996585916}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b9439e59070f88c45bc1c3e0f9fba774, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -170,14 +170,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myDamageable: {fileID: 0}
   myCharMove: {fileID: 0}
+  myBluePrint: {fileID: 11400000, guid: 9c407e3fa04f5e04e99bc5ad6134f3e5, type: 2}
   enemies:
   - {fileID: 0}
   currentTarget: {fileID: 0}
   visionMask:
     serializedVersion: 2
     m_Bits: 4294965759
-  rangeOfVision: 20
-  coneOfVision: 60
   heldWeapon: {fileID: 11400000, guid: 0bbab2541ae5cd74687364fcb17f06f4, type: 2}
   canFire: 1
   _currentClip: 10
@@ -208,11 +207,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rbody: {fileID: 0}
-  _walkSpeed: 3
-  _runSpeed: 6
   markerPrefab: {fileID: 1305129920698028, guid: f4a7836dcc3afd54aae3565a864bfd71,
     type: 2}
-  _enemyData: {fileID: 11400000, guid: b3e5a24afc176ad4fa11a9a46f8790bd, type: 2}
 --- !u!114 &114168724626078496
 MonoBehaviour:
   m_ObjectHideFlags: 1

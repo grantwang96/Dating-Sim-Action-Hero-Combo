@@ -12,7 +12,7 @@ public class EnemyDamageable : Damageable {
 
     protected override void Start() {
         base.Start();
-        _health = GetComponent<EnemyMovement>().enemyData.maxHealth;
+        _health = myBrain.MyBluePrint.maxHealth;
     }
 
     public override void TakeDamage(int damage, Damageable source) {
@@ -20,7 +20,7 @@ public class EnemyDamageable : Damageable {
         base.TakeDamage(damage, source);
         if(myBrain != null) {
             Damageable dam = source.GetComponent<Damageable>();
-            myBrain.React(source);
+            myBrain.ReactToThreat(source);
         }
     }
 

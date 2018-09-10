@@ -9,14 +9,10 @@ public abstract class CharacterMove : MonoBehaviour {
 
     [SerializeField] protected Rigidbody2D rbody;
     protected Stack<Vector2> path = new Stack<Vector2>();
+    public int pathSize { get { return path.Count; } }
     private Vector2 _currentDestination;
     public Vector2 currentDestination { get { return _currentDestination; } }
-
-    [SerializeField] protected float _walkSpeed;
-    public float walkSpeed { get { return _walkSpeed; } }
-    [SerializeField] protected float _runSpeed;
-    public float runSpeed { get { return _runSpeed; } }
-
+    
     protected Coroutine _movementRoutine;
     public Coroutine movementRoutine { get { return _movementRoutine; } }
 
@@ -46,7 +42,8 @@ public abstract class CharacterMove : MonoBehaviour {
         if (GameManager.Instance.grid[newX, newY] != null) { return; }
         if(damageable.XPos == newX && damageable.YPos == newY) { return; }
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
-
+        CancelDestination();
+        
         // Calculate path
         _movementRoutine = StartCoroutine(CalculatePath(newX, newY));
     }
@@ -57,6 +54,7 @@ public abstract class CharacterMove : MonoBehaviour {
     /// <param name="steps"></param>
     public void SetDestination(int steps) {
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
+        CancelDestination();
         _movementRoutine = StartCoroutine(CalculatePathRandom(steps));
     }
     
@@ -67,6 +65,7 @@ public abstract class CharacterMove : MonoBehaviour {
     public void SetDestination(Vector2 desiredCover, int range) {
         if (damageable.health <= 0) { return; }
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
+        CancelDestination();
         _movementRoutine = StartCoroutine(CalculatePathCover(desiredCover, range));
     }
     
@@ -76,8 +75,8 @@ public abstract class CharacterMove : MonoBehaviour {
     /// <param name="speed"></param>
     /// <param name="forwardLook"></param>
     public void MoveToDestination(float speed, bool forwardLook) {
-        if(path.Count == 0) { Debug.Log("Empty path!"); return; }
         if (_movementRoutine != null) { StopCoroutine(_movementRoutine); }
+        if (path.Count == 0) { Debug.Log("Empty path!"); return; }
 
         _movementRoutine = StartCoroutine(TravelProcess(speed, forwardLook));
     }
@@ -121,6 +120,14 @@ public abstract class CharacterMove : MonoBehaviour {
         transform.up = dir;
     }
 
+    /// <summary>
+    /// this hard sets the rotation of the character
+    /// </summary>
+    /// <param name="z"></param>
+    public void SetRotation(float z) {
+        rbody.MoveRotation(z);
+    }
+
     // gets a path to a specific point on the grid
     protected virtual IEnumerator CalculatePath(int xDest, int yDest) {
         Debug.Log("Calculating path for " + name + "...");
@@ -138,7 +145,7 @@ public abstract class CharacterMove : MonoBehaviour {
         current.distanceFromStart = 0; // calculate distance from start (on path)
         current.distanceScore = current.distanceFromStart + current.manhattanDistanceToDestination; // generate total score
         toBeVisited.Add(current); // add to "to be visited"
-
+        Debug.Log("-------------------------------------");
         // while not all possibilities haven't been expended yet
         while (toBeVisited.Count > 0) {
             current = Vertex.GetSmallestDistanceScore(toBeVisited);
@@ -272,7 +279,7 @@ public abstract class CharacterMove : MonoBehaviour {
             beenThere.Add(current);
 
             // you've found a new position
-            if (current.coverScore >= 2) {
+            if (current.coverScore >= 2 || current.distanceScore == range) {
                 Debug.Log("Destination: " + current.xPosition + ", " + current.yPosition);
                 GeneratePath(current);
                 break; // leave this while loop
@@ -334,7 +341,6 @@ public abstract class CharacterMove : MonoBehaviour {
             Vector2 gridDest = path.Peek();
             int newX = Mathf.RoundToInt(gridDest.x);
             int newY = Mathf.RoundToInt(gridDest.y);
-            Debug.Log(newX + ", " + newY);
 
             // the space has been occupied by something else
             if(GameManager.Instance.grid[newX, newY] != null) {

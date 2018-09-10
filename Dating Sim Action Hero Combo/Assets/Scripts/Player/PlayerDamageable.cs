@@ -28,7 +28,8 @@ public class PlayerDamageable : Damageable {
     }
 
     private void Update() {
-
+        xPos = GameManager.GetGridSpaceX(transform.position.x);
+        yPos = GameManager.GetGridSpaceY(transform.position.y);
     }
 
     private IEnumerator RecoverArmor() {

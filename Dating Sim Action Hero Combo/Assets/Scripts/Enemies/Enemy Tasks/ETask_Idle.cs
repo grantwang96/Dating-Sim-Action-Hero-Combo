@@ -13,10 +13,10 @@ public class ETask_Idle : EnemyTask {
     }
 
     public override Vector2 GetLocation() {
-        return nearestOpenSpace();
+        return NearestOpenSpace();
     }
 
-    private Vector2 nearestOpenSpace() {
+    private Vector2 NearestOpenSpace() {
         for(int i = 0;i < points.Count; i++) {
             Transform temp = points[i];
             int rand = Random.Range(0, points.Count);
@@ -28,15 +28,24 @@ public class ETask_Idle : EnemyTask {
             int y = GameManager.GetGridSpaceY(points[i].position.y);
             if(GameManager.Instance.grid[x, y] == null) {
                 Debug.Log(points[i] + " " + x + ", " + y);
-                Debug.Log("Space empty: " + GameManager.Instance.grid[x, y] == null);
+                Debug.Log(GameManager.Instance.grid[x, y]);
                 return new Vector2(x, y);
             }
         }
         return new Vector2(-1, -1);
     }
 
+    public override bool InValidSpace(int brainX, int brainY) {
+        foreach(Transform point in points) {
+            int gridX = GameManager.GetGridSpaceX(point.position.x);
+            int gridY = GameManager.GetGridSpaceY(point.position.y);
+            if(gridX == brainX && gridY == brainY) { return true; }
+        }
+        return false;
+    }
+
     public override void OnEnemyDeath(Damageable enemy) {
-        Debug.Log(enemy.name);
+        Debug.Log(enemy.name + " was killed!");
         if (enemiesRequired.Contains(enemy)) {
             enemiesRequired.Remove(enemy);
         }
@@ -61,7 +70,9 @@ public class ETask_Idle : EnemyTask {
         }
     }
 
-    public override BrainState PerformAction(Brain brain) {
-        return new GruntIdle();
+    public override bool PerformAction(Brain brain) {
+        bool validSpace = InValidSpace(brain.xPos, brain.yPos);
+        if (validSpace) { currentProgress += Time.deltaTime; };
+        return validSpace;
     }
 }

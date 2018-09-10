@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBrain : Brain{
+public class EnemyBrain : Brain {
 
     public WeaponType heldWeapon;
     [SerializeField] protected bool canFire = true;
@@ -16,7 +16,8 @@ public class EnemyBrain : Brain{
         base.Start();
         _currentClip = heldWeapon.clipCapacity;
 
-        ChangeStates(new Civilian_Idle());
+        // ChangeStates(new Civilian_Idle());
+        ChangeStates(new Idle());
 	}
 	
 	// Update is called once per frame
@@ -26,10 +27,10 @@ public class EnemyBrain : Brain{
 
     public override Transform CheckVision() {
         foreach (Damageable enemy in enemies) {
-            if (Vector2.Angle(enemy.transform.position - transform.position, transform.up) < coneOfVision &&
-               Vector2.Distance(enemy.transform.position, transform.position) < rangeOfVision) {
+            if (Vector2.Angle(enemy.transform.position - transform.position, transform.up) < myBluePrint.maxVisionAngle &&
+               Vector2.Distance(enemy.transform.position, transform.position) < myBluePrint.rangeOfVision) {
 
-                RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.transform.position - transform.position, rangeOfVision, visionMask);
+                RaycastHit2D rayhit = Physics2D.Raycast(transform.position, enemy.transform.position - transform.position, myBluePrint.rangeOfVision, visionMask);
                 if (rayhit.transform == enemy.transform) {
                     return enemy.transform;
                 }
@@ -37,13 +38,11 @@ public class EnemyBrain : Brain{
         }
         return null;
     }
-
-    protected void ShooCivilian(Damageable dam) {
-
-    }
-
-    public override void React(Damageable target) {
-
+    
+    public override void ReactToThreat(Damageable target) {
+        if(currentState.GetType() == typeof(Threat_Detected)) { return; }
+        currentTarget = target;
+        ChangeStates(new Threat_Detected());
     }
 
     public override void MainAction() {

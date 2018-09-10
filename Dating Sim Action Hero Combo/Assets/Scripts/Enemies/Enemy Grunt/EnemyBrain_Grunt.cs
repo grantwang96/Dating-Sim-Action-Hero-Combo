@@ -14,12 +14,12 @@ public class EnemyBrain_Grunt : EnemyBrain {
         myCharMove = GetComponent<CharacterMove>();
 
         _currentClip = heldWeapon.clipCapacity;
-        ChangeStates(new GruntTravel());
+        ChangeStates(new Idle());
     }
 
     // grunts will run away upon first seeing a threat. Afterwards defends against threat.
-    public override void React(Damageable target) {
-
+    public override void ReactToThreat(Damageable target) {
+        /*
         if(target.tag == "Player") {
             System.Type stateType = currentState.GetType();
             if (stateType == typeof(GruntTakeCover) || stateType == typeof(GruntDefend)) { return; }
@@ -28,6 +28,11 @@ public class EnemyBrain_Grunt : EnemyBrain {
         } else if(target.tag == "Civilian") {
 
         }
+        */
 
+        System.Type stateType = currentState.GetType();
+        if (stateType == typeof(CalculatePath_Dir) || stateType == typeof(Threat_Detected)) { return; }
+        currentTarget = target;
+        ChangeStates(new Threat_Detected());
     }
 }

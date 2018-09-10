@@ -29,9 +29,9 @@ public class GruntTravel : BrainState {
         if(myBrain.MyCharacterMove.movementRoutine == null) {
             if (searching) {
                 searching = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed, true);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyBluePrint.walkSpeed, true);
             } else {
-                myBrain.ChangeStates(EnemyTaskManager.Instance.currentTask.PerformAction(myBrain)); // perform current action
+                // myBrain.ChangeStates(EnemyTaskManager.Instance.currentTask.PerformAction(myBrain)); // perform current action
                 return;
             }
         }
@@ -89,7 +89,7 @@ public class GruntWander : BrainState {
         if(myBrain.MyCharacterMove.movementRoutine == null) {
             if (searching) {
                 searching = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.walkSpeed, true);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyBluePrint.walkSpeed, true);
             } else {
                 myBrain.ChangeStates(new GruntIdle());
             }
@@ -115,14 +115,14 @@ public class GruntTakeCover : BrainState {
         threatDir.y = Mathf.Round(threatDir.y);
         Debug.Log(threatDir);
 
-        myBrain.MyCharacterMove.SetDestination(threatDir, Mathf.RoundToInt(myBrain.RangeOfVision));
+        myBrain.MyCharacterMove.SetDestination(threatDir, Mathf.RoundToInt(myBrain.MyBluePrint.rangeOfVision));
     }
 
     public override void Execute() {
         if(myBrain.MyCharacterMove.movementRoutine == null) {
             if (searching) {
                 searching = false;
-                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyCharacterMove.runSpeed, false);
+                myBrain.MyCharacterMove.MoveToDestination(myBrain.MyBluePrint.runSpeed, false);
             } else {
                 myBrain.ChangeStates(new GruntDefend());
                 return;

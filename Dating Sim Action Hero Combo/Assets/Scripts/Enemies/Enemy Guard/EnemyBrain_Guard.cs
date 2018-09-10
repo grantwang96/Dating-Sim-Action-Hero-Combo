@@ -6,7 +6,7 @@ public class EnemyBrain_Guard : EnemyBrain {
 
     [SerializeField] public Transform pathSet;
     [SerializeField] public List<Transform> patrolPath = new List<Transform>();
-    private int _pathIndex = 0; // where is your next destination
+    [SerializeField] private int _pathIndex = 0; // where is your next destination
     public int pathIndex { get { return _pathIndex; } }
 
     private void Awake() {
@@ -20,21 +20,24 @@ public class EnemyBrain_Guard : EnemyBrain {
         myCharMove = GetComponent<CharacterMove>();
 
         _currentClip = heldWeapon.clipCapacity;
-        ChangeStates(new EnemyGuard_Patrol());
+        GetNearestPatrolPathPoint();
+        ChangeStates(new Idle());
     }
 
-    public override void React(Damageable target) {
-
-        if(target.tag == "Player") {
-
-        } else if(target.tag == "Civilian") {
-
-        }
-
+    public override void ReactToThreat(Damageable target) {
+        
         currentTarget = target;
         System.Type stateType = currentState.GetType();
-        if (stateType == typeof(EnemyGuard_Aggro) || stateType == typeof(EnemyGuard_Alert)) { return; }
-        ChangeStates(new EnemyGuard_Alert());
+        if(stateType == typeof(Threat_Detected)){ return; }
+        // if (stateType == typeof(EnemyGuard_Aggro) || stateType == typeof(EnemyGuard_Alert)) { return; }
+        ChangeStates(new Threat_Detected());
+    }
+
+    public override void OnThreatGone() {
+        base.OnThreatGone();
+        _xDest = currentTarget.XPos;
+        _yDest = currentTarget.YPos;
+        Debug.Log("Threat Last Seen: " + xDest + ", " + yDest);
     }
 
     public void IncrementPathIndex() {

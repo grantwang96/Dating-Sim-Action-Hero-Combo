@@ -557,36 +557,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114808695920193164, guid: 6f8b5bf9fecf1fe4da15984126a61c81,
-        type: 2}
-      propertyPath: recoverDelay
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114808695920193164, guid: 6f8b5bf9fecf1fe4da15984126a61c81,
-        type: 2}
-      propertyPath: recoverRate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114808695920193164, guid: 6f8b5bf9fecf1fe4da15984126a61c81,
-        type: 2}
-      propertyPath: _maxArmor
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114808695920193164, guid: 6f8b5bf9fecf1fe4da15984126a61c81,
-        type: 2}
-      propertyPath: _armor
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114983091615224766, guid: 6f8b5bf9fecf1fe4da15984126a61c81,
-        type: 2}
-      propertyPath: startColor.a
-      value: 0.19607843
-      objectReference: {fileID: 0}
-    - target: {fileID: 212663932095367108, guid: 6f8b5bf9fecf1fe4da15984126a61c81,
-        type: 2}
-      propertyPath: m_Color.a
-      value: 0.19607843
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6f8b5bf9fecf1fe4da15984126a61c81, type: 2}
   m_IsPrefabParent: 0
@@ -1139,14 +1109,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myDamageable: {fileID: 0}
   myCharMove: {fileID: 0}
+  myBluePrint: {fileID: 0}
   enemies:
   - {fileID: 1648668955}
   currentTarget: {fileID: 0}
   visionMask:
     serializedVersion: 2
     m_Bits: 0
-  rangeOfVision: 20
-  coneOfVision: 60
   heldWeapon: {fileID: 11400000, guid: 0bbab2541ae5cd74687364fcb17f06f4, type: 2}
   canFire: 1
   _currentClip: 0
@@ -1556,62 +1525,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4342438562630794, guid: f501acabbb544f84987be8a1b8557c4d,
     type: 2}
   m_PrefabInternal: {fileID: 703420111}
---- !u!1 &1111868105
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1111868106}
-  - component: {fileID: 1111868107}
-  m_Layer: 0
-  m_Name: VisionCone
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1111868106
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1111868105}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1831441906}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &1111868107
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1111868105}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0, y: 0}
-      - {x: -1, y: 1}
-      - {x: 1, y: 1}
 --- !u!1 &1118784299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,7 +1819,7 @@ Prefab:
       objectReference: {fileID: 201803877}
     - target: {fileID: 1191700582154324, guid: 47970b7e4fb52214b975740902ec62e5, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47970b7e4fb52214b975740902ec62e5, type: 2}
@@ -2146,7 +2059,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1977594996585916, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
@@ -2300,7 +2213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   location: {x: 6, y: 0}
-  timeToComplete: 0
+  timeToComplete: 100
   currentProgress: 0
   enemiesRequired:
   - {fileID: 441121292}
@@ -2317,11 +2230,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4537490907903880, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2352,14 +2265,9 @@ Prefab:
       propertyPath: enemies.Array.data[0]
       value: 
       objectReference: {fileID: 1648668955}
-    - target: {fileID: 114002987962368772, guid: 7219e067dceb8064aace98a841737ef3,
-        type: 2}
-      propertyPath: enemies.Array.data[1]
-      value: 
-      objectReference: {fileID: 441121292}
     - target: {fileID: 1977594996585916, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
@@ -2584,11 +2492,6 @@ Transform:
   m_Father: {fileID: 1527068193}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1831441906 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4016282031870788, guid: 47970b7e4fb52214b975740902ec62e5,
-    type: 2}
-  m_PrefabInternal: {fileID: 1285713758}
 --- !u!4 &1869497773 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4342438562630794, guid: f501acabbb544f84987be8a1b8557c4d,
@@ -2669,6 +2572,16 @@ Prefab:
     - target: {fileID: 1926785635101302, guid: 1df0a6dabb03e4940b06359b60726c0d, type: 2}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114936017219220810, guid: 1df0a6dabb03e4940b06359b60726c0d,
+        type: 2}
+      propertyPath: myBluePrint
+      value: 
+      objectReference: {fileID: 11400000, guid: 02351091f0c002448b0206c620d0c623,
+        type: 2}
+    - target: {fileID: 1697515828205738, guid: 1df0a6dabb03e4940b06359b60726c0d, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1df0a6dabb03e4940b06359b60726c0d, type: 2}

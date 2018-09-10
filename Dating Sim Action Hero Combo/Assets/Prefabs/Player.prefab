@@ -212,11 +212,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 25
-  _armor: 25
-  _maxArmor: 25
-  recovering: 0
-  recoverDelay: 2
-  recoverRate: 0.5
+  xPos: 0
+  yPos: 0
+  _armor: 10
+  _maxArmor: 10
+  recoverDelay: 3
+  recoverRate: 1
 --- !u!114 &114983091615224766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -228,7 +229,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e63d2c66abab441b92867b5523e669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startColor: {r: 1, g: 0, b: 0, a: 0.39215687}
+  owner: {fileID: 0}
+  startColor: {r: 1, g: 0, b: 0, a: 0.19607843}
 --- !u!212 &212663932095367108
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -265,7 +267,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e972304b7fca3d647b30e71d9e913e91, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.39215687}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.19607843}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
