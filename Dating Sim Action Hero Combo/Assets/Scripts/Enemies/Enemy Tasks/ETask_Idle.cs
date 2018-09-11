@@ -72,7 +72,10 @@ public class ETask_Idle : EnemyTask {
 
     public override bool PerformAction(Brain brain) {
         bool validSpace = InValidSpace(brain.xPos, brain.yPos);
-        if (validSpace) { currentProgress += Time.deltaTime; };
+        if (validSpace) {
+            currentProgress += Time.deltaTime;
+            if(currentProgress >= timeToComplete) { OnSucceed(); }
+        };
         return validSpace;
     }
 }

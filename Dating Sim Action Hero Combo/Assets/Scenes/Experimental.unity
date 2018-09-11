@@ -557,6 +557,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1992125369977426, guid: 6f8b5bf9fecf1fe4da15984126a61c81, type: 2}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6f8b5bf9fecf1fe4da15984126a61c81, type: 2}
   m_IsPrefabParent: 0
@@ -2217,7 +2221,6 @@ MonoBehaviour:
   currentProgress: 0
   enemiesRequired:
   - {fileID: 441121292}
-  - {fileID: 1401828488}
   NextTaskSuccess: {fileID: 0}
   NextTaskFail: {fileID: 0}
   points: []
@@ -2267,7 +2270,7 @@ Prefab:
       objectReference: {fileID: 1648668955}
     - target: {fileID: 1977594996585916, guid: 7219e067dceb8064aace98a841737ef3, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7219e067dceb8064aace98a841737ef3, type: 2}

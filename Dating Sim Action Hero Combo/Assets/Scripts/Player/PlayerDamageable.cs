@@ -46,6 +46,9 @@ public class PlayerDamageable : Damageable {
     }
 
     public override void TakeDamage(int damage, Damageable source) {
+
+        if(_health <= 0) { return; }
+
         if(armor > 0) {
             _armor -= damage;
             if(armorRecoverRoutine != null) { StopCoroutine(armorRecoverRoutine); }
@@ -63,6 +66,7 @@ public class PlayerDamageable : Damageable {
         base.Die();
 
         OnPlayerDeath(); // call all player death behaviors
+        EnemyTaskManager.Instance.EndGame(EnemyTaskManager.Instance.currentTask);
     }
 
     public override bool IsThreat(string otherTag) {

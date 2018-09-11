@@ -11,8 +11,10 @@ public class EnemyTaskManager : MonoBehaviour {
         get { return _currentTask; }
         set {
             if(value == null) {
-                if (_currentTask.successful) { Debug.Log("Game over!"); }
-                else { Debug.Log("You win!"); }
+                EndGame(_currentTask);
+            } else {
+                OnEnemyDeath -= _currentTask.OnEnemyDeath;
+                OnEnemyDeath += value.OnEnemyDeath;
             }
             _currentTask = value;
         }
@@ -25,11 +27,40 @@ public class EnemyTaskManager : MonoBehaviour {
 
     private void Awake() {
         Instance = this;
+    }
+
+    private void Start() {
         OnEnemyDeath += currentTask.OnEnemyDeath;
     }
 
     public void EnemyKilled(Damageable enemy) {
         OnEnemyDeath.Invoke(enemy);
+    }
+    
+    /// <summary>
+    /// Ends the game. Pass in the last enemy task to check whether player won or lost
+    /// </summary>
+    /// <param name="lastTask"></param>
+    public void EndGame(EnemyTask lastTask) {
+        // get result of game
+        bool result = ValidateEndGame();
+
+        // deactivate gameplayer PlayerInput controls
+        PlayerInput.Instance.enabled = false;
+
+        // display appropriate screen to result
+        Debug.Log("Player has " + ((result) ? "won" : "lost") + "!");
+    }
+
+    /// <summary>
+    /// Checks to see if player has won or lost
+    /// </summary>
+    /// <returns></returns>
+    private bool ValidateEndGame() {
+        if(PlayerDamageable.Instance.health > 0 && !currentTask.successful) {
+            return true;
+        }
+        return false;
     }
 }
 
