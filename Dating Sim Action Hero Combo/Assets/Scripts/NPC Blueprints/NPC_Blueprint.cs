@@ -36,6 +36,7 @@ public abstract class NPC_Blueprint : ScriptableObject {
     /// <param name="brain"></param>
     public virtual void IdleEnter(Brain brain) {
         Debug.Log(brain + " has begun idling...");
+        brain.currentTarget = null;
         brain.StartCoroutine(Idling(brain));
     }
     /// <summary>
@@ -95,6 +96,9 @@ public abstract class NPC_Blueprint : ScriptableObject {
             brain.ChangeStates(new Travel());
         }
     }
+    public virtual void CalculateWanderExit(Brain brain) {
+
+    }
 
     // functions that handle traveling along a path
     public virtual void TravelEnter(Brain brain) {
@@ -111,6 +115,9 @@ public abstract class NPC_Blueprint : ScriptableObject {
             brain.ChangeStates(new Idle());
         }
     }
+    public virtual void TravelExit(Brain brain) {
+        
+    }
 
     // functions that handle threats
     /// <summary>
@@ -125,6 +132,9 @@ public abstract class NPC_Blueprint : ScriptableObject {
         dir.x = Mathf.Round(dir.x);
         dir.y = Mathf.Round(dir.y);
         brain.MyCharacterMove.MoveToDestination(dir, true, runSpeed);
+    }
+    public virtual void ThreatDetectedExit(Brain brain) {
+
     }
 
     protected void CheckForDanger(Brain brain) {

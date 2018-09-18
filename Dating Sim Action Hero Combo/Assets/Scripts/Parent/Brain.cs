@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// the parent class for AI entities
 /// </summary>
-public abstract class Brain : MonoBehaviour {
+public abstract class Brain : MonoBehaviour, Interactable {
 
     protected BrainState currentState;
 
@@ -104,5 +104,9 @@ public abstract class Brain : MonoBehaviour {
         if(currentState != null) { currentState.Exit(); }
         currentState = newState;
         newState.Enter(this);
+    }
+
+    public virtual void Interact() {
+
     }
 }

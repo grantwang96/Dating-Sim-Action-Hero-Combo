@@ -46,6 +46,10 @@ public class CalculatePath_Wander : BrainState {
     public override void Execute() {
         myBrain.MyBluePrint.CalculatePathExec(myBrain);
     }
+
+    public override void Exit() {
+        myBrain.MyBluePrint.CalculateWanderExit(myBrain);
+    }
 }
 
 /// <summary>
@@ -114,3 +118,6 @@ public class Threat_Detected : BrainState {
     }
 }
 
+public interface Interactable {
+    void Interact();
+}

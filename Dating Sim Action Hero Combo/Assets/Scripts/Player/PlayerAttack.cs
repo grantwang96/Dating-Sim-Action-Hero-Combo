@@ -44,7 +44,14 @@ public class PlayerAttack : MonoBehaviour {
 
     private void Talk() { // interact with an NPC
         if (!canFire) { return; }
-        StartCoroutine(WaitToFire(.2f));
+        Collider2D coll = Physics2D.OverlapCircle(transform.position + transform.forward, .5f);
+        if(coll != null) {
+            Interactable inter = coll.GetComponent<Interactable>();
+            if(inter != null) {
+                inter.Interact();
+                StartCoroutine(WaitToFire(.2f));
+            }
+        }
     }
 
     private void FireGun() { // fires your currently held weapon

@@ -6,7 +6,8 @@ public class DateBrain : Brain {
 
     public static DateBrain Instance;
     public Transform dateLocation; // where the date should normally be
-
+    
+    [Range(-1f, 1f)] public float currentDateStanding;
     public float lastConversationTime; // save the last time the player has interacted with the date
     public Coroutine idleRoutine; // this coroutine runs while the date is satisfied
     
@@ -59,6 +60,10 @@ public class DateBrain : Brain {
     }
 
     public override void MainAction() {
-        
+        lastConversationTime = Time.time;
+    }
+
+    public override void Interact() {
+        MainAction();
     }
 }
