@@ -13,6 +13,7 @@ public class EnemyDamageable : Damageable {
     protected override void Start() {
         base.Start();
         _health = myBrain.MyBluePrint.maxHealth;
+        GameManager.Instance.badGuys.Add(this);
     }
 
     public override void TakeDamage(int damage, Damageable source) {

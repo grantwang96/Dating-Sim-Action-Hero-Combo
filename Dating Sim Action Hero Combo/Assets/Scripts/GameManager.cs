@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour {
     
     public Damageable[,] grid; // holds the map data
 
+    public List<Damageable> goodGuys = new List<Damageable>();
+    public List<Damageable> badGuys = new List<Damageable>();
+
 	// Use this for initialization
 	void Awake () {
         Instance = this;
@@ -27,6 +30,24 @@ public class GameManager : MonoBehaviour {
     void Update () {
 		
 	}
+
+    public void EndGame() {
+        // get result of game
+        bool result = ValidateEndGame();
+
+        // deactivate gameplayer PlayerInput controls
+        PlayerInput.Instance.enabled = false;
+        
+        // display appropriate screen to result
+        Debug.Log("Player has " + ((result) ? "won" : "lost") + "!");
+    }
+
+    private bool ValidateEndGame() {
+        if (PlayerDamageable.Instance.health > 0 && !EnemyTaskManager.Instance.currentTask.successful) {
+            return true;
+        }
+        return false;
+    }
 
     // checks if coordinate is within map
     public bool IsWithinGridSpace(int x, int y) {

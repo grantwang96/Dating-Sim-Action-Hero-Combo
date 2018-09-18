@@ -11,7 +11,7 @@ public class EnemyTaskManager : MonoBehaviour {
         get { return _currentTask; }
         set {
             if(value == null) {
-                EndGame(_currentTask);
+                GameManager.Instance.EndGame();
             } else {
                 OnEnemyDeath -= _currentTask.OnEnemyDeath;
                 OnEnemyDeath += value.OnEnemyDeath;

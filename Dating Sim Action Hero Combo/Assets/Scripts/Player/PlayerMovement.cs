@@ -24,7 +24,8 @@ public class PlayerMovement : MonoBehaviour {
         if (PlayerInput.Instance.switchingOutfits) { return; }
 
         Vector2 input = PlayerInput.Instance.moveVector;
-        rbody.velocity = input * runSpeed;
+        // rbody.velocity = input * runSpeed;
+        rbody.MovePosition(rbody.position + (input * runSpeed * Time.deltaTime));
     }
 
     private void OnPlayerDeath() {

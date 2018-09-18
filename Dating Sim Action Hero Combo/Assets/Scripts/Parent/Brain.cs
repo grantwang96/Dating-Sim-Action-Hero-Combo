@@ -55,8 +55,12 @@ public abstract class Brain : MonoBehaviour {
         if (currentState != null) { currentState.Execute(); }
     }
 
+    /// <summary>
+    /// Checks to see if any threats are within vision
+    /// </summary>
+    /// <returns></returns>
     public virtual Transform CheckVision() { // check the vision of the character and returns enemy transform if found
-        foreach (Damageable enemy in enemies) {
+        foreach (Damageable enemy in GameManager.Instance.badGuys) {
             if (Vector2.Angle(enemy.transform.position - transform.position, transform.up) < myBluePrint.maxVisionAngle &&
                Vector2.Distance(enemy.transform.position, transform.position) < myBluePrint.rangeOfVision) {
 
@@ -69,6 +73,11 @@ public abstract class Brain : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// Checks to see if a specific target can be seen
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <returns></returns>
     public virtual bool CheckVision(Transform enemy) {
         if(enemy == null) { return false; }
         if (Vector2.Angle(enemy.position - transform.position, transform.up) < myBluePrint.maxVisionAngle &&

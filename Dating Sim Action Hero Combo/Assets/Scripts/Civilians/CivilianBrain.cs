@@ -8,7 +8,7 @@ public class CivilianBrain : Brain {
     [SerializeField] private bool occupied;
 
     protected override void Start() {
-        currentState = new Civilian_Idle();
+        ChangeStates(new Idle());
         base.Start();
     }
 

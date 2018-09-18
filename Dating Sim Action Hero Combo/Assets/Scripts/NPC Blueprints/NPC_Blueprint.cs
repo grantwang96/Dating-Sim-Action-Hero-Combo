@@ -104,7 +104,7 @@ public abstract class NPC_Blueprint : ScriptableObject {
     }
     public virtual void TravelExecute(Brain brain) {
         CheckForDanger(brain);
-        Debug.Log(brain.MyCharacterMove.movementRoutine == null);
+        // Debug.Log(brain.MyCharacterMove.movementRoutine == null);
 
         // if we have finished moving to the destination
         if (brain.MyCharacterMove.movementRoutine == null) {

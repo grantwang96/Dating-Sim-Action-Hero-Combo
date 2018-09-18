@@ -25,6 +25,7 @@ public class PlayerDamageable : Damageable {
 
     protected override void Start() {
         // player is not registered with typical obstructions
+        GameManager.Instance.goodGuys.Add(this);
     }
 
     private void Update() {
@@ -66,7 +67,8 @@ public class PlayerDamageable : Damageable {
         base.Die();
 
         OnPlayerDeath(); // call all player death behaviors
-        EnemyTaskManager.Instance.EndGame(EnemyTaskManager.Instance.currentTask);
+        // EnemyTaskManager.Instance.EndGame(EnemyTaskManager.Instance.currentTask);
+        GameManager.Instance.EndGame();
     }
 
     public override bool IsThreat(string otherTag) {

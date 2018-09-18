@@ -26,7 +26,7 @@ public class EnemyBrain : Brain {
 	}
 
     public override Transform CheckVision() {
-        foreach (Damageable enemy in enemies) {
+        foreach (Damageable enemy in GameManager.Instance.goodGuys) {
             if (Vector2.Angle(enemy.transform.position - transform.position, transform.up) < myBluePrint.maxVisionAngle &&
                Vector2.Distance(enemy.transform.position, transform.position) < myBluePrint.rangeOfVision) {
 

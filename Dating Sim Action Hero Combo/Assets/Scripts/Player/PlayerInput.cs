@@ -44,6 +44,10 @@ public class PlayerInput : MonoBehaviour {
         ProcessPCInputs();
 	}
 
+    private void OnDisable() {
+        _moveVector = Vector2.zero;
+    }
+
     private void ProcessPCInputs() {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");

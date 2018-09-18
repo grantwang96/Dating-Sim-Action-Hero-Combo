@@ -19,17 +19,6 @@ public class EnemyBrain_Grunt : EnemyBrain {
 
     // grunts will run away upon first seeing a threat. Afterwards defends against threat.
     public override void ReactToThreat(Damageable target) {
-        /*
-        if(target.tag == "Player") {
-            System.Type stateType = currentState.GetType();
-            if (stateType == typeof(GruntTakeCover) || stateType == typeof(GruntDefend)) { return; }
-            currentTarget = target;
-            ChangeStates(new GruntTakeCover());
-        } else if(target.tag == "Civilian") {
-
-        }
-        */
-
         System.Type stateType = currentState.GetType();
         if (stateType == typeof(CalculatePath_Dir) || stateType == typeof(Threat_Detected)) { return; }
         currentTarget = target;
