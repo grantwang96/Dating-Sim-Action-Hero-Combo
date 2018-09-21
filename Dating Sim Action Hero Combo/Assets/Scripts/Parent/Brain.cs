@@ -11,10 +11,8 @@ public abstract class Brain : MonoBehaviour, Interactable {
     [SerializeField] protected Damageable myDamageable;
     public int xPos { get { return myDamageable.XPos; } }
     public int yPos { get { return myDamageable.YPos; } }
-
     [SerializeField] protected CharacterMove myCharMove;
     public CharacterMove MyCharacterMove { get { return myCharMove; } }
-
     [SerializeField] protected NPC_Blueprint myBluePrint; // the blueprint of this NPC
     public NPC_Blueprint MyBluePrint { get { return myBluePrint; } }
 
@@ -23,18 +21,11 @@ public abstract class Brain : MonoBehaviour, Interactable {
     public Damageable currentTarget;
 
     [SerializeField] protected LayerMask visionMask;
-    /*
-    [SerializeField] protected float rangeOfVision; // the maximum distance this character can see
-    public float RangeOfVision { get { return rangeOfVision; } }
-    [SerializeField] protected float coneOfVision; // the maximum angle away this character can see
-    public float ConeOfVision { get { return coneOfVision; } }
-    [SerializeField] protected float scanSpeed;
-    public float ScanSpeed { get { return scanSpeed; } }
 
-    [SerializeField] protected int _maxWanderDistance;
-    public int maxWanderDistance { get { return _maxWanderDistance; } }
-    */
-
+    public Coroutine currentRoutine; // saves the current routine(such as idling)
+    [SerializeField] protected string[] _dialogueList;
+    public string[] dialogueList { get { return _dialogueList; } }
+    
     protected int _xDest;
     protected int _yDest;
     public int xDest { get { return _xDest; } }
@@ -107,6 +98,12 @@ public abstract class Brain : MonoBehaviour, Interactable {
     }
 
     public virtual void Interact() {
-
+        ChangeStates(new Interaction());
+        MainAction();
     }
+
+    public virtual void ExitInteraction() {
+        ChangeStates(new Idle());
+    }
+
 }

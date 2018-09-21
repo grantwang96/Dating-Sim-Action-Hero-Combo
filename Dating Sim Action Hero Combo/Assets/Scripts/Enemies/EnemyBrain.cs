@@ -49,6 +49,14 @@ public class EnemyBrain : Brain {
         FireGun();
     }
 
+    public override void Interact() {
+
+    }
+
+    public override void ExitInteraction() {
+        
+    }
+
     protected void FireGun() {
         if (!canFire) { return; }
         if (!heldWeapon) { return; }

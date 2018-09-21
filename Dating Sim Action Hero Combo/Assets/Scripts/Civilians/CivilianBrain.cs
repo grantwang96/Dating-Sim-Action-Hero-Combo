@@ -24,7 +24,7 @@ public class CivilianBrain : Brain {
     }
 
     public override void MainAction() {
-        Debug.Log(name + "Merp");
+
     }
 
     public override void ReactToThreat(Damageable target) {
@@ -42,5 +42,14 @@ public class CivilianBrain : Brain {
             BulletNoise bn = collider.GetComponent<BulletNoise>();
             ReactToThreat(bn.owner);
         }
+    }
+    
+    public override void ExitInteraction() {
+        ChangeStates(new Idle());
+    }
+
+    public override void Interact() {
+        ChangeStates(new Interaction());
+        MainAction();
     }
 }

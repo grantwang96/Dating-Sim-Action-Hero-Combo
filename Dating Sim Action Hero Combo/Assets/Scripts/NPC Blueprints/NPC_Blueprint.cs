@@ -37,7 +37,7 @@ public abstract class NPC_Blueprint : ScriptableObject {
     public virtual void IdleEnter(Brain brain) {
         Debug.Log(brain + " has begun idling...");
         brain.currentTarget = null;
-        brain.StartCoroutine(Idling(brain));
+        brain.currentRoutine = brain.StartCoroutine(Idling(brain));
     }
     /// <summary>
     /// The characters update loop

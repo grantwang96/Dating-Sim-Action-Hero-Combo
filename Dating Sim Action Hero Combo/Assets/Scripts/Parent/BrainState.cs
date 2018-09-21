@@ -30,6 +30,44 @@ public class BrainState {
 /// </summary>
 public class Idle : BrainState {
 
+    public override void Exit() {
+        myBrain.MyBluePrint.IdleExit(myBrain);
+    }
+}
+
+/// <summary>
+/// Character is talking to the player
+/// </summary>
+public class Interaction : BrainState {
+
+    float startingAngle;
+    Coroutine turnRoutine;
+
+    public override void Enter(Brain brain) {
+        myBrain = brain;
+        startingAngle = brain.transform.eulerAngles.z;
+        Debug.Log(brain.name + " has begun to " + this.GetType().Name);
+
+        float targetAngle = Vector2.Angle(Vector2.up, (PlayerDamageable.Instance.transform.position - myBrain.transform.position));
+        turnRoutine = myBrain.StartCoroutine(TurnTo(targetAngle));
+
+
+    }
+
+    public override void Exit() {
+        if(turnRoutine != null) { myBrain.StopCoroutine(turnRoutine); }
+        turnRoutine = myBrain.StartCoroutine(TurnTo(startingAngle));
+    }
+
+    IEnumerator TurnTo(float targetAngle) {
+        float time = 0f;
+        float startAngle = myBrain.transform.eulerAngles.z;
+        while(time < 1f) {
+            time += Time.deltaTime;
+            myBrain.MyCharacterMove.SetRotation(Mathf.LerpAngle(startAngle, targetAngle, time));
+            yield return null;
+        }
+    }
 }
 
 /// <summary>
@@ -118,6 +156,9 @@ public class Threat_Detected : BrainState {
     }
 }
 
+/// <summary>
+/// Can be interacted with by the player
+/// </summary>
 public interface Interactable {
     void Interact();
 }

@@ -16,7 +16,7 @@ public class PlayerAttack : MonoBehaviour {
     public int currentClip { get { return _currentClip; } }
 
     // allows the player to shoot
-    private bool canFire = true;
+    [SerializeField] private bool canFire = true;
 
     // the current weapon in the player's hand
     [SerializeField] private WeaponType heldWeapon;
@@ -44,9 +44,12 @@ public class PlayerAttack : MonoBehaviour {
 
     private void Talk() { // interact with an NPC
         if (!canFire) { return; }
-        Collider2D coll = Physics2D.OverlapCircle(transform.position + transform.forward, .5f);
-        if(coll != null) {
-            Interactable inter = coll.GetComponent<Interactable>();
+        RaycastHit2D rayHit = Physics2D.Raycast(transform.position, transform.up);
+        Debug.DrawLine(transform.position, transform.position + (transform.up * 10), Color.blue, 30f);
+        // Collider2D coll = Physics2D.OverlapCircle(transform.position + transform.forward, .25f);
+        if(rayHit.transform != null && rayHit.transform != transform) {
+            Debug.Log(rayHit.transform);
+            Interactable inter = rayHit.transform.GetComponent<Interactable>();
             if(inter != null) {
                 inter.Interact();
                 StartCoroutine(WaitToFire(.2f));

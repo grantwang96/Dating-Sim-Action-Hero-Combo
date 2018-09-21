@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class DateBrain : Brain {
+public class DateBrain : Brain, Interactable {
 
     public static DateBrain Instance;
     public Transform dateLocation; // where the date should normally be
@@ -61,9 +62,11 @@ public class DateBrain : Brain {
 
     public override void MainAction() {
         lastConversationTime = Time.time;
+        PlayerUI.Instance.DisplayTextBox("Not Damsel", dialogueList);
     }
-
+    
     public override void Interact() {
+        ChangeStates(new Interaction());
         MainAction();
     }
 }
