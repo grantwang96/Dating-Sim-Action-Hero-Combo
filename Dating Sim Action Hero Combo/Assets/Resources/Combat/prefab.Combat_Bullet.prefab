@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 909176873411148746}
   - component: {fileID: 909176873411148744}
   - component: {fileID: 8469220611858616102}
+  - component: {fileID: 8131912108035086969}
   m_Layer: 10
   m_Name: prefab.Combat_Bullet
   m_TagString: Untagged
@@ -49,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 909176873411148746}
   _trailRenderer: {fileID: 8469220611858616102}
+  _hitBox: {fileID: 8131912108035086969}
 --- !u!50 &909176873411148746
 Rigidbody2D:
   serializedVersion: 4
@@ -61,7 +63,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -191,6 +193,18 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &8131912108035086969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909176873411148852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be41d4534d8b10b4c8d783398f796e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1772215289002022764
 GameObject:
   m_ObjectHideFlags: 0

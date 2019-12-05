@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 public abstract class MoveController : MonoBehaviour {
+
     [SerializeField] protected Rigidbody2D _rigidbody;
 
     public IntVector3 MapPosition { get; protected set; }

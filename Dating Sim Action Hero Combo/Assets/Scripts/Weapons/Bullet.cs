@@ -6,18 +6,29 @@ public class Bullet : MonoBehaviour, PooledObject
 {
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private TrailRenderer _trailRenderer;
+    [SerializeField] private Hitbox _hitBox;
 
     private int _power;
     private float _totalLifeTime;
     private bool _isLive;
     private Vector2 _initialVelocity;
-    
+
+    private void Awake() {
+        _hitBox.OnHitBoxTriggered += OnHitBoxTriggered;
+    }
+
+    private void OnDestroy() {
+        _hitBox.OnHitBoxTriggered -= OnHitBoxTriggered;
+    }
+
     public void Setup(int power, float totalLifeTime, Vector2 newPosition, Vector2 velocity) {
         _power = power;
         _totalLifeTime = totalLifeTime;
         transform.position = newPosition;
         transform.up = velocity.normalized;
         _initialVelocity = velocity;
+
+        _hitBox.Initialize(_power, DamageType.Normal);
     }
 
     public void Spawn() {
@@ -38,11 +49,7 @@ public class Bullet : MonoBehaviour, PooledObject
         _totalLifeTime -= Time.deltaTime;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
-        IDamageable damageable = collision.otherCollider.GetComponent<IDamageable>();
-        if(damageable != null && _isLive) {
-            damageable.TakeDamage(_power, DamageType.Normal);
-        }
+    private void OnHitBoxTriggered() {
         Despawn();
     }
 

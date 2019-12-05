@@ -18,24 +18,8 @@ public class PlayerUnit : Unit {
         Instance = this;
     }
     
-    private void FixedUpdate()
-    {
-        ProcessMovement();
-        ProcessRotation();
-    }
-
-    private void ProcessMovement() {
-        Vector2 moveInput = InputController.Instance.MovementInput;
-        Vector2 delta = moveInput * _speed * Time.deltaTime;
-        _rigidbody.MovePosition((Vector2)transform.position + delta);
-    }
-
-    private void ProcessRotation() {
-        Vector2 dir = InputController.Instance.RotationInput;
-        // ONLY change rotation if player has inputted some change
-        if (!Mathf.Approximately(dir.x, 0f) || !Mathf.Approximately(dir.y, 0f)) {
-            float angle = Vector2.SignedAngle(Vector2.up, dir);
-            _rigidbody.MoveRotation(angle);
-        }
+    public override void TakeDamage(int damage, DamageType damageType) {
+        // visual response here
+        base.TakeDamage(damage, damageType);
     }
 }

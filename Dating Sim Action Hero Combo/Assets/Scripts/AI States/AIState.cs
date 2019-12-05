@@ -47,6 +47,8 @@ public enum AIStateTransitionId {
     OnUnitEnemySeen,
     OnUnitEnemyLost,
     OnNextTargetSet,
+    OnUnitDefeated,
+    OnUnitReadyDespawn
 }
 
 // information about the current AI State

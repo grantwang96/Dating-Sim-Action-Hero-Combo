@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IEnemyManager {
+
+    IReadOnlyList<IEnemyController> AllEnemies { get; }
+
     void SpawnEnemy(Vector2 position, string enemyType);
-    void ChangeState(EnemyManagerState newState);
+    void DespawnEnemy(IEnemyController controller);
 }
 
 public class EnemyManager : MonoBehaviour, IEnemyManager
@@ -12,15 +15,22 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
     public static IEnemyManager Instance { get; private set; }
     [SerializeField] private List<EnemyData> _allEnemyTypes = new List<EnemyData>();
 
-    private EnemyManagerState _currentState;
     private Dictionary<string, EnemyData> _enemyDataConfig = new Dictionary<string, EnemyData>();
     private List<IEnemyController> _enemyControllers = new List<IEnemyController>();
-    // dictionary of enemies by job <Job, List<EnemyController>
+    // dictionary of enemies by job <Job, List<EnemyController>;
 
+    [SerializeField] private EnemyManagerState _currentState;
+    [SerializeField] private List<EM_StateTransitionEntry> _EMStateTransitionEntries = new List<EM_StateTransitionEntry>();
+    private Dictionary<EM_StateTransitionId, EnemyManagerState> _stateList = new Dictionary<EM_StateTransitionId, EnemyManagerState>();
+
+    public IReadOnlyList<IEnemyController> AllEnemies => _enemyControllers;
+
+    #region INITIALIZATION
     private void Awake() {
         Instance = this;
         LoadEnemyConfig();
-        ChangeState(new DefaultEnemyManagerState());
+        LoadManagerStates();
+        ChangeState(_currentState);
     }
 
     private void LoadEnemyConfig() {
@@ -29,6 +39,15 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         }
     }
 
+    private void LoadManagerStates() {
+        _stateList.Clear();
+        for (int i = 0; i < _EMStateTransitionEntries.Count; i++) {
+            _stateList.Add(_EMStateTransitionEntries[i].TransitionId, _EMStateTransitionEntries[i].State);
+        }
+    }
+    #endregion
+
+    #region UPDATE LOOP
     private void Update() {
         ProcessEnemyControllers();
     }
@@ -38,6 +57,7 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
             _enemyControllers[i].ExecuteState();
         }
     }
+    #endregion
 
     public void SpawnEnemy(Vector2 position, string enemyType) {
         EnemyData data;
@@ -71,20 +91,30 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
 
         // add enemy controller to list and dictionary
         _enemyControllers.Add(enemyController);
-
-        // spawn the unit
-        unit.Spawn();
     }
 
+    public void DespawnEnemy(IEnemyController controller) {
+        // remove from all listings
+        controller.Dispose();
+        _enemyControllers.Remove(controller);
+        CustomLogger.Log(nameof(EnemyManager), $"Removing enemy controller from list. Count is now {_enemyControllers.Count}.");
+    }
+    
     private void OnAIStateReadyToTransition(AIStateTransitionId id, IEnemyController controller) {
-        _currentState.OnReadyToTransition(id, controller);
+        _currentState.OnControllerReadyToTransition(id, controller);
     }
 
-    public void ChangeState(EnemyManagerState newState) {
+    private void ChangeState(EnemyManagerState newState) {
         if(_currentState != null) {
             _currentState.Exit();
         }
         _currentState = newState;
         _currentState.Enter();
     }
+}
+
+[System.Serializable]
+public class EM_StateTransitionEntry {
+    public EM_StateTransitionId TransitionId;
+    public EnemyManagerState State;
 }

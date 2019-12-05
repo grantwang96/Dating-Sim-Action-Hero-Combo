@@ -1,47 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// State for the overall enemy manager
 /// </summary>
-public abstract class EnemyManagerState
-{
+public abstract class EnemyManagerState : MonoBehaviour {
+
+    public event Action<EM_StateTransitionId> NextStateUpdated;
+
     // what should happen at the start of this state
     public virtual void Enter() {
 
     }
-
+    
     // when an enemy controller reports a change of state, what should happen?
-    public virtual void OnReadyToTransition(AIStateTransitionId transitionId, IEnemyController controller) {
-        
+    public virtual void OnControllerReadyToTransition(AIStateTransitionId transitionId, IEnemyController controller) {
+
     }
 
     public virtual void Exit() {
 
     }
+
+    protected virtual void OnEnemyDefeated(IEnemyController controller) {
+        EnemyManager.Instance.DespawnEnemy(controller);
+    }
 }
 
-public class DefaultEnemyManagerState : EnemyManagerState {
-
-    public override void OnReadyToTransition(AIStateTransitionId transitionId, IEnemyController controller) {
-        base.OnReadyToTransition(transitionId, controller);
-        switch (transitionId) {
-            case AIStateTransitionId.OnUnitIdleFinished:
-                AssignNewWanderTarget(controller);
-                break;
-            case AIStateTransitionId.OnUnitEnemyLost:
-                // change manager state (next state will set controller states on Enter)
-                break;
-        }
-        // probably continue normally
-        controller.TransitionState(transitionId);
-    }
-
-    private void AssignNewWanderTarget(IEnemyController controller) {
-        int searchRadius = Random.Range(controller.Data.WanderRadiusMin, controller.Data.WanderRadiusMax);
-        List<IntVector3> traversableTiles = MapService.GetTraversableTiles(searchRadius, controller.MapPosition, controller.Data.WanderRadiusMin);
-        IntVector3 nextDestination = traversableTiles[Random.Range(0, traversableTiles.Count)];
-        controller.MapSpaceTarget = nextDestination;
-    }
+public enum EM_StateTransitionId {
+    OnGameStart,
+    OnPlayerSpotted,
+    OnPlayerLost,
+    OnEnemyDefeated
 }

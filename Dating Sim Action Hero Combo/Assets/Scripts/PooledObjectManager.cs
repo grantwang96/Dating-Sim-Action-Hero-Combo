@@ -13,25 +13,45 @@ public interface IPooledObjectManager {
 
 public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
 {
-    private const int MaximumObjectPoolSize = 100; // the hard cap maximum a single pool can be
+    private const int MaximumObjectPoolSize = 200; // the hard cap maximum a single pool can be
 
     public static IPooledObjectManager Instance { get; private set; }
 
-    private readonly Dictionary<string, PooledObjectEntry> _availablePooledObjects = new Dictionary<string, PooledObjectEntry>();
-    private readonly Dictionary<string, List<PooledObject>> _inUsePooledObjects = new Dictionary<string, List<PooledObject>>();
+    [SerializeField] private PreloadedPooledObjectEntry[] _objectsToPreload;
+
+    private readonly Dictionary<string, PooledObjectEntry> _objectPool = new Dictionary<string, PooledObjectEntry>();
 
     private void Awake() {
         if(Instance != null) {
             CustomLogger.Error(this.name, $"There should not be more than 1 {nameof(PooledObjectManager)} instances at a time!");
         }
         Instance = this;
+        PreloadObjectPool();
+    }
+
+    private void PreloadObjectPool() {
+        for(int i = 0; i < _objectsToPreload.Length; i++) {
+            GameObject resource = _objectsToPreload[i].Resource;
+            PooledObject pooledObject = resource.GetComponent<PooledObject>();
+            if(pooledObject == null) {
+                CustomLogger.Error(nameof(PooledObjectManager), $"Preload object {resource.name} is not a {nameof(PooledObject)}!");
+                continue;
+            }
+            string pooledObjectId = resource.name;
+            PooledObjectEntry newEntry = new PooledObjectEntry() {
+                BaseResource = resource,
+                AvailableObjects = new List<PooledObject>(),
+                InUseObjects = new List<PooledObject>()
+            };
+            _objectPool.Add(pooledObjectId, newEntry);
+        }
     }
 
     public void RegisterPooledObject(string prefabName, int count) {
         string pooledObjectId = prefabName;
 
         PooledObjectEntry entry;
-        if (!_availablePooledObjects.TryGetValue(pooledObjectId, out entry)) {
+        if (!_objectPool.TryGetValue(pooledObjectId, out entry)) {
             // create the file path
             string filePath = GenerateFilePath(prefabName);
 
@@ -47,13 +67,13 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
                 return;
             }
 
-            // add new entry to the available pool
+            // add new entry to the pool
             PooledObjectEntry newEntry = new PooledObjectEntry() {
                 BaseResource = resource,
-                AvailableObjects = new List<PooledObject>()
+                AvailableObjects = new List<PooledObject>(),
+                InUseObjects = new List<PooledObject>()
             };
-            _availablePooledObjects.Add(pooledObjectId, newEntry);
-            _inUsePooledObjects.Add(pooledObjectId, new List<PooledObject>());
+            _objectPool.Add(pooledObjectId, newEntry);
             entry = newEntry;
         }
 
@@ -77,42 +97,47 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
     }
 
     private void CloneToPool(string poolId, GameObject resource, int count) {
+        PooledObjectEntry entry = _objectPool[poolId];
+        int currentCount = entry.AvailableObjects.Count + entry.InUseObjects.Count;
+        if(currentCount + count > MaximumObjectPoolSize) {
+            CustomLogger.Warn(nameof(PooledObjectManager), $"Max pool size reached for {poolId}");
+            count = MaximumObjectPoolSize - currentCount;
+        }
         for (int i = 0; i < count; i++) {
             GameObject clone = Instantiate(resource, transform);
             clone.name = poolId;
             PooledObject clonePO = clone.GetComponent<PooledObject>();
-            _availablePooledObjects[poolId].AvailableObjects.Add(clonePO);
+            _objectPool[poolId].AvailableObjects.Add(clonePO);
             clonePO.Despawn(); // hide the object
         }
     }
 
     public void DeregisterPooledObject(string objectId) {
-        if (!_availablePooledObjects.ContainsKey(objectId)) {
+        if (!_objectPool.ContainsKey(objectId)) {
             CustomLogger.Error(nameof(PooledObjectManager), $"Does not contain entry with id {objectId}!");
             return;
         }
-        foreach(PooledObject pooledObject in _availablePooledObjects[objectId].AvailableObjects) {
+        foreach(PooledObject pooledObject in _objectPool[objectId].AvailableObjects) {
             UnityEngine.Object obj = pooledObject as UnityEngine.Object;
             Destroy(obj);
         }
-        _availablePooledObjects.Remove(objectId);
-        foreach(PooledObject pooledObject in _inUsePooledObjects[objectId]) {
+        foreach(PooledObject pooledObject in _objectPool[objectId].InUseObjects) {
             UnityEngine.Object obj = pooledObject as UnityEngine.Object;
             Destroy(obj);
         }
-        _inUsePooledObjects.Remove(objectId);
+        _objectPool.Remove(objectId);
     }
 
     public bool UsePooledObject(string objectId, out PooledObject obj) {
         obj = null;
         bool success = false;
         PooledObjectEntry entry;
-        if(_availablePooledObjects.TryGetValue(objectId, out entry)) {
+        if(_objectPool.TryGetValue(objectId, out entry)) {
             if(entry.AvailableObjects.Count == 0) {
                 CloneToPool(objectId, entry.BaseResource, 1);
             }
             obj = entry.AvailableObjects[0];
-            _inUsePooledObjects[objectId].Add(obj);
+            entry.InUseObjects.Add(obj);
             entry.AvailableObjects.RemoveAt(0);
             success = true;
         }
@@ -120,17 +145,26 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
     }
 
     public void ReturnPooledObject(string objectId, PooledObject obj) {
-        List<PooledObject> inUsePool;
-        if(!_inUsePooledObjects.TryGetValue(objectId, out inUsePool)) {
+        PooledObjectEntry entry;
+        if(!_objectPool.TryGetValue(objectId, out entry)) {
             CustomLogger.Error(nameof(PooledObjectManager), $"Could not find in-use object pool for id: {objectId}");
             return;
         }
-        inUsePool.Remove(obj);
-        _availablePooledObjects[objectId].AvailableObjects.Add(obj);
+        entry.InUseObjects.Remove(obj);
+        if (!_objectPool[objectId].AvailableObjects.Contains(obj)) {
+            _objectPool[objectId].AvailableObjects.Add(obj);
+        }
     }
 
     private class PooledObjectEntry {
         public GameObject BaseResource;
         public List<PooledObject> AvailableObjects = new List<PooledObject>();
+        public List<PooledObject> InUseObjects = new List<PooledObject>();
+    }
+
+    [Serializable]
+    private class PreloadedPooledObjectEntry {
+        public GameObject Resource;
+        public int InitialCount;
     }
 }

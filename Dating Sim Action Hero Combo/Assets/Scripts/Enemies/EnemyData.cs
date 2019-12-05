@@ -7,6 +7,7 @@ public class EnemyData : ScriptableObject
 {
     [SerializeField] private string _unitPrefabId;
     [SerializeField] private int _maxHealth;
+    [SerializeField] private DamageType _resistances;
     [SerializeField] private float _runSpeed;
     [SerializeField] private float _walkSpeed;
 
@@ -23,6 +24,7 @@ public class EnemyData : ScriptableObject
 
     public string UnitPrefabId => _unitPrefabId;
     public int MaxHealth => _maxHealth;
+    public DamageType Resistances => _resistances;
     public float WalkSpeed => _walkSpeed;
     public float RunSpeed => _runSpeed;
 

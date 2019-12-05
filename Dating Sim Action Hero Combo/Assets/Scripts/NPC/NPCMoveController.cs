@@ -23,6 +23,11 @@ public class NPCMoveController : MoveController
         UpdateCurrentDestination();
     }
 
+    public void ClearDestination() {
+        _currentPath.Clear();
+        _isMoving = false;
+    }
+
     public void SetLookTarget(Transform target) {
         _lookTarget = target;
     }

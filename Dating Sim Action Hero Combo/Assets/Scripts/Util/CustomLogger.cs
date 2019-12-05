@@ -8,6 +8,10 @@ public static class CustomLogger
         Debug.Log($"[{reportingClass}] {message}");
     }
 
+    public static void Warn(string reportingClass, string message) {
+        Debug.LogWarning($"[{reportingClass}] {message}");
+    }
+
     public static void Error(string reportingClass, string message) {
         Debug.LogError($"[{reportingClass}] {message}");
     }
