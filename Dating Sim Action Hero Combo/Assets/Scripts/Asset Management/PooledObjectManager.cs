@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Action = System.Action;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public interface IPooledObjectManager {
-    void RegisterPooledObject(string prefabName, int initialCount);
-    void DeregisterPooledObject(string objectId);
 
-    bool UsePooledObject(string objectId, out PooledObject obj);
-    void ReturnPooledObject(string objectId, PooledObject obj);
+    void RegisterPooledObject(string poolId, int initialCount, Action<bool> OnRegisterComplete = null);
+    void DeregisterPooledObject(string poolId);
+
+    bool UsePooledObject(string poolId, out PooledObject obj);
+    void ReturnPooledObject(string poolId, PooledObject obj);
 }
 
 public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
@@ -17,7 +19,7 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
 
     public static IPooledObjectManager Instance { get; private set; }
 
-    [SerializeField] private PreloadedPooledObjectEntry[] _objectsToPreload;
+    [SerializeField] private global::PooledObjectEntry[] _objectsToPreload;
 
     private readonly Dictionary<string, PooledObjectEntry> _objectPool = new Dictionary<string, PooledObjectEntry>();
 
@@ -26,74 +28,42 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
             CustomLogger.Error(this.name, $"There should not be more than 1 {nameof(PooledObjectManager)} instances at a time!");
         }
         Instance = this;
+    }
+
+    private void Start() {
         PreloadObjectPool();
     }
 
     private void PreloadObjectPool() {
         for(int i = 0; i < _objectsToPreload.Length; i++) {
-            GameObject resource = _objectsToPreload[i].Resource;
-            PooledObject pooledObject = resource.GetComponent<PooledObject>();
-            if(pooledObject == null) {
-                CustomLogger.Error(nameof(PooledObjectManager), $"Preload object {resource.name} is not a {nameof(PooledObject)}!");
-                continue;
-            }
-            string pooledObjectId = resource.name;
-            PooledObjectEntry newEntry = new PooledObjectEntry() {
-                BaseResource = resource,
-                AvailableObjects = new List<PooledObject>(),
-                InUseObjects = new List<PooledObject>()
-            };
-            _objectPool.Add(pooledObjectId, newEntry);
+            AssetManager.Instance.GetAsset(_objectsToPreload[i].PoolId);
         }
     }
 
-    public void RegisterPooledObject(string prefabName, int count) {
-        string pooledObjectId = prefabName;
-
+    public void RegisterPooledObject(string poolId, int count, Action<bool> OnRegisterComplete = null) {
         PooledObjectEntry entry;
-        if (!_objectPool.TryGetValue(pooledObjectId, out entry)) {
-            // create the file path
-            string filePath = GenerateFilePath(prefabName);
-
-            // load the resource
-            GameObject resource = Resources.Load<GameObject>(filePath);
-            if (resource == null) {
-                CustomLogger.Error(nameof(PooledObjectManager), $"Could not retrieve object with path {filePath}!");
-                return;
-            }
-            PooledObject pooledObject = resource.GetComponent<PooledObject>();
-            if (pooledObject == null) {
-                CustomLogger.Error(nameof(PooledObjectManager), $"Resource was not of type {nameof(PooledObject)}");
-                return;
-            }
-
-            // add new entry to the pool
-            PooledObjectEntry newEntry = new PooledObjectEntry() {
-                BaseResource = resource,
-                AvailableObjects = new List<PooledObject>(),
-                InUseObjects = new List<PooledObject>()
-            };
-            _objectPool.Add(pooledObjectId, newEntry);
-            entry = newEntry;
+        if (_objectPool.TryGetValue(poolId, out entry)) {
+            CloneToPool(poolId, entry.BaseResource, count);
+            return;
+        }
+        GameObject storedPrefab = AssetManager.Instance.GetAsset(poolId);
+        if(storedPrefab == null) {
+            CustomLogger.Error(nameof(PooledObjectManager), $"Failed to register object with id {poolId}");
+            return;
         }
 
-        CloneToPool(pooledObjectId, entry.BaseResource, count);
-    }
-    
-    private string GenerateFilePath(string prefabName) {
-        try {
-            string[] components = prefabName.Split('.');
-            string[] pathComponents = components[1].Split('_');
-            string filePath = pathComponents[0];
-            for (int i = 1; i < pathComponents.Length - 1; i++) {
-                filePath = $"{filePath}/{pathComponents[i]}";
-            }
-            filePath = $"{filePath}/{prefabName}";
-            return filePath;
-        } catch (Exception e) {
-            CustomLogger.Error(nameof(PooledObjectManager), $"Error parsing file path {e.StackTrace}");
-            return string.Empty;
+        PooledObject pooledObject = storedPrefab.GetComponent<PooledObject>();
+        if (pooledObject == null) {
+            CustomLogger.Error(nameof(PooledObjectManager), $"Asset is not a pooled object!");
+            return;
         }
+        PooledObjectEntry newEntry = new PooledObjectEntry() {
+            BaseResource = storedPrefab,
+            AvailableObjects = new List<PooledObject>(),
+            InUseObjects = new List<PooledObject>()
+        };
+        _objectPool.Add(storedPrefab.name, newEntry);
+        CloneToPool(storedPrefab.name, newEntry.BaseResource, count);
     }
 
     private void CloneToPool(string poolId, GameObject resource, int count) {
@@ -161,10 +131,10 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
         public List<PooledObject> AvailableObjects = new List<PooledObject>();
         public List<PooledObject> InUseObjects = new List<PooledObject>();
     }
+}
 
-    [Serializable]
-    private class PreloadedPooledObjectEntry {
-        public GameObject Resource;
-        public int InitialCount;
-    }
+[System.Serializable]
+public class PooledObjectEntry {
+    public string PoolId;
+    public int InitialCount;
 }

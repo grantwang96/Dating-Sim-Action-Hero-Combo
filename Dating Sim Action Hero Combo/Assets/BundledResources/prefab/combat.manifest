@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 4110716878
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b2715b6cf63d0fef53721edb7f70331f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4d4a6ba884b7c1dcd74b947beda62ab4
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 96
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: be41d4534d8b10b4c8d783398f796e29, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 021360ae71f8bbc4abec50c8bf3b65e1, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/Combat/prefab.Combat_Bullet.prefab
+Dependencies: []

@@ -69,12 +69,10 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         // Get a pooled enemy object
         PooledObject pooledObject;
         if (!PooledObjectManager.Instance.UsePooledObject(data.UnitPrefabId, out pooledObject)) {
-            CustomLogger.Log(nameof(EnemyManager), $"{data.UnitPrefabId} not yet registered with object pool. Registering now...");
             PooledObjectManager.Instance.RegisterPooledObject(data.UnitPrefabId, 1);
-            if(!PooledObjectManager.Instance.UsePooledObject(data.UnitPrefabId, out pooledObject)) {
-                CustomLogger.Error(nameof(EnemyManager), $"Could not retrieve pooled object resource with id {data.UnitPrefabId}");
-                return;
-            }
+            CustomLogger.Log(nameof(EnemyManager), $"{data.UnitPrefabId} not yet registered with object pool. Registering now...");
+            SpawnEnemy(position, enemyType);
+            return;
         }
         EnemyUnit unit = pooledObject as EnemyUnit;
         if(unit == null) {
@@ -97,7 +95,6 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         // remove from all listings
         controller.Dispose();
         _enemyControllers.Remove(controller);
-        CustomLogger.Log(nameof(EnemyManager), $"Removing enemy controller from list. Count is now {_enemyControllers.Count}.");
     }
     
     private void OnAIStateReadyToTransition(AIStateTransitionId id, IEnemyController controller) {

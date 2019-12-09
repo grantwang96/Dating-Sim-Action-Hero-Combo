@@ -1,0 +1,42 @@
+ManifestFileVersion: 0
+CRC: 2148058211
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1d88563147e41ded31aa663c26d87834
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 24168fe35d4bc3c505aa3d946be223fa
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 62
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ad5fe4687deaf364b9e6914b416b8195, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 56968439b6f8d764db991c6d92cbc166, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/Units/prefab.Units_TestEnemy.prefab
+Dependencies: []

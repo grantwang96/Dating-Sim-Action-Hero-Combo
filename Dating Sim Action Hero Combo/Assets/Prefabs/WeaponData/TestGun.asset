@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestGun
   m_EditorClassIdentifier: 
   _weaponActivateTime: 3
-  _cooldownTime: 0.5
+  _cooldownTime: 0.1
   _sprite: {fileID: 0}
   _icon: {fileID: 0}
   _bulletPrefabId: prefab.Combat_Bullet
