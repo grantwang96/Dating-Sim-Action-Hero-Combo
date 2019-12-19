@@ -48,11 +48,20 @@ public class NPCMoveController : MoveController
         Vector2 dir = transform.forward;
         if(_lookTarget != null) {
             dir = (_lookTarget.position - transform.position).normalized;
+            SetRotation(dir);
         } else if (_isMoving) {
             dir = (_currentDestination - (Vector2)transform.position).normalized;
+            SetRotation(dir);
         }
+    }
+
+    private void SetRotation(Vector2 dir) {
         float angle = Vector2.SignedAngle(Vector2.up, dir);
-        _rigidbody.MoveRotation(angle);
+        float lerpedAngle = Mathf.LerpAngle(_rigidbody.rotation, angle, 0.33f);
+        if(Mathf.Abs(angle - lerpedAngle) < 0.1f) {
+            lerpedAngle = angle;
+        }
+        _rigidbody.MoveRotation(lerpedAngle);
     }
 
     protected void UpdateCurrentDestination() {

@@ -8,7 +8,7 @@ public class AIState_Idle : AIStateDataObject {
     [SerializeField] private float _minimumIdleTime;
     [SerializeField] private float _maximumIdleTime;
 
-    protected override ActiveAIState GenerateActiveAIState(EnemyController enemyController) {
+    protected override ActiveAIState GenerateActiveAIState(IUnitController unitController) {
         float duration = Random.Range(_minimumIdleTime, _maximumIdleTime);
         ActiveIdleState newState = new ActiveIdleState(duration);
         return newState;
@@ -25,15 +25,17 @@ public class ActiveIdleState : ActiveAIState {
         CurrentTime = 0f;
     }
 
-    public override void OnExecute() {
+    public override bool OnExecute() {
         base.OnExecute();
-        IncrementTime();
+        return IncrementTime();
     }
 
-    private void IncrementTime() {
+    private bool IncrementTime() {
         CurrentTime += Time.deltaTime;
         if (CurrentTime >= Duration) {
             SetNextTransition(AIStateTransitionId.OnUnitIdleFinished);
+            return true;
         }
+        return false;
     }
 }

@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: TestEnemyData
   m_EditorClassIdentifier: 
   _unitPrefabId: prefab.Units_TestEnemy
-  _maxHealth: 10
+  _maxHealth: 200
   _resistances: 0
   _runSpeed: 5
   _walkSpeed: 2
-  _visionRange: 0
-  _visionAngle: 0
+  _visionRange: 10
+  _visionAngle: 80
   _visionLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 769
   _wanderRadiusMin: 3
   _wanderRadiusMax: 6
+  _hostileTags: 5
   _animatorController: {fileID: 9100000, guid: abfa567898217f847af825fedb5e6ea0, type: 2}
   _aiStateMachine:
   - _transitionId: 0
@@ -35,3 +36,22 @@ MonoBehaviour:
   - _transitionId: 2
     _states:
     - {fileID: 11400000, guid: 97d46b0f4a3175c4e873739556185151, type: 2}
+  - _transitionId: 3
+    _states:
+    - {fileID: 11400000, guid: 11c56fdf65aa4a9479230b09fdc9108e, type: 2}
+  - _transitionId: 4
+    _states:
+    - {fileID: 11400000, guid: cdde38bae5841a5469813ffb018cc4f1, type: 2}
+  - _transitionId: 5
+    _states:
+    - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
+  - _transitionId: 9
+    _states:
+    - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
+  - _transitionId: 12
+    _states:
+    - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
+  - _transitionId: 13
+    _states:
+    - {fileID: 11400000, guid: cdde38bae5841a5469813ffb018cc4f1, type: 2}
+  _equippedWeapon: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}

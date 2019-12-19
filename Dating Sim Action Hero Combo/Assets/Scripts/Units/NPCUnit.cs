@@ -21,7 +21,7 @@ public class NPCUnit : Unit
     public void Initialize(RuntimeAnimatorController animController, float size) {
         _animator.runtimeAnimatorController = animController;
         _collider.radius = size;
-        _front.localPosition = Vector2.up * (size + 0.1f);
+        _front.localPosition = Vector2.up * (size + 0.25f);
         _front.localEulerAngles = Vector2.up;
 
         MoveController.Initialize();

@@ -5,10 +5,12 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     // store currently held weapon
-    [SerializeField] private WeaponData _equippedWeapon;
-    private ActiveWeaponState _activeWeaponState = new ActiveWeaponState();
+    private WeaponSlot _equippedWeapon;
+    [SerializeField] private int _hackBulletCount;
+    [SerializeField] private WeaponData _hackWeaponData; // hack
 
     private void Start() {
+        _equippedWeapon = new WeaponSlot(_hackWeaponData);
         SubscribeToController();
     }
 
@@ -36,14 +38,14 @@ public class PlayerCombat : MonoBehaviour
     }
 
     private void OnShootBtnPressed() {
-        _equippedWeapon.TryActivate(ActivateTime.OnPress, PlayerUnit.Instance, _activeWeaponState);
+        _equippedWeapon.Use(ActivateTime.OnPress, PlayerUnit.Instance, ref _hackBulletCount);
     }
 
     private void OnShootBtnHeld() {
-        _equippedWeapon.TryActivate(ActivateTime.OnHeld, PlayerUnit.Instance, _activeWeaponState);
+        _equippedWeapon.Use(ActivateTime.OnHeld, PlayerUnit.Instance, ref _hackBulletCount);
     }
 
     private void OnShootBtnReleased() {
-        _equippedWeapon.TryActivate(ActivateTime.OnRelease, PlayerUnit.Instance, _activeWeaponState);
+        _equippedWeapon.Use(ActivateTime.OnRelease, PlayerUnit.Instance, ref _hackBulletCount);
     }
 }

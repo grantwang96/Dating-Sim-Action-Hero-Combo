@@ -210,7 +210,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48685e6d48304a04496b1c97cc8b31c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unitTags: 1
   _animator: {fileID: 1163273303771618445}
+  _equippedWeapon: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}
   _front: {fileID: 8202479464982852657}
   _speed: 10
 --- !u!50 &8202479465019601315
@@ -281,7 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57773a2cd46e8e04797ee3cbd65698f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equippedWeapon: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}
+  _hackBulletCount: 800
+  _hackWeaponData: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}
 --- !u!114 &5219552658643734024
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,16 +10,17 @@ public class GunData : WeaponData {
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _bulletLifeTime;
 
-    protected override void PerformAction(Unit unit, ActiveWeaponState state) {
+    protected override bool PerformAction(Unit unit, ActiveWeaponState state) {
         if (!HasWeaponCooledDown(state.LastActivateTime)) {
             // fail to fire
-            return;
+            return false;
         }
 
         // start firing the shot
         InitiateShot(unit);
         // update weapon state
         state.LastActivateTime = Time.time;
+        return true;
     }
 
     protected virtual void InitiateShot(Unit unit) {
@@ -43,7 +44,7 @@ public class GunData : WeaponData {
     protected virtual void FireShot(Unit unit, Bullet bullet) {
         // calculate direction to fire and add force
         Vector2 velocity = unit.Front.up * _bulletSpeed;
-        bullet.Setup(_power, _bulletLifeTime, unit.Front.position, velocity);
+        bullet.Setup(_power, _bulletLifeTime, unit.Front.position, velocity, unit);
         bullet.Spawn();
     }
 }

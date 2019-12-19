@@ -25,6 +25,11 @@ public partial class Mapservice
     public static PathStatus GetPathToDestination(IntVector3 startPosition, IntVector3 targetDestination, out List<IntVector3> path) {
         path = new List<IntVector3>();
 
+        if (!LevelDataManager.Instance.IsWithinMap(targetDestination)) {
+            CustomLogger.Warn(nameof(MapService), $"Target Destination {targetDestination} is out of bounds!");
+            return PathStatus.Invalid;
+        }
+
         int startX = startPosition.x;
         int startY = startPosition.y;
         int targetX = targetDestination.x;

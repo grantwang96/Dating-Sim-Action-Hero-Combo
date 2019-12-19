@@ -4,9 +4,13 @@ using UnityEngine;
 
 public interface ILevelDataManager {
 
+    int MapBoundsX { get; }
+    int MapBoundsY { get; }
+
     IntVector3 WorldToArraySpace(Vector2 worldPos);
     Vector2 ArrayToWorldSpace(int x, int y);
 
+    bool IsWithinMap(IntVector3 position);
     void UpdateTile(int x, int y, string tileType = "");
     ITileInfo GetTileAt(int x, int y);
 }
@@ -23,6 +27,8 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
 
     [SerializeField] private int _mapSizeX;
     [SerializeField] private int _mapSizeY;
+    public int MapBoundsX => _mapSizeX;
+    public int MapBoundsY => _mapSizeY;
 
     [SerializeField] private TileData _defaultTileData; // default tile (empty, probably)
     [SerializeField] private TileData[] _tileDatas; // tile datas to preload
@@ -67,6 +73,10 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
             return null;
         }
         return _tiles[x][y];
+    }
+
+    public bool IsWithinMap(IntVector3 position) {
+        return position.x >= 0 && position.x < _mapSizeX && position.y >= 0 && position.y < _mapSizeY;
     }
 
     public IntVector3 WorldToArraySpace(Vector2 worldPos) {

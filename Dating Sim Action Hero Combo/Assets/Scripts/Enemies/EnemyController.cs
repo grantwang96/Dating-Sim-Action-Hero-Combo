@@ -3,34 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public interface IEnemyController {
-    int Health { get; }
+public interface IEnemyController : IUnitController {
     float Speed { get; }
-    EnemyUnit Unit { get; }
-    EnemyData Data { get; }
-
-    IntVector3 MapPosition { get; }
-    IntVector3 MapSpaceTarget { get; set; }
-
-    event Action<AIStateTransitionId, IEnemyController> OnAIStateReadyToTransition;
-
-    void TransitionState(AIStateTransitionId transitionId);
-    void ExecuteState();
-    void Dispose();
 }
 
 public class EnemyController : IEnemyController
 {
     public int Health { get; private set; }
     public float Speed { get; private set; }
-    public EnemyUnit Unit { get; private set; }
-    public EnemyData Data { get; private set; }
+    public Unit Unit { get; private set; }
+    public UnitData Data { get; private set; }
+    public WeaponSlot EquippedWeapon { get; private set; }
 
-    public IntVector3 MapPosition => Unit.MoveController.MapPosition;
-    public IntVector3 MapSpaceTarget { get; set; }
+    public IntVector3 MapPosition => Unit.MapPosition;
+    private IntVector3 _mapSpaceTarget;
+    public IntVector3 MapSpaceTarget {
+        get { return _mapSpaceTarget; }
+        set {
+            _mapSpaceTarget = value;
+        }
+    }
+    public Unit FocusedTarget { get; set; }
 
-    public event Action<AIStateTransitionId, IEnemyController> OnAIStateReadyToTransition;
-    public event Action<IEnemyController> OnEnemyUnitDefeated;
+    public event Action<AIStateTransitionId, IUnitController> OnAIStateReadyToTransition;
+    public event Action<IUnitController> OnUnitDefeated;
 
     private AIStateDataObject _currentState;
     private ActiveAIState _activeAIStateData; // information about the current AI State
@@ -39,9 +35,13 @@ public class EnemyController : IEnemyController
         Data = enemyData;
         Health = enemyData.MaxHealth;
         Speed = enemyData.WalkSpeed;
+        EquippedWeapon = new WeaponSlot(enemyData.EquippedWeapon);
+
         Unit = unit;
-        Unit.Initialize(enemyData.AnimatorController, .5f); // temp
-        Unit.Spawn();
+        unit.Initialize(enemyData.AnimatorController, .5f); // temp
+        Unit.SetUnitTags(UnitTags.Enemy);
+        UnitsManager.Instance.RegisterUnit(Unit);
+        unit.Spawn();
 
         // subscribe to events?
         SubscribeToEvents();
@@ -49,16 +49,25 @@ public class EnemyController : IEnemyController
 
     public void Dispose() {
         UnsubscribeToEvents();
+        UnitsManager.Instance.DeregisterUnit(Unit);
+        EnemyUnit enemyUnit = Unit as EnemyUnit;
+        if (enemyUnit != null) {
+            enemyUnit.Despawn();
+        }
     }
 
     private void SubscribeToEvents() {
         Unit.OnTakeDamage += OnTakeDamage;
         Unit.OnHealDamage += OnHealDamage;
+
+        EnemyManager.Instance.OnUnitBroadcastMessage += OnUnitBroadcastMessage;
     }
 
     private void UnsubscribeToEvents() {
         Unit.OnTakeDamage -= OnTakeDamage;
         Unit.OnHealDamage -= OnHealDamage;
+
+        EnemyManager.Instance.OnUnitBroadcastMessage -= OnUnitBroadcastMessage;
     }
 
     // called by EnemyManager on update loop
@@ -75,10 +84,17 @@ public class EnemyController : IEnemyController
         OnAIStateReadyToTransition?.Invoke(transitionId, this);
     }
 
+    private void OnUnitBroadcastMessage(AIStateTransitionId transitionId, IUnitController controller) {
+        if(controller == this) {
+            return;
+        }
+        TransitionState(transitionId);
+    }
+
     // can be called internally or used as override by manager
     public void TransitionState(AIStateTransitionId transitionId) {
         if(_currentState != null) {
-            _currentState.Exit();
+            _currentState.Exit(_activeAIStateData);
         }
         List<AIStateDataObject> possibleNextStates = Data.GetStateForTransitionId(transitionId);
         if(possibleNextStates.Count == 0) {
@@ -93,7 +109,7 @@ public class EnemyController : IEnemyController
 
     #region LISTENERS
 
-    private void OnTakeDamage(int damage, DamageType damageType) {
+    private void OnTakeDamage(int damage, DamageType damageType, Unit attacker) {
         int totalDamage = damage;
         // if this unit is resistant to this damage
         if ((Data.Resistances & damageType) != 0) {
@@ -105,9 +121,13 @@ public class EnemyController : IEnemyController
         Health -= totalDamage;
         if(Health <= 0) {
             OnCurrentStateReadyToTransition(AIStateTransitionId.OnUnitDefeated);
-            Unit.Despawn();
+            EnemyManager.Instance.DespawnEnemy(this);
+            return;
         }
-        // change state ???
+        if (attacker.UnitTags.HasFlag(UnitTags.Player) || attacker.UnitTags.HasFlag(UnitTags.Law_Enforcement)) {
+            FocusedTarget = attacker;
+        }
+        OnCurrentStateReadyToTransition(AIStateTransitionId.OnUnitTakeDamage);
     }
 
     private void OnHealDamage(int damage) {

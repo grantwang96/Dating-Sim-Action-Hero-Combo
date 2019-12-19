@@ -17,9 +17,13 @@ public class PlayerUnit : Unit {
     private void Awake() {
         Instance = this;
     }
-    
-    public override void TakeDamage(int damage, DamageType damageType) {
+
+    private void Start() {
+        UnitsManager.Instance.RegisterUnit(this);
+    }
+
+    public override void TakeDamage(int damage, DamageType damageType, Unit attacker) {
         // visual response here
-        base.TakeDamage(damage, damageType);
+        base.TakeDamage(damage, damageType, attacker);
     }
 }

@@ -7,27 +7,33 @@ public abstract class AIStateDataObject : ScriptableObject {
 
     [SerializeField] protected List<AIStateDataObject> _subStates = new List<AIStateDataObject>();
 
-    public virtual ActiveAIState Enter(EnemyController enemyController, AIStateInitializationData initData = null) {
-        ActiveAIState newState = GenerateActiveAIState(enemyController);
+    public virtual ActiveAIState Enter(IUnitController controller, AIStateInitializationData initData = null) {
+        ActiveAIState newState = GenerateActiveAIState(controller);
         for (int i = 0; i < _subStates.Count; i++) {
-            ActiveAIState subState = _subStates[i].Enter(enemyController);
+            ActiveAIState subState = _subStates[i].Enter(controller);
             newState.AddAISubState(subState);
         }
         return newState;
     }
     
     // start state and initialize some active AI State Data
-    public virtual void Execute(ActiveAIState activeAIState) {
-        activeAIState.OnExecute();
-        for (int i = 0; i < _subStates.Count; i++) {
+    public virtual bool Execute(ActiveAIState activeAIState) {
+        bool cancelAll = activeAIState.OnExecute();
+        for (int i = 0; i < activeAIState.SubStates.Count; i++) {
             ActiveAIState subData = activeAIState.SubStates[i];
-            _subStates[i].Execute(subData);
+            if (_subStates[i].Execute(subData)) {
+                cancelAll = true;
+                break;
+            }
         }
+        return cancelAll;
     }
 
-    public virtual void Exit() { } // exit state behaviour
+    public virtual void Exit(ActiveAIState activeAIState) {
+        activeAIState.OnExit();
+    } // exit state behaviour
     
-    protected abstract ActiveAIState GenerateActiveAIState(EnemyController enemyController);
+    protected abstract ActiveAIState GenerateActiveAIState(IUnitController controller);
 }
 
 [System.Serializable]
@@ -43,12 +49,18 @@ public class AIStateTransitionEntry {
 public enum AIStateTransitionId {
     OnUnitInitialized,
     OnUnitIdleFinished,
-    OnUnitWanderFinished,
+    OnUnitMoveComplete,
     OnUnitEnemySeen,
+    OnUnitAlerted,
     OnUnitEnemyLost,
     OnNextTargetSet,
     OnUnitDefeated,
-    OnUnitReadyDespawn
+    OnUnitReadyDespawn,
+    OnUnitAllyAlert,
+    OnUnitMeleeAttack,
+    OnUnitRangedAttack,
+    OnUnitAllyLostEnemy,
+    OnUnitTakeDamage
 }
 
 // information about the current AI State
@@ -59,12 +71,6 @@ public class ActiveAIState {
 
     public event Action<AIStateTransitionId> OnReadyToTransition;
     
-    ~ActiveAIState() {
-        for(int i = 0; i < SubStates.Count; i++) {
-            SubStates[i].OnReadyToTransition -= SetNextTransition;
-        }
-    }
-
     public void AddAISubState(ActiveAIState data) {
         _subStates.Add(data);
         data.OnReadyToTransition += SetNextTransition;
@@ -74,8 +80,14 @@ public class ActiveAIState {
         OnReadyToTransition?.Invoke(transitionId);
     }
 
-    public virtual void OnExecute() {
-        
+    public virtual bool OnExecute() {
+        return false;
+    }
+
+    public virtual void OnExit() {
+        for (int i = 0; i < SubStates.Count; i++) {
+            SubStates[i].OnReadyToTransition -= SetNextTransition;
+        }
     }
 }
 

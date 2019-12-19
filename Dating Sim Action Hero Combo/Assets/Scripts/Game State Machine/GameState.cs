@@ -75,7 +75,6 @@ public class GameState : MonoBehaviour {
     }
     
     public virtual void Enter() {
-        Debug.Log($"Entering state {this.name}");
         IsLoading = true;
         // enter parent state first, if necessary
         if (ParentState != null && !ParentState.IsActive) {
@@ -93,13 +92,14 @@ public class GameState : MonoBehaviour {
             TryToLoadScene();
             return;
         }
-        OnStateLoaded();
+        OnStateEnterSuccess();
     }
 
     private void TryToLoadScene() {
         bool success = SceneController.Instance.TransitionToScene(_sceneName);
         if (!success) {
             CustomLogger.Error($"[{this.name}]", $"[{nameof(GameState)}] Failed to find and load scene!");
+            OnStateEnterFailed();
             return;
         }
         SceneController.Instance.OnSceneLoaded += OnSceneLoaded;
@@ -108,19 +108,18 @@ public class GameState : MonoBehaviour {
     private void OnSceneLoaded(string sceneName) {
         if (sceneName.Equals(_sceneName)) {
             SceneController.Instance.OnSceneLoaded -= OnSceneLoaded;
-            OnStateLoaded();
+            OnStateEnterSuccess();
         }
     }
 
     // when the game the state has finished loading everything
-    protected void OnStateLoaded() {
+    protected void OnStateEnterSuccess() {
         IsLoading = false;
         IsActive = true;
         RegisterPrefabs();
-        Debug.Log($"Finished loading state {this.name}");
         OnGameStateEnter?.Invoke();
         if(ParentState != null) {
-            ParentState.OnGameStateEnter -= OnStateLoaded;
+            ParentState.OnGameStateEnter -= OnStateEnterSuccess;
         }
     }
 
@@ -148,6 +147,12 @@ public class GameState : MonoBehaviour {
             return true;
         }
         return StateOnPath(ParentState);
+    }
+
+    private void OnStateEnterFailed() {
+        IsActive = false;
+        IsLoading = false;
+        CustomLogger.Error(this.name, $"Failed to enter state!");
     }
 }
 

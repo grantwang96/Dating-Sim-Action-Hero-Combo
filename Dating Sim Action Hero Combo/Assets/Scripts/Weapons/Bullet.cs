@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour, PooledObject
     private float _totalLifeTime;
     private bool _isLive;
     private Vector2 _initialVelocity;
+    private Unit _owner;
+    private IDamageable _ownerDamageable;
 
     private void Awake() {
         _hitBox.OnHitBoxTriggered += OnHitBoxTriggered;
@@ -21,14 +23,14 @@ public class Bullet : MonoBehaviour, PooledObject
         _hitBox.OnHitBoxTriggered -= OnHitBoxTriggered;
     }
 
-    public void Setup(int power, float totalLifeTime, Vector2 newPosition, Vector2 velocity) {
+    public void Setup(int power, float totalLifeTime, Vector2 newPosition, Vector2 velocity, Unit owner) {
         _power = power;
         _totalLifeTime = totalLifeTime;
         transform.position = newPosition;
         transform.up = velocity.normalized;
         _initialVelocity = velocity;
-
-        _hitBox.Initialize(_power, DamageType.Normal);
+        _owner = owner;
+        _ownerDamageable = owner.GetComponent<IDamageable>();
     }
 
     public void Spawn() {
@@ -49,7 +51,11 @@ public class Bullet : MonoBehaviour, PooledObject
         _totalLifeTime -= Time.deltaTime;
     }
 
-    private void OnHitBoxTriggered() {
+    private void OnHitBoxTriggered(Collider2D collider) {
+        IDamageable damageable = collider.GetComponent<IDamageable>();
+        if (damageable != null && damageable != _ownerDamageable) {
+            damageable.TakeDamage(_power, DamageType.Normal, _owner);
+        }
         Despawn();
     }
 

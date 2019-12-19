@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public interface IEnemyManager {
 
     IReadOnlyList<IEnemyController> AllEnemies { get; }
+
+    event Action<AIStateTransitionId, IUnitController> OnUnitBroadcastMessage;
 
     void SpawnEnemy(Vector2 position, string enemyType);
     void DespawnEnemy(IEnemyController controller);
@@ -24,6 +27,7 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
     private Dictionary<EM_StateTransitionId, EnemyManagerState> _stateList = new Dictionary<EM_StateTransitionId, EnemyManagerState>();
 
     public IReadOnlyList<IEnemyController> AllEnemies => _enemyControllers;
+    public event Action<AIStateTransitionId, IUnitController> OnUnitBroadcastMessage;
 
     #region INITIALIZATION
     private void Awake() {
@@ -97,16 +101,22 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         _enemyControllers.Remove(controller);
     }
     
-    private void OnAIStateReadyToTransition(AIStateTransitionId id, IEnemyController controller) {
+    private void OnAIStateReadyToTransition(AIStateTransitionId id, IUnitController controller) {
         _currentState.OnControllerReadyToTransition(id, controller);
+    }
+
+    private void BroadcastMessageToUnits(AIStateTransitionId id, IUnitController controller) {
+        OnUnitBroadcastMessage?.Invoke(id, controller);
     }
 
     private void ChangeState(EnemyManagerState newState) {
         if(_currentState != null) {
             _currentState.Exit();
+            _currentState.OnBroadcastUnitStateChange -= BroadcastMessageToUnits;
         }
         _currentState = newState;
         _currentState.Enter();
+        _currentState.OnBroadcastUnitStateChange += BroadcastMessageToUnits;
     }
 }
 

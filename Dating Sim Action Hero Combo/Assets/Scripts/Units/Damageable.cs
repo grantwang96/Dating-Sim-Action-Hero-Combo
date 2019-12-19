@@ -4,10 +4,10 @@ using System;
 
 public interface IDamageable
 {
-    event Action<int, DamageType> OnTakeDamage;
+    event Action<int, DamageType, Unit> OnTakeDamage;
     event Action<int> OnHealDamage;
 
-    void TakeDamage(int damage, DamageType damageType);
+    void TakeDamage(int damage, DamageType damageType, Unit attacker);
     void Heal(int damage);
 }
 

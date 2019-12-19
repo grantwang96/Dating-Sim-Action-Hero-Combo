@@ -23,6 +23,11 @@ public partial class MapService
         _toBeVisited.Clear();
         _alreadyVisited.Clear();
 
+        if(!LevelDataManager.Instance.IsWithinMap(start)) {
+            CustomLogger.Warn(nameof(MapService), $"Starting position '{start}' is out of bounds!");
+            return null;
+        }
+
         List<IntVector3> traversableTargets = new List<IntVector3>();
         TileNode current = new TileNode() {
             X = start.x,

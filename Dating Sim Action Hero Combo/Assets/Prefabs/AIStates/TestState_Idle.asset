@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f487bb6885449754bbeda8148ac0774b, type: 3}
   m_Name: TestState_Idle
   m_EditorClassIdentifier: 
-  _subStates: []
+  _subStates:
+  - {fileID: 11400000, guid: 019b53cb498868d4bb0f2879e0d572df, type: 2}
   _minimumIdleTime: 3
   _maximumIdleTime: 5
