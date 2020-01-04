@@ -41,17 +41,32 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 11c56fdf65aa4a9479230b09fdc9108e, type: 2}
   - _transitionId: 4
     _states:
-    - {fileID: 11400000, guid: cdde38bae5841a5469813ffb018cc4f1, type: 2}
+    - {fileID: 11400000, guid: 080aa8169aef70a4bafebc1aca632a71, type: 2}
   - _transitionId: 5
     _states:
     - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
   - _transitionId: 9
     _states:
-    - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
+    - {fileID: 11400000, guid: 97d46b0f4a3175c4e873739556185151, type: 2}
   - _transitionId: 12
     _states:
-    - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
+    - {fileID: 11400000, guid: cdde38bae5841a5469813ffb018cc4f1, type: 2}
   - _transitionId: 13
     _states:
-    - {fileID: 11400000, guid: cdde38bae5841a5469813ffb018cc4f1, type: 2}
+    - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
+  - _transitionId: 10
+    _states:
+    - {fileID: 11400000, guid: 81ffbb71aac7f7c4ba535eb9fc0e3368, type: 2}
+  - _transitionId: 11
+    _states:
+    - {fileID: 11400000, guid: 3ed1af88359455045b8897b8e341f23f, type: 2}
+  - _transitionId: 6
+    _states:
+    - {fileID: 11400000, guid: 080aa8169aef70a4bafebc1aca632a71, type: 2}
+  - _transitionId: 14
+    _states:
+    - {fileID: 11400000, guid: 080aa8169aef70a4bafebc1aca632a71, type: 2}
+  - _transitionId: 16
+    _states:
+    - {fileID: 11400000, guid: ddbe5c4506f5503499c22d07fe839eaa, type: 2}
   _equippedWeapon: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}

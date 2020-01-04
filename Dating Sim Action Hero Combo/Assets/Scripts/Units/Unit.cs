@@ -5,7 +5,7 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class Unit : MonoBehaviour, IDamageable
+public abstract class Unit : MonoBehaviour, IDamageable, ISoundListener
 {
     [SerializeField] private UnitTags _unitTags;
     public UnitTags UnitTags => _unitTags;
@@ -23,6 +23,8 @@ public abstract class Unit : MonoBehaviour, IDamageable
     public event Action<int, DamageType, Unit> OnTakeDamage;
     public event Action<int> OnHealDamage;
 
+    public event Action<IntVector3, Unit> OnCombatSoundHeard;
+
     public virtual void SetUnitTags(UnitTags newTags) {
         OnUnitTagsSet?.Invoke(this, newTags);
         _unitTags = newTags;
@@ -34,6 +36,10 @@ public abstract class Unit : MonoBehaviour, IDamageable
 
     public virtual void Heal(int damage) {
         OnHealDamage?.Invoke(damage);
+    }
+
+    public virtual void OnSoundHeard(IntVector3 origin, Unit source = null) {
+        OnCombatSoundHeard?.Invoke(origin, source);
     }
 }
 

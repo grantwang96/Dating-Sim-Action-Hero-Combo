@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4e81169081a0914d904582a9dc998ef, type: 3}
-  m_Name: TestState_Scan
+  m_Script: {fileID: 11500000, guid: 621199ac4dda6a940a3379b94d18d44d, type: 3}
+  m_Name: TestState_Chase
   m_EditorClassIdentifier: 
-  _subStates: []
-  _onHostileFound: 3
+  _subStates:
+  - {fileID: 11400000, guid: 95eb08957790e714dac6f0cff4de5b1c, type: 2}
+  _fullSpeed: 1

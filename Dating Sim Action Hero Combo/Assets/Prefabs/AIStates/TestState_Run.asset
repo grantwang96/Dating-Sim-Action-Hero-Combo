@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621199ac4dda6a940a3379b94d18d44d, type: 3}
   m_Name: TestState_Run
   m_EditorClassIdentifier: 
-  _subStates: []
+  _subStates:
+  - {fileID: 11400000, guid: 019b53cb498868d4bb0f2879e0d572df, type: 2}
   _fullSpeed: 1

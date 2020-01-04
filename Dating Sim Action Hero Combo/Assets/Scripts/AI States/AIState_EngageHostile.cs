@@ -14,19 +14,26 @@ public class AIState_EngageHostile : AIStateDataObject {
 public class ActiveEngageHostileState : ActiveAIState {
 
     private IUnitController _controller;
+    private WeaponSlot _equippedWeapon;
 
     public ActiveEngageHostileState(IUnitController controller) {
         _controller = controller;
-        WeaponSlot equippedWeapon = controller.EquippedWeapon;
-        if(equippedWeapon == null) {
+        _equippedWeapon = controller.EquippedWeapon;
+    }
+
+    public override bool OnExecute() {
+        if (_equippedWeapon == null) {
             // set the controller to run away or find a new weapon
             SetNextTransition(AIStateTransitionId.OnUnitDefeated);
-            return;
+            return true;
         }
-        if (equippedWeapon.Data.IsRanged) {
+        if (_equippedWeapon.Data.IsRanged) {
             // set ranged attack state
+            SetNextTransition(AIStateTransitionId.OnUnitRangedAttack);
         } else {
             // set melee attack state
+            SetNextTransition(AIStateTransitionId.OnUnitMeleeAttack);
         }
+        return true;
     }
 }

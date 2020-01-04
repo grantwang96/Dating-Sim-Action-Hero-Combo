@@ -52,6 +52,8 @@ public class ActiveAlertState : ActiveAIState {
 
     private void OnAlertAnimationComplete() {
         // change animation state
+        // temp: Force change animation to normal
+        _animator.Play("Normal");
         SetNextTransition(AIStateTransitionId.OnUnitAlerted);
         _isComplete = true;
     }

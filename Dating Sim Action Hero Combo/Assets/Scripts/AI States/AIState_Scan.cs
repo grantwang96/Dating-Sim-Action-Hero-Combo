@@ -5,8 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "AI State/Scan")]
 public class AIState_Scan : AIStateDataObject {
 
+    [SerializeField] private AIStateTransitionId _onHostileFound;
+
     protected override ActiveAIState GenerateActiveAIState(IUnitController controller) {
-        ActiveScanState newState = new ActiveScanState(controller);
+        ActiveScanState newState = new ActiveScanState(controller, _onHostileFound);
         return newState;
     }
 }
@@ -20,14 +22,16 @@ public class ActiveScanState : ActiveAIState {
 
     private Transform _unitTransform;
     private IUnitController _controller;
+    private AIStateTransitionId _onHostileFound;
 
     private List<Unit> _hostiles;
 
-    public ActiveScanState(IUnitController controller) : base() {
+    public ActiveScanState(IUnitController controller, AIStateTransitionId onHostileFound) : base() {
         _visionAngle = controller.Data.VisionAngle;
         _visionRange = controller.Data.VisionRange;
         _visionLayers = controller.Data.VisionLayers;
         _hostileTags = controller.Data.HostileTags;
+        _onHostileFound = onHostileFound;
 
         _controller = controller;
         _unitTransform = controller.Unit.transform;
@@ -45,7 +49,7 @@ public class ActiveScanState : ActiveAIState {
     }
 
     private void OnFoundHostile() {
-        SetNextTransition(AIStateTransitionId.OnUnitEnemySeen);
+        SetNextTransition(_onHostileFound);
     }
 
     private void CreateHostilesList() {

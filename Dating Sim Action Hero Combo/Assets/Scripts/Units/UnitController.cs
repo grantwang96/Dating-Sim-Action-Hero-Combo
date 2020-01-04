@@ -89,6 +89,7 @@ public class UnitController : IUnitController
             return;
         }
         _currentState = possibleNextStates[UnityEngine.Random.Range(0, possibleNextStates.Count)];
+        Debug.Log($"Transitioning to state {_currentState.name}");
         _activeAIStateData = _currentState.Enter(this);
         _activeAIStateData.OnReadyToTransition += OnCurrentStateReadyToTransition;
     }

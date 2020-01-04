@@ -59,6 +59,7 @@ public class EnemyController : IEnemyController
     private void SubscribeToEvents() {
         Unit.OnTakeDamage += OnTakeDamage;
         Unit.OnHealDamage += OnHealDamage;
+        Unit.OnCombatSoundHeard += OnSoundHeard;
 
         EnemyManager.Instance.OnUnitBroadcastMessage += OnUnitBroadcastMessage;
     }
@@ -66,6 +67,7 @@ public class EnemyController : IEnemyController
     private void UnsubscribeToEvents() {
         Unit.OnTakeDamage -= OnTakeDamage;
         Unit.OnHealDamage -= OnHealDamage;
+        Unit.OnCombatSoundHeard -= OnSoundHeard;
 
         EnemyManager.Instance.OnUnitBroadcastMessage -= OnUnitBroadcastMessage;
     }
@@ -93,14 +95,18 @@ public class EnemyController : IEnemyController
 
     // can be called internally or used as override by manager
     public void TransitionState(AIStateTransitionId transitionId) {
-        if(_currentState != null) {
-            _currentState.Exit(_activeAIStateData);
-        }
         List<AIStateDataObject> possibleNextStates = Data.GetStateForTransitionId(transitionId);
         if(possibleNextStates.Count == 0) {
             CustomLogger.Error(nameof(EnemyController), $"Enemy Data Object {Data.name} does not have any states for transition id {transitionId}");
             _currentState = null;
             return;
+        }
+        // don't attempt to re-enter current state
+        if (possibleNextStates.Contains(_currentState)) {
+            return;
+        }
+        if (_currentState != null) {
+            _currentState.Exit(_activeAIStateData);
         }
         _currentState = possibleNextStates[UnityEngine.Random.Range(0, possibleNextStates.Count)];
         _activeAIStateData = _currentState.Enter(this);
@@ -132,6 +138,16 @@ public class EnemyController : IEnemyController
 
     private void OnHealDamage(int damage) {
         Health += damage;
+    }
+
+    private void OnSoundHeard(IntVector3 origin, Unit source) {
+        // determine if we need to change state for this
+        // don't react to sounds from friendlies
+        if (source != null && (source == Unit || source.UnitTags.HasFlag(Unit.UnitTags))) {
+            return;
+        }
+        MapSpaceTarget = origin;
+        OnCurrentStateReadyToTransition(AIStateTransitionId.OnUnitReadyToQuickMove);
     }
 
     #endregion

@@ -270,5 +270,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8139055063456896020, guid: 726664f64e13cfa4089b526698aba009,
+        type: 3}
+      propertyPath: _allPrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139055063456896020, guid: 726664f64e13cfa4089b526698aba009,
+        type: 3}
+      propertyPath: _allPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 8431842786976931747, guid: 42b2faf8e8cb00d4f89bc8f38d9126aa,
+        type: 3}
+    - target: {fileID: 8139055063519414391, guid: 726664f64e13cfa4089b526698aba009,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139055063519414391, guid: 726664f64e13cfa4089b526698aba009,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].PoolId
+      value: prefab.Combat_WeaponSoundBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 8139055063519414391, guid: 726664f64e13cfa4089b526698aba009,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].InitialCount
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 726664f64e13cfa4089b526698aba009, type: 3}

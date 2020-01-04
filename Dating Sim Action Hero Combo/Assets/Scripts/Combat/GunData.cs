@@ -4,11 +4,14 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "Weapon Data/Gun")]
 public class GunData : WeaponData {
-    
+
+    [SerializeField] private string _pooledWeaponSoundBoxId;
     [SerializeField] private string _bulletPrefabId;
     [SerializeField] private int _power;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _bulletLifeTime;
+
+    [SerializeField] private float _soundBoxSize;
 
     protected override bool PerformAction(Unit unit, ActiveWeaponState state) {
         if (!HasWeaponCooledDown(state.LastActivateTime)) {
@@ -46,5 +49,21 @@ public class GunData : WeaponData {
         Vector2 velocity = unit.Front.up * _bulletSpeed;
         bullet.Setup(_power, _bulletLifeTime, unit.Front.position, velocity, unit);
         bullet.Spawn();
+        GenerateSoundBox(unit);
+    }
+
+    protected virtual void GenerateSoundBox(Unit unit) {
+        PooledObject weaponSoundBoxPO;
+        if (!PooledObjectManager.Instance.UsePooledObject(_pooledWeaponSoundBoxId, out weaponSoundBoxPO)) {
+            CustomLogger.Error(this.name, $"Could not retrieve weapon sound box pooled object with id: {_pooledWeaponSoundBoxId}");
+            return;
+        }
+        WeaponSoundBox soundBox = weaponSoundBoxPO as WeaponSoundBox;
+        if(soundBox == null) {
+            CustomLogger.Error(this.name, $"Object {weaponSoundBoxPO} was not of type {nameof(WeaponSoundBox)}");
+            return;
+        }
+        soundBox.Initialize(_soundBoxSize, unit.Front.position, unit);
+        soundBox.Spawn();
     }
 }

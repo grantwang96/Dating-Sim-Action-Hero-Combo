@@ -86,7 +86,6 @@ public class GameState : MonoBehaviour {
     }
 
     protected void OnReadyToEnter() {
-        Debug.Log($"{this.name} ready to enter!");
         if (RequiresScene()) {
             // that means a scene transition is necessary and we haven't fully loaded yet
             TryToLoadScene();

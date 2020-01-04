@@ -33,7 +33,7 @@ public class ActiveIdleState : ActiveAIState {
     private bool IncrementTime() {
         CurrentTime += Time.deltaTime;
         if (CurrentTime >= Duration) {
-            SetNextTransition(AIStateTransitionId.OnUnitIdleFinished);
+            SetNextTransition(AIStateTransitionId.OnUnitReadyToMove);
             return true;
         }
         return false;

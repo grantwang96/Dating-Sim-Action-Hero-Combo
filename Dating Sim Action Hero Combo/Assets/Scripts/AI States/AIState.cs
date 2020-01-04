@@ -48,11 +48,12 @@ public class AIStateTransitionEntry {
 
 public enum AIStateTransitionId {
     OnUnitInitialized,
-    OnUnitIdleFinished,
+    OnUnitReadyToMove,
     OnUnitMoveComplete,
-    OnUnitEnemySeen,
+    OnUnitEnemyDiscovered,
     OnUnitAlerted,
     OnUnitEnemyLost,
+    OnUnitEnemyRefound,
     OnNextTargetSet,
     OnUnitDefeated,
     OnUnitReadyDespawn,
@@ -60,7 +61,10 @@ public enum AIStateTransitionId {
     OnUnitMeleeAttack,
     OnUnitRangedAttack,
     OnUnitAllyLostEnemy,
-    OnUnitTakeDamage
+    OnUnitTakeDamage,
+    OnUnitChase,
+    OnUnitReadyToQuickMove,
+    OnCombatNoiseHeard
 }
 
 // information about the current AI State

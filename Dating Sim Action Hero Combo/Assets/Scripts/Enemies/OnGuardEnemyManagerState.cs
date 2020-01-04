@@ -7,7 +7,7 @@ public class OnGuardEnemyManagerState : EnemyManagerState
     public override void OnControllerReadyToTransition(AIStateTransitionId transitionId, IUnitController controller) {
         base.OnControllerReadyToTransition(transitionId, controller);
         switch (transitionId) {
-            case AIStateTransitionId.OnUnitIdleFinished:
+            case AIStateTransitionId.OnUnitReadyToMove:
                 AssignNewWanderTarget(controller);
                 break;
             case AIStateTransitionId.OnUnitAlerted:

@@ -87,7 +87,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.01
 --- !u!96 &8469220611858616102
 TrailRenderer:
   serializedVersion: 2
@@ -135,14 +135,14 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.0072448663
-        value: 0.14973244
-        inSlope: -0.51222837
-        outSlope: -0.51222837
+        time: 0
+        value: 0.04278359
+        inSlope: -0.00002304333
+        outSlope: -0.00002304333
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.124088906
+        outWeight: 0.123188406
       - serializedVersion: 3
         time: 1
         value: 0
@@ -190,7 +190,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.05
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &8131912108035086969
@@ -231,7 +231,7 @@ Transform:
   m_GameObject: {fileID: 1772215289002022764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 909176873411148747}
   m_RootOrder: 0
