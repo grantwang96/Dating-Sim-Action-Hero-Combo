@@ -11,12 +11,11 @@ public class NPCUnit : Unit
     [SerializeField] protected CircleCollider2D _collider;
     [SerializeField] protected Transform _front;
 
+    [SerializeField] protected NPCMoveController _moveController;
+    public override MoveController MoveController => _moveController;
+
     public override Transform Transform => transform;
     public override Transform Front => _front;
-    public override IntVector3 MapPosition => LevelDataManager.Instance.WorldToArraySpace(transform.position);
-
-    [SerializeField] protected NPCMoveController _moveController;
-    public NPCMoveController MoveController => _moveController;
 
     public void Initialize(RuntimeAnimatorController animController, float size) {
         _animator.runtimeAnimatorController = animController;

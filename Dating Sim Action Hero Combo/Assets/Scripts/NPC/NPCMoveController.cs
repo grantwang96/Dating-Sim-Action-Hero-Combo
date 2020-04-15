@@ -38,9 +38,16 @@ public class NPCMoveController : MoveController
         Vector2 newPosition = (Vector2)transform.position + dir.normalized * _moveSpeed * Time.deltaTime;
         _rigidbody.velocity = Vector2.zero;
         _rigidbody.MovePosition(newPosition);
+        ProcessMapSpace();
         if (Vector2.Distance(transform.position, _currentDestination) < 0.1f) {
-            UpdateMapSpacePosition();
             UpdateCurrentDestination();
+        }
+    }
+
+    protected virtual void ProcessMapSpace() {
+        IntVector3 position = LevelDataManager.Instance.WorldToArraySpace(transform.position);
+        if(MapPosition != position) {
+            UpdateMapSpacePosition(position);
         }
     }
 

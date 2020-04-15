@@ -18,7 +18,7 @@ public class DefaultEnemyManagerState : EnemyManagerState {
             case AIStateTransitionId.OnUnitEnemyLost:
                 // potentially change manager state
                 // TODO: depending on enemy type, do something different (some might chase, some might hold position)
-                IntVector3 targetPosition = controller.FocusedTarget.MapPosition;
+                IntVector3 targetPosition = controller.FocusedTarget.MoveController.MapPosition;
                 AssignRunTarget(controller, targetPosition);
                 break;
             case AIStateTransitionId.OnUnitDefeated:
@@ -31,7 +31,7 @@ public class DefaultEnemyManagerState : EnemyManagerState {
     }
 
     private void MoveGuardsToLastKnownLoc(IUnitController controller) {
-        IntVector3 targetPosition = controller.FocusedTarget.MapPosition;
+        IntVector3 targetPosition = controller.FocusedTarget.MoveController.MapPosition;
 
         // TODO: filter by enemy type
 

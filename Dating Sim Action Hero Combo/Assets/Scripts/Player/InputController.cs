@@ -8,6 +8,10 @@ public interface IInputController {
     Vector2 MovementInput { get; }
     Vector2 RotationInput { get; }
 
+    event Action OutfitSwapBtnPressed;
+    event Action OutfitSwapBtnHeld;
+    event Action OutfitSwapBtnReleased;
+
     event Action InteractBtnPressed;
     event Action InteractBtnHeld;
     event Action InteractBtnReleased;
@@ -23,6 +27,10 @@ public class InputController : MonoBehaviour, IInputController
 
     public Vector2 MovementInput { get; private set; }
     public Vector2 RotationInput { get; private set; }
+
+    public event Action OutfitSwapBtnPressed;
+    public event Action OutfitSwapBtnHeld;
+    public event Action OutfitSwapBtnReleased;
 
     public event Action InteractBtnPressed;
     public event Action InteractBtnHeld;
@@ -76,6 +84,8 @@ public class InputController : MonoBehaviour, IInputController
     private void ButtonInputs() {
         ButtonInput("Submit", InteractBtnPressed, InteractBtnHeld, InteractBtnReleased);
         ButtonInput("Fire1", ShootBtnPressed, ShootBtnHeld, ShootBtnReleased);
+        ButtonInput("Interact", InteractBtnPressed, InteractBtnHeld, InteractBtnReleased);
+        ButtonInput("SwitchOutfit", OutfitSwapBtnPressed, OutfitSwapBtnHeld, OutfitSwapBtnReleased);
     }
 
     private void ButtonInput(string inputName, Action pressed, Action held, Action released) {

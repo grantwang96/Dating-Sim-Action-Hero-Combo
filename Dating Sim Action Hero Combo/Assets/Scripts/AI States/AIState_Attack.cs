@@ -13,7 +13,7 @@ public abstract class ActiveAttackState : ActiveAIState {
     protected Unit _target;
     protected UnitData _unitData;
     protected NPCMoveController _moveController;
-    protected WeaponSlot _equippedWeapon;
+    protected Weapon _equippedWeapon;
 
     public ActiveAttackState(IUnitController controller) {
         _unit = controller.Unit;

@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerUnit : Unit {
+public class PlayerUnit : Unit, ITileOccupant {
 
     public static PlayerUnit Instance { get; private set; }
 
     [SerializeField] private Transform _front;
-    
+    [SerializeField] private PlayerMoveController _playerMoveController;
+    public override MoveController MoveController => _playerMoveController;
+
     public override Transform Transform => transform;
     public override Transform Front => _front;
-    public override IntVector3 MapPosition => LevelDataManager.Instance.WorldToArraySpace(transform.position);
 
     [SerializeField] private float _speed;
+
+    // temp
+    public WeaponData HackPlayerWeaponConfig;
 
     private void Awake() {
         Instance = this;

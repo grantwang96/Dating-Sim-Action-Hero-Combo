@@ -10,6 +10,15 @@ public class PlayerMoveController : MoveController {
         Vector2 moveInput = InputController.Instance.MovementInput;
         Vector2 delta = moveInput * _speed * Time.deltaTime;
         _rigidbody.MovePosition((Vector2)transform.position + delta);
+
+        UpdateMapPosition();
+    }
+
+    private void UpdateMapPosition() {
+        IntVector3 position = LevelDataManager.Instance.WorldToArraySpace(transform.position);
+        if(position != MapPosition) {
+            UpdateMapSpacePosition(position);
+        }
     }
 
     protected override void ProcessRotation() {

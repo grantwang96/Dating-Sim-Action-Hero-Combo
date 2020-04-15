@@ -11,7 +11,7 @@ public interface IUnitController {
     IntVector3 MapPosition { get; }
     IntVector3 MapSpaceTarget { get; set; }
     Unit FocusedTarget { get; set; }
-    WeaponSlot EquippedWeapon { get; }
+    Weapon EquippedWeapon { get; }
 
     event Action<AIStateTransitionId, IUnitController> OnAIStateReadyToTransition;
     event Action<IUnitController> OnUnitDefeated;
@@ -27,8 +27,8 @@ public class UnitController : IUnitController
     public Unit Unit { get; private set; }
     public UnitData Data { get; private set; }
 
-    public WeaponSlot EquippedWeapon { get; }
-    public IntVector3 MapPosition => Unit.MapPosition;
+    public Weapon EquippedWeapon { get; }
+    public IntVector3 MapPosition => Unit.MoveController.MapPosition;
     private IntVector3 _mapSpaceTarget;
     public IntVector3 MapSpaceTarget {
         get { return _mapSpaceTarget; }

@@ -8,7 +8,7 @@ public partial class MapService
 
     public const int NumTriesAbort = 100;
 
-    private static IntVector3[] _directions = {
+    public static IntVector3[] Directions = {
         new IntVector3(1, 0),
         new IntVector3(1, -1),
         new IntVector3(0, -1),
@@ -18,6 +18,70 @@ public partial class MapService
         new IntVector3(0, 1),
         new IntVector3(1, 1)
     };
+
+    public static List<IntVector3> GetPositionsWithinRadius(int minDistance, IntVector3 start, int radius) {
+        _toBeVisited.Clear();
+        _alreadyVisited.Clear();
+
+        if (!LevelDataManager.Instance.IsWithinMap(start)) {
+            CustomLogger.Warn(nameof(MapService), $"Starting position '{start}' is out of bounds!");
+            return null;
+        }
+
+        List<IntVector3> traversableTargets = new List<IntVector3>();
+        TileNode current = new TileNode() {
+            X = start.x,
+            Y = start.y,
+            DistanceFromStart = 0
+        };
+
+        _toBeVisited.Add(current);
+        int count = 0;
+
+        while (_toBeVisited.Count != 0) {
+            count++;
+            current = _toBeVisited[0];
+            TryAddToList(minDistance, traversableTargets, current);
+            _toBeVisited.RemoveAt(0);
+            _alreadyVisited.Add(new IntVector3(current.X, current.Y));
+
+            for (int i = 0; i < Directions.Length; i++) {
+                int dirX = Directions[i].x;
+                int dirY = Directions[i].y;
+                int neighborX = current.X + Directions[i].x;
+                int neighborY = current.Y + Directions[i].y;
+
+                int distanceFromStart = Mapservice.DistanceFromStart(start.x, start.y, neighborX, neighborY);
+                if (distanceFromStart > radius) {
+                    continue;
+                }
+
+                if (_alreadyVisited.Contains(new IntVector3(neighborX, neighborY))) {
+                    continue;
+                }
+
+                ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
+                bool _canTraverse = info != null && !info.Data.IsSolid;
+
+                if (!_canTraverse || ContainsNode(neighborX, neighborY)) {
+                    continue;
+                }
+
+                TileNode newNode = new TileNode() {
+                    X = neighborX,
+                    Y = neighborY,
+                    DistanceFromStart = distanceFromStart
+                };
+                _toBeVisited.Add(newNode);
+            }
+            if (count > NumTriesAbort) {
+                CustomLogger.Error(nameof(MapService), $"{nameof(GetTraversableTiles)} Aborting after {count} steps!");
+                break;
+            }
+        }
+
+        return traversableTargets;
+    }
 
     public static List<IntVector3> GetTraversableTiles(int radius, IntVector3 start, int minDistance = 0) {
         _toBeVisited.Clear();
@@ -45,11 +109,11 @@ public partial class MapService
             _toBeVisited.RemoveAt(0);
             _alreadyVisited.Add(new IntVector3(current.X, current.Y));
 
-            for(int i = 0; i < _directions.Length; i++) {
-                int dirX = _directions[i].x;
-                int dirY = _directions[i].y;
-                int neighborX = current.X + _directions[i].x;
-                int neighborY = current.Y + _directions[i].y;
+            for(int i = 0; i < Directions.Length; i++) {
+                int dirX = Directions[i].x;
+                int dirY = Directions[i].y;
+                int neighborX = current.X + Directions[i].x;
+                int neighborY = current.Y + Directions[i].y;
 
                 int distanceFromStart = Mapservice.DistanceFromStart(start.x, start.y, neighborX, neighborY);
                 if(distanceFromStart > radius) {
@@ -74,7 +138,7 @@ public partial class MapService
                     _canTraverse &= !neighborTileY.Data.IsSolid;
                 }
 
-                if (!_canTraverse || ContainsNode(neighborX, neighborY)) {
+                if (ContainsNode(neighborX, neighborY)) {
                     continue;
                 }
 

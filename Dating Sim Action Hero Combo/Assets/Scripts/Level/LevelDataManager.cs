@@ -13,6 +13,8 @@ public interface ILevelDataManager {
     bool IsWithinMap(IntVector3 position);
     void UpdateTile(int x, int y, string tileType = "");
     ITileInfo GetTileAt(int x, int y);
+    List<ITileInfo> GetTilesWithinRadius(IntVector3 position, int radius);
+    void SetOccupant(IntVector3 position, ITileOccupant occupant);
 }
 
 public enum PathStatus {
@@ -75,8 +77,31 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
         return _tiles[x][y];
     }
 
+    public List<ITileInfo> GetTilesWithinRadius(IntVector3 position, int radius) {
+        List<ITileInfo> tilesList = new List<ITileInfo>();
+        if (!IsWithinMap(position)) {
+            CustomLogger.Warn(nameof(LevelDataManager), $"Position {position} is out of bounds!");
+            return tilesList;
+        }
+        List<IntVector3> adjacentPositions = MapService.GetPositionsWithinRadius(0, position, radius);
+        for(int i = 0; i < adjacentPositions.Count; i++) {
+            if (IsWithinMap(adjacentPositions[i])) {
+                tilesList.Add(_tiles[adjacentPositions[i].x][adjacentPositions[i].y]);
+            }
+        }
+        return tilesList;
+    }
+
     public bool IsWithinMap(IntVector3 position) {
         return position.x >= 0 && position.x < _mapSizeX && position.y >= 0 && position.y < _mapSizeY;
+    }
+
+    public void SetOccupant(IntVector3 position, ITileOccupant occupant) {
+        if (!IsWithinMap(position)) {
+            CustomLogger.Error(nameof(LevelDataManager), $"Position {position} is out of bounds!");
+            return;
+        }
+        _tiles[position.x][position.y].SetOccupant(occupant);
     }
 
     public IntVector3 WorldToArraySpace(Vector2 worldPos) {

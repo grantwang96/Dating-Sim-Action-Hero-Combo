@@ -12,12 +12,10 @@ public abstract class Unit : MonoBehaviour, IDamageable, ISoundListener
 
     [SerializeField] protected Animator _animator;
     public Animator Animator => _animator;
-
-    [SerializeField] protected WeaponData _equippedWeapon;
+    public abstract MoveController MoveController { get; }
 
     public abstract Transform Transform { get; }
     public abstract Transform Front { get; }
-    public abstract IntVector3 MapPosition { get; }
 
     public event Action<Unit, UnitTags> OnUnitTagsSet;
     public event Action<int, DamageType, Unit> OnTakeDamage;

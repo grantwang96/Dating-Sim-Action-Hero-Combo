@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSlot
+public class Weapon
 {
     public WeaponData Data { get; private set; }
     public int CurrentClip { get; private set; }
@@ -11,7 +11,7 @@ public class WeaponSlot
     private bool _isReloading;
     private float _startReloadTime;
 
-    public WeaponSlot(WeaponData data) {
+    public Weapon(WeaponData data) {
         Data = data;
         CurrentClip = data.ClipSize;
         _weaponState = new ActiveWeaponState();

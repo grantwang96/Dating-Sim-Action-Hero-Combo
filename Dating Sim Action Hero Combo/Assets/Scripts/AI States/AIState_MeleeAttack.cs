@@ -33,7 +33,7 @@ public class ActiveMeleeState : ActiveAttackState {
     }
 
     protected override bool CanAttack() {
-        IntVector3 distance = _target.MapPosition - _unit.MapPosition;
+        IntVector3 distance = _target.MoveController.MapPosition - _unit.MoveController.MapPosition;
         return Mathf.Abs(distance.x) <= 1 && Mathf.Abs(distance.z) <= 1;
     }
 }

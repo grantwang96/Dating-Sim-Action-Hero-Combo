@@ -15,7 +15,7 @@ public abstract class MoveController : MonoBehaviour {
     public event Action<IntVector3> OnMapPositionUpdated;
 
     public virtual void Initialize() {
-        UpdateMapSpacePosition();
+        UpdateMapSpacePosition(LevelDataManager.Instance.WorldToArraySpace(transform.position));
     }
 
     protected virtual void FixedUpdate() {
@@ -23,8 +23,8 @@ public abstract class MoveController : MonoBehaviour {
         ProcessRotation();
     }
 
-    protected virtual void UpdateMapSpacePosition() {
-        MapPosition = LevelDataManager.Instance.WorldToArraySpace(transform.position);
+    protected virtual void UpdateMapSpacePosition(IntVector3 position) {
+        MapPosition = position;
         OnMapPositionUpdated?.Invoke(MapPosition);
     }
 }

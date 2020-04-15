@@ -14,7 +14,7 @@ public class AIState_EngageHostile : AIStateDataObject {
 public class ActiveEngageHostileState : ActiveAIState {
 
     private IUnitController _controller;
-    private WeaponSlot _equippedWeapon;
+    private Weapon _equippedWeapon;
 
     public ActiveEngageHostileState(IUnitController controller) {
         _controller = controller;

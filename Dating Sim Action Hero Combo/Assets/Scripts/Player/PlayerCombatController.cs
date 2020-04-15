@@ -2,36 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombatController : PlayerActionController
 {
     // store currently held weapon
-    private WeaponSlot _equippedWeapon;
-    [SerializeField] private int _hackBulletCount;
-    [SerializeField] private WeaponData _hackWeaponData; // hack
+    private Weapon _equippedWeapon;
 
-    private void Start() {
-        _equippedWeapon = new WeaponSlot(_hackWeaponData);
-        SubscribeToController();
+    private static int _hackBulletCount = 800;
+
+    public PlayerCombatController(PlayerUnit unit) : base(unit) {
+        _equippedWeapon = new Weapon(unit.HackPlayerWeaponConfig);
     }
 
-    private void OnDisable() {
-        UnsubscribeToController();
-    }
+    protected override void SubscribeToEvents() {
+        base.SubscribeToEvents();
 
-    private void OnEnable() {
-        if (InputController.Instance != null) {
-            SubscribeToController();
-        }
-    }
-
-    private void SubscribeToController() {
-        UnsubscribeToController(); // ensure we don't double subscribe
         InputController.Instance.ShootBtnPressed += OnShootBtnPressed;
         InputController.Instance.ShootBtnHeld += OnShootBtnHeld;
         InputController.Instance.ShootBtnReleased += OnShootBtnReleased;
     }
 
-    private void UnsubscribeToController() {
+    protected override void UnsubscribeToEvents() {
+        base.UnsubscribeToEvents();
+
         InputController.Instance.ShootBtnPressed -= OnShootBtnPressed;
         InputController.Instance.ShootBtnHeld -= OnShootBtnHeld;
         InputController.Instance.ShootBtnReleased -= OnShootBtnReleased;

@@ -13,9 +13,9 @@ public class EnemyController : IEnemyController
     public float Speed { get; private set; }
     public Unit Unit { get; private set; }
     public UnitData Data { get; private set; }
-    public WeaponSlot EquippedWeapon { get; private set; }
+    public Weapon EquippedWeapon { get; private set; }
 
-    public IntVector3 MapPosition => Unit.MapPosition;
+    public IntVector3 MapPosition => Unit.MoveController.MapPosition;
     private IntVector3 _mapSpaceTarget;
     public IntVector3 MapSpaceTarget {
         get { return _mapSpaceTarget; }
@@ -35,7 +35,7 @@ public class EnemyController : IEnemyController
         Data = enemyData;
         Health = enemyData.MaxHealth;
         Speed = enemyData.WalkSpeed;
-        EquippedWeapon = new WeaponSlot(enemyData.EquippedWeapon);
+        EquippedWeapon = new Weapon(enemyData.EquippedWeapon);
 
         Unit = unit;
         unit.Initialize(enemyData.AnimatorController, .5f); // temp

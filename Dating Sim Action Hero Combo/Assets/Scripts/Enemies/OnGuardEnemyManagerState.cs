@@ -27,7 +27,7 @@ public class OnGuardEnemyManagerState : EnemyManagerState
     }
 
     private void MoveGuardsToLastKnownLoc(IUnitController controller) {
-        IntVector3 targetPosition = controller.FocusedTarget.MapPosition;
+        IntVector3 targetPosition = controller.FocusedTarget.MoveController.MapPosition;
         for (int i = 0; i < EnemyManager.Instance.AllEnemies.Count; i++) {
             // TODO: filter by enemy type
             IEnemyController enemy = EnemyManager.Instance.AllEnemies[i];
