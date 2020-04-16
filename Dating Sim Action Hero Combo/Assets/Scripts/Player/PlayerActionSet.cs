@@ -49,7 +49,6 @@ public class PlayerActionController : IPlayerActionController {
     }
 
     private void OnInteractPressed() {
-        CustomLogger.Log("", "Pressed interact");
         if (!CanInteract()) {
             return;
         }

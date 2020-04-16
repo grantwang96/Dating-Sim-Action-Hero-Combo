@@ -112,7 +112,7 @@ public class GameState : MonoBehaviour {
     }
 
     // when the game the state has finished loading everything
-    protected void OnStateEnterSuccess() {
+    protected virtual void OnStateEnterSuccess() {
         IsLoading = false;
         IsActive = true;
         RegisterPrefabs();
@@ -145,7 +145,7 @@ public class GameState : MonoBehaviour {
         if(this == state) {
             return true;
         }
-        return StateOnPath(ParentState);
+        return ParentState.StateOnPath(state);
     }
 
     private void OnStateEnterFailed() {

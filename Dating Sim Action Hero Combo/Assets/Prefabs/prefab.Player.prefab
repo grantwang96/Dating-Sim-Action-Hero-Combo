@@ -212,7 +212,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitTags: 1
   _animator: {fileID: 1163273303771618445}
-  _equippedWeapon: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}
   _front: {fileID: 8202479464982852657}
   _playerMoveController: {fileID: 5219552658643734024}
   _speed: 10

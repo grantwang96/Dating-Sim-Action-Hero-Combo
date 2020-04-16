@@ -1,5 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2966075384107687872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3550187103806547343}
+  - component: {fileID: 9055879485079710609}
+  m_Layer: 0
+  m_Name: Boot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3550187103806547343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2966075384107687872}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8139055063159839605}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9055879485079710609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2966075384107687872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8546dfa2ddb6924c8c109b8bb48ed92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transitions:
+  - _transitionName: TestingCombat
+    _gameState: {fileID: 8139055063634721352}
+  _sceneName: 
+  _pooledObjectPrefabAssets: []
+  _uiPrefabAssets: []
 --- !u!1 &8139055062982982170
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,6 +121,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 3550187103806547343}
   - {fileID: 8139055063519414390}
   m_Father: {fileID: 8139055064034183520}
   m_RootOrder: 0
@@ -88,9 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08fdfaa75922cf94c99ebe24e58f747c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hackStartState: {fileID: 8139055063634721352}
-  _gameHubState: {fileID: 0}
-  _tutorialState: {fileID: 0}
+  _bootState: {fileID: 9055879485079710609}
 --- !u!1 &8139055063456896022
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +216,7 @@ Transform:
   - {fileID: 8139055063634721355}
   - {fileID: 8139055064074844197}
   m_Father: {fileID: 8139055063159839605}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8139055063519414391
 MonoBehaviour:
