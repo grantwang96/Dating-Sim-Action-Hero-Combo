@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestEnemyData
   m_EditorClassIdentifier: 
   _unitPrefabId: prefab.Units_TestEnemy
-  _maxHealth: 200
+  _maxHealth: 10
   _resistances: 0
   _runSpeed: 5
   _walkSpeed: 2

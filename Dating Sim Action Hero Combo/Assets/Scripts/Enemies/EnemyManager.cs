@@ -8,8 +8,9 @@ public interface IEnemyManager {
     IReadOnlyList<IEnemyController> AllEnemies { get; }
 
     event Action<AIStateTransitionId, IUnitController> OnUnitBroadcastMessage;
+    event Action<IUnitController> OnEnemyDefeated;
 
-    void SpawnEnemy(Vector2 position, string enemyType);
+    void SpawnEnemy(Vector2 position, string enemyType, string overrideId);
     void DespawnEnemy(IEnemyController controller);
 }
 
@@ -27,7 +28,9 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
     private Dictionary<EM_StateTransitionId, EnemyManagerState> _stateList = new Dictionary<EM_StateTransitionId, EnemyManagerState>();
 
     public IReadOnlyList<IEnemyController> AllEnemies => _enemyControllers;
+
     public event Action<AIStateTransitionId, IUnitController> OnUnitBroadcastMessage;
+    public event Action<IUnitController> OnEnemyDefeated;
 
     #region INITIALIZATION
     private void Awake() {
@@ -63,7 +66,7 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
     }
     #endregion
 
-    public void SpawnEnemy(Vector2 position, string enemyType) {
+    public void SpawnEnemy(Vector2 position, string enemyType, string overrideId) {
         EnemyData data;
         if (!_enemyDataConfig.TryGetValue(enemyType, out data)) {
             CustomLogger.Error(nameof(EnemyManager), $"Could not retrieve {nameof(EnemyData)} from id {enemyType}");
@@ -75,7 +78,7 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         if (!PooledObjectManager.Instance.UsePooledObject(data.UnitPrefabId, out pooledObject)) {
             PooledObjectManager.Instance.RegisterPooledObject(data.UnitPrefabId, 1);
             CustomLogger.Log(nameof(EnemyManager), $"{data.UnitPrefabId} not yet registered with object pool. Registering now...");
-            SpawnEnemy(position, enemyType);
+            SpawnEnemy(position, enemyType, overrideId);
             return;
         }
         EnemyUnit unit = pooledObject as EnemyUnit;
@@ -87,8 +90,9 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         unit.transform.position = position;
 
         // create enemy controller for unit here
-        IEnemyController enemyController = new EnemyController(data, unit);
+        IEnemyController enemyController = new EnemyController(data, unit, overrideId);
         enemyController.OnAIStateReadyToTransition += OnAIStateReadyToTransition;
+        enemyController.OnUnitDefeated += OnUnitDefeated;
         enemyController.TransitionState(AIStateTransitionId.OnUnitInitialized);
 
         // add enemy controller to list and dictionary
@@ -117,6 +121,11 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         _currentState = newState;
         _currentState.Enter();
         _currentState.OnBroadcastUnitStateChange += BroadcastMessageToUnits;
+    }
+
+    private void OnUnitDefeated(IUnitController unit) {
+        unit.OnUnitDefeated -= OnUnitDefeated;
+        OnEnemyDefeated?.Invoke(unit);
     }
 }
 

@@ -33,7 +33,7 @@ public class TestMonkey : MonoBehaviour
     }
 
     private void TestEnemySpawn() {
-        EnemyManager.Instance.SpawnEnemy(TestStart, _testEnemyType);
+        EnemyManager.Instance.SpawnEnemy(TestStart, _testEnemyType, "");
     }
 
     private void GenerateMarkerPrefab() {

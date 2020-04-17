@@ -9,6 +9,9 @@ public interface IEnemyController : IUnitController {
 
 public class EnemyController : IEnemyController
 {
+    private const int EnemyIdLength = 5;
+
+    public string UnitId { get; private set; }
     public int Health { get; private set; }
     public float Speed { get; private set; }
     public Unit Unit { get; private set; }
@@ -31,7 +34,14 @@ public class EnemyController : IEnemyController
     private AIStateDataObject _currentState;
     private ActiveAIState _activeAIStateData; // information about the current AI State
 
-    public EnemyController(EnemyData enemyData, EnemyUnit unit) {
+    public EnemyController(EnemyData enemyData, EnemyUnit unit, string overrideId = "") {
+
+        if (string.IsNullOrEmpty(overrideId)) {
+            UnitId = $"Enemy_{StringGenerator.RandomString(EnemyIdLength)}";
+        } else {
+            UnitId = overrideId;
+        }
+
         Data = enemyData;
         Health = enemyData.MaxHealth;
         Speed = enemyData.WalkSpeed;
@@ -116,6 +126,9 @@ public class EnemyController : IEnemyController
     #region LISTENERS
 
     private void OnTakeDamage(int damage, DamageType damageType, Unit attacker) {
+        if(Health <= 0) {
+            return;
+        }
         int totalDamage = damage;
         // if this unit is resistant to this damage
         if ((Data.Resistances & damageType) != 0) {
@@ -127,7 +140,7 @@ public class EnemyController : IEnemyController
         Health -= totalDamage;
         if(Health <= 0) {
             OnCurrentStateReadyToTransition(AIStateTransitionId.OnUnitDefeated);
-            EnemyManager.Instance.DespawnEnemy(this);
+            OnUnitDefeated?.Invoke(this);
             return;
         }
         if (attacker.UnitTags.HasFlag(UnitTags.Player) || attacker.UnitTags.HasFlag(UnitTags.Law_Enforcement)) {

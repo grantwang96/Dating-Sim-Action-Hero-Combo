@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 public interface IUnitController {
+    string UnitId { get; }
     int Health { get; }
     Unit Unit { get; }
     UnitData Data { get; }
@@ -23,6 +24,7 @@ public interface IUnitController {
 
 public class UnitController : IUnitController
 {
+    public string UnitId { get; private set; }
     public int Health { get; private set; }
     public Unit Unit { get; private set; }
     public UnitData Data { get; private set; }
@@ -45,8 +47,8 @@ public class UnitController : IUnitController
     private AIStateDataObject _currentState;
     private ActiveAIState _activeAIStateData; // information about the current AI State
 
-    public UnitController() {
-
+    public UnitController(string unitId = "") {
+        UnitId = unitId;
     }
 
     public void Dispose() {
