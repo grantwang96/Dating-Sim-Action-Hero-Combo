@@ -17,7 +17,7 @@ public class AssetManager : MonoBehaviour, IAssetManager {
 
     [SerializeField] private List<GameObject> _allPrefabs = new List<GameObject>();
 
-    [SerializeField] private Dictionary<string, GameObject> _pr1efabRegistry = new Dictionary<string, GameObject>();
+    [SerializeField] private Dictionary<string, GameObject> _prefabRegistry = new Dictionary<string, GameObject>();
 
     private void Awake() {
         if(Instance != null && Instance != this) {
@@ -30,13 +30,13 @@ public class AssetManager : MonoBehaviour, IAssetManager {
 
     private void LoadPooledObjects() {
         for(int i = 0; i < _allPrefabs.Count; i++) {
-            _pr1efabRegistry.Add(_allPrefabs[i].name, _allPrefabs[i]);
+            _prefabRegistry.Add(_allPrefabs[i].name, _allPrefabs[i]);
         }
     }
 
     public GameObject GetAsset(string assetName) {
         GameObject go;
-        if(!_pr1efabRegistry.TryGetValue(assetName, out go)) {
+        if(!_prefabRegistry.TryGetValue(assetName, out go)) {
             CustomLogger.Error(nameof(AssetManager), $"Could not find object with name {assetName}");
         }
         return go;

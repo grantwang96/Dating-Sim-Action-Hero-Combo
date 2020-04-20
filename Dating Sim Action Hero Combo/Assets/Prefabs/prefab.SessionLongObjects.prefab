@@ -1,5 +1,48 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1313311273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1313311274}
+  - component: {fileID: 1313311275}
+  m_Layer: 0
+  m_Name: InputController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1313311274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313311273}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8139055064034183520}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1313311275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313311273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d89225353f555469242f6c1908e214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2966075384107687872
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,6 +228,7 @@ MonoBehaviour:
   _allPrefabs:
   - {fileID: 437165491455309681, guid: 8288ce8cebfec2143990ee82ebefd88f, type: 3}
   - {fileID: 909176873411148852, guid: 8fadb4dc37b01c0448e4b09a1954bdd6, type: 3}
+  - {fileID: 8431842786976931747, guid: 42b2faf8e8cb00d4f89bc8f38d9126aa, type: 3}
 --- !u!1 &8139055063519414377
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +278,8 @@ MonoBehaviour:
   _sceneName: 
   _pooledObjectPrefabAssets:
   - PoolId: prefab.Combat_Bullet
+    InitialCount: 20
+  - PoolId: prefab.Combat_WeaponSoundBox
     InitialCount: 20
   _uiPrefabAssets: []
 --- !u!1 &8139055063634721354
@@ -360,6 +406,7 @@ Transform:
   - {fileID: 8139055063456896023}
   - {fileID: 8139055062982982171}
   - {fileID: 8139055063800222703}
+  - {fileID: 1313311274}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
