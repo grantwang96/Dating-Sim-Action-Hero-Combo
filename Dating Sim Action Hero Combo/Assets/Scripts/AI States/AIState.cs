@@ -7,7 +7,7 @@ public abstract class AIStateDataObject : ScriptableObject {
 
     [SerializeField] protected List<AIStateDataObject> _subStates = new List<AIStateDataObject>();
 
-    public virtual ActiveAIState Enter(IUnitController controller, AIStateInitializationData initData = null) {
+    public virtual ActiveAIState Enter(NPCUnitController controller, AIStateInitializationData initData = null) {
         ActiveAIState newState = GenerateActiveAIState(controller);
         for (int i = 0; i < _subStates.Count; i++) {
             ActiveAIState subState = _subStates[i].Enter(controller);
@@ -33,7 +33,7 @@ public abstract class AIStateDataObject : ScriptableObject {
         activeAIState.OnExit();
     } // exit state behaviour
     
-    protected abstract ActiveAIState GenerateActiveAIState(IUnitController controller);
+    protected abstract ActiveAIState GenerateActiveAIState(NPCUnitController controller);
 }
 
 [System.Serializable]

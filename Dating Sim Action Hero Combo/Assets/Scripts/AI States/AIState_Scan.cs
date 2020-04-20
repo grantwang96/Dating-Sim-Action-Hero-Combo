@@ -7,7 +7,7 @@ public class AIState_Scan : AIStateDataObject {
 
     [SerializeField] private AIStateTransitionId _onHostileFound;
 
-    protected override ActiveAIState GenerateActiveAIState(IUnitController controller) {
+    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
         ActiveScanState newState = new ActiveScanState(controller, _onHostileFound);
         return newState;
     }
@@ -21,12 +21,12 @@ public class ActiveScanState : ActiveAIState {
     private UnitTags _hostileTags;
 
     private Transform _unitTransform;
-    private IUnitController _controller;
+    private NPCUnitController _controller;
     private AIStateTransitionId _onHostileFound;
 
     private List<Unit> _hostiles;
 
-    public ActiveScanState(IUnitController controller, AIStateTransitionId onHostileFound) : base() {
+    public ActiveScanState(NPCUnitController controller, AIStateTransitionId onHostileFound) : base() {
         _visionAngle = controller.Data.VisionAngle;
         _visionRange = controller.Data.VisionRange;
         _visionLayers = controller.Data.VisionLayers;

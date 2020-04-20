@@ -8,7 +8,7 @@ public class AIState_Idle : AIStateDataObject {
     [SerializeField] private float _minimumIdleTime;
     [SerializeField] private float _maximumIdleTime;
 
-    protected override ActiveAIState GenerateActiveAIState(IUnitController unitController) {
+    protected override ActiveAIState GenerateActiveAIState(NPCUnitController unitController) {
         float duration = Random.Range(_minimumIdleTime, _maximumIdleTime);
         ActiveIdleState newState = new ActiveIdleState(duration);
         return newState;

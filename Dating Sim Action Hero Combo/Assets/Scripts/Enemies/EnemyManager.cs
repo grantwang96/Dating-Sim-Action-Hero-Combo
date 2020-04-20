@@ -5,13 +5,13 @@ using System;
 
 public interface IEnemyManager {
 
-    IReadOnlyList<IEnemyController> AllEnemies { get; }
+    IReadOnlyList<EnemyController> AllEnemies { get; }
 
-    event Action<AIStateTransitionId, IUnitController> OnUnitBroadcastMessage;
-    event Action<IUnitController> OnEnemyDefeated;
+    event Action<AIStateTransitionId, NPCUnitController> OnUnitBroadcastMessage;
+    event Action<UnitController> OnEnemyDefeated;
 
     void SpawnEnemy(Vector2 position, string enemyType, string overrideId);
-    void DespawnEnemy(IEnemyController controller);
+    void DespawnEnemy(EnemyController controller);
 }
 
 public class EnemyManager : MonoBehaviour, IEnemyManager
@@ -20,17 +20,17 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
     [SerializeField] private List<EnemyData> _allEnemyTypes = new List<EnemyData>();
 
     private Dictionary<string, EnemyData> _enemyDataConfig = new Dictionary<string, EnemyData>();
-    private List<IEnemyController> _enemyControllers = new List<IEnemyController>();
+    private List<EnemyController> _enemyControllers = new List<EnemyController>();
     // dictionary of enemies by job <Job, List<EnemyController>;
 
     [SerializeField] private EnemyManagerState _currentState;
     [SerializeField] private List<EM_StateTransitionEntry> _EMStateTransitionEntries = new List<EM_StateTransitionEntry>();
     private Dictionary<EM_StateTransitionId, EnemyManagerState> _stateList = new Dictionary<EM_StateTransitionId, EnemyManagerState>();
 
-    public IReadOnlyList<IEnemyController> AllEnemies => _enemyControllers;
+    public IReadOnlyList<EnemyController> AllEnemies => _enemyControllers;
 
-    public event Action<AIStateTransitionId, IUnitController> OnUnitBroadcastMessage;
-    public event Action<IUnitController> OnEnemyDefeated;
+    public event Action<AIStateTransitionId, NPCUnitController> OnUnitBroadcastMessage;
+    public event Action<UnitController> OnEnemyDefeated;
 
     #region INITIALIZATION
     private void Awake() {
@@ -90,7 +90,7 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         unit.transform.position = position;
 
         // create enemy controller for unit here
-        IEnemyController enemyController = new EnemyController(data, unit, overrideId);
+        EnemyController enemyController = new EnemyController(data, unit, overrideId);
         enemyController.OnAIStateReadyToTransition += OnAIStateReadyToTransition;
         enemyController.OnUnitDefeated += OnUnitDefeated;
         enemyController.TransitionState(AIStateTransitionId.OnUnitInitialized);
@@ -99,17 +99,17 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         _enemyControllers.Add(enemyController);
     }
 
-    public void DespawnEnemy(IEnemyController controller) {
+    public void DespawnEnemy(EnemyController controller) {
         // remove from all listings
         controller.Dispose();
         _enemyControllers.Remove(controller);
     }
     
-    private void OnAIStateReadyToTransition(AIStateTransitionId id, IUnitController controller) {
+    private void OnAIStateReadyToTransition(AIStateTransitionId id, NPCUnitController controller) {
         _currentState.OnControllerReadyToTransition(id, controller);
     }
 
-    private void BroadcastMessageToUnits(AIStateTransitionId id, IUnitController controller) {
+    private void BroadcastMessageToUnits(AIStateTransitionId id, NPCUnitController controller) {
         OnUnitBroadcastMessage?.Invoke(id, controller);
     }
 
@@ -123,7 +123,7 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         _currentState.OnBroadcastUnitStateChange += BroadcastMessageToUnits;
     }
 
-    private void OnUnitDefeated(IUnitController unit) {
+    private void OnUnitDefeated(UnitController unit) {
         unit.OnUnitDefeated -= OnUnitDefeated;
         OnEnemyDefeated?.Invoke(unit);
     }

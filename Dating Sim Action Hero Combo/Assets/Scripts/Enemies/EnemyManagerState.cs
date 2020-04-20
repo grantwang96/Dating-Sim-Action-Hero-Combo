@@ -9,7 +9,7 @@ using System;
 public abstract class EnemyManagerState : MonoBehaviour {
 
     public event Action<EM_StateTransitionId> NextStateUpdated;
-    public event Action<AIStateTransitionId, IUnitController> OnBroadcastUnitStateChange;
+    public event Action<AIStateTransitionId, NPCUnitController> OnBroadcastUnitStateChange;
 
     // what should happen at the start of this state
     public virtual void Enter() {
@@ -17,7 +17,7 @@ public abstract class EnemyManagerState : MonoBehaviour {
     }
     
     // when an enemy controller reports a change of state, what should happen?
-    public virtual void OnControllerReadyToTransition(AIStateTransitionId transitionId, IUnitController controller) {
+    public virtual void OnControllerReadyToTransition(AIStateTransitionId transitionId, NPCUnitController controller) {
 
     }
 
@@ -25,7 +25,7 @@ public abstract class EnemyManagerState : MonoBehaviour {
 
     }
 
-    protected virtual void OnEnemyDefeated(IUnitController controller) {
+    protected virtual void OnEnemyDefeated(NPCUnitController controller) {
 
     }
 
@@ -33,7 +33,7 @@ public abstract class EnemyManagerState : MonoBehaviour {
         NextStateUpdated?.Invoke(transitionId);
     }
 
-    protected void BroadcastUnitStateChange(AIStateTransitionId transitionId, IUnitController controller) {
+    protected void BroadcastUnitStateChange(AIStateTransitionId transitionId, NPCUnitController controller) {
         OnBroadcastUnitStateChange?.Invoke(transitionId, controller);
     }
 }

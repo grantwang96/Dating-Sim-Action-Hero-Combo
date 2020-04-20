@@ -15,7 +15,7 @@ public abstract class ActiveAttackState : ActiveAIState {
     protected NPCMoveController _moveController;
     protected Weapon _equippedWeapon;
 
-    public ActiveAttackState(IUnitController controller) {
+    public ActiveAttackState(NPCUnitController controller) {
         _unit = controller.Unit;
         _unitData = controller.Data;
         _target = controller.FocusedTarget;

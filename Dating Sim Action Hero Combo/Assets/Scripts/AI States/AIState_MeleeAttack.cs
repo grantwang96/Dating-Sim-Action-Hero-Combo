@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "AI State/Melee Attack")]
 public class AIState_MeleeAttack : AIStateDataObject {
 
-    protected override ActiveAIState GenerateActiveAIState(IUnitController controller) {
+    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
         ActiveAIState aiState = new ActiveMeleeState(controller);
         return aiState;
     }
@@ -13,7 +13,7 @@ public class AIState_MeleeAttack : AIStateDataObject {
 
 public class ActiveMeleeState : ActiveAttackState {
     
-    public ActiveMeleeState(IUnitController controller) : base(controller) {
+    public ActiveMeleeState(NPCUnitController controller) : base(controller) {
 
     }
 

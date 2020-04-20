@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OnGuardEnemyManagerState : EnemyManagerState
 {
-    public override void OnControllerReadyToTransition(AIStateTransitionId transitionId, IUnitController controller) {
+    public override void OnControllerReadyToTransition(AIStateTransitionId transitionId, NPCUnitController controller) {
         base.OnControllerReadyToTransition(transitionId, controller);
         switch (transitionId) {
             case AIStateTransitionId.OnUnitReadyToMove:
@@ -26,11 +26,11 @@ public class OnGuardEnemyManagerState : EnemyManagerState
         controller.TransitionState(transitionId);
     }
 
-    private void MoveGuardsToLastKnownLoc(IUnitController controller) {
+    private void MoveGuardsToLastKnownLoc(NPCUnitController controller) {
         IntVector3 targetPosition = controller.FocusedTarget.MoveController.MapPosition;
         for (int i = 0; i < EnemyManager.Instance.AllEnemies.Count; i++) {
             // TODO: filter by enemy type
-            IEnemyController enemy = EnemyManager.Instance.AllEnemies[i];
+            EnemyController enemy = EnemyManager.Instance.AllEnemies[i];
             if(enemy == controller) {
                 continue;
             }
@@ -40,11 +40,11 @@ public class OnGuardEnemyManagerState : EnemyManagerState
         AssignRunTarget(controller, targetPosition);
     }
 
-    private void AssignRunTarget(IUnitController controller, IntVector3 target) {
+    private void AssignRunTarget(NPCUnitController controller, IntVector3 target) {
         controller.MapSpaceTarget = target;
     }
 
-    private void AssignNewWanderTarget(IUnitController controller) {
+    private void AssignNewWanderTarget(NPCUnitController controller) {
         int searchRadius = Random.Range(controller.Data.WanderRadiusMin, controller.Data.WanderRadiusMax);
         List<IntVector3> traversableTiles = MapService.GetTraversableTiles(searchRadius, controller.MapPosition, controller.Data.WanderRadiusMin);
         IntVector3 nextDestination = traversableTiles[Random.Range(0, traversableTiles.Count)];

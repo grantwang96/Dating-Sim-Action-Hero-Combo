@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMoveableUnitController : IUnitController
+public interface IMoveableUnitController
 {
     float Speed { get; }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "AI State/Engage Hostile")]
 public class AIState_EngageHostile : AIStateDataObject {
 
-    protected override ActiveAIState GenerateActiveAIState(IUnitController controller) {
+    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
         ActiveEngageHostileState activeState = new ActiveEngageHostileState(controller);
         return activeState;
     }
@@ -13,10 +13,10 @@ public class AIState_EngageHostile : AIStateDataObject {
 
 public class ActiveEngageHostileState : ActiveAIState {
 
-    private IUnitController _controller;
+    private NPCUnitController _controller;
     private Weapon _equippedWeapon;
 
-    public ActiveEngageHostileState(IUnitController controller) {
+    public ActiveEngageHostileState(NPCUnitController controller) {
         _controller = controller;
         _equippedWeapon = controller.EquippedWeapon;
     }

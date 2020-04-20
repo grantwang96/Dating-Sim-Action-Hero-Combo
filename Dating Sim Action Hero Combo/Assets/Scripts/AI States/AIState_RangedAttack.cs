@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "AI State/Ranged Attack")]
 public class AIState_RangedAttack : AIStateDataObject
 {
-    protected override ActiveAIState GenerateActiveAIState(IUnitController controller) {
+    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
         ActiveRangedAttackState rangedAttackState = new ActiveRangedAttackState(controller);
         return rangedAttackState;
     }
@@ -13,7 +13,7 @@ public class AIState_RangedAttack : AIStateDataObject
 
 public class ActiveRangedAttackState : ActiveAttackState {
  
-    public ActiveRangedAttackState(IUnitController controller) : base(controller) {
+    public ActiveRangedAttackState(NPCUnitController controller) : base(controller) {
 
     }
 

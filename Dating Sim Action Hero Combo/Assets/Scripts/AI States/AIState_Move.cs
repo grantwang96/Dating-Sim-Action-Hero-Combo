@@ -7,7 +7,7 @@ public class AIState_Move : AIStateDataObject
 {
     [SerializeField] private bool _fullSpeed;
 
-    protected override ActiveAIState GenerateActiveAIState(IUnitController controller) {
+    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
         float speed = _fullSpeed ? controller.Data.RunSpeed : controller.Data.WalkSpeed;
         NPCUnit movableUnit = controller.Unit as NPCUnit;
         if(movableUnit == null) {

@@ -16,7 +16,7 @@ public class EliminateTargetQuest : Quest
         EnemyManager.Instance.OnEnemyDefeated += OnEnemyDefeated;
     }
 
-    private void OnEnemyDefeated(IUnitController unit) {
+    private void OnEnemyDefeated(UnitController unit) {
         if (!unit.UnitId.Equals(_unitId)) {
             return;
         }

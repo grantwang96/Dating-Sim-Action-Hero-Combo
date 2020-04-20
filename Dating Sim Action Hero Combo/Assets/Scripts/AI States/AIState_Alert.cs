@@ -7,7 +7,7 @@ public class AIState_Alert : AIStateDataObject {
 
     public const string AlertStateName = "Alert";
 
-    protected override ActiveAIState GenerateActiveAIState(IUnitController controller) {
+    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
         ActiveAlertState activeAlertState = new ActiveAlertState(controller.Unit);
         return activeAlertState;
     }

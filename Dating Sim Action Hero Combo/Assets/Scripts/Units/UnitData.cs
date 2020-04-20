@@ -50,8 +50,4 @@ public class UnitData : ScriptableObject
         }
         return new List<AIStateDataObject>();
     }
-
-    public virtual void EngageTarget(IUnitController controller, Unit Target) {
-
-    }
 }
