@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BootState : GameState
 {
+    [SerializeField] private PlayerConfig _playerConfig;
+
     protected override void OnStateEnterSuccess() {
         base.OnStateEnterSuccess();
         InitializeManagers();
@@ -11,6 +13,6 @@ public class BootState : GameState
     }
 
     private void InitializeManagers() {
-        PlayerConfig.Create();
+        PlayerStateController.Create(_playerConfig);
     }
 }

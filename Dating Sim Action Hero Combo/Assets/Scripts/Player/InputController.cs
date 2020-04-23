@@ -6,7 +6,7 @@ using System;
 public interface IInputController {
 
     Vector2 MovementInput { get; }
-    Vector2 RotationInput { get; }
+    Vector2 MousePositionInput { get; }
 
     event Action OutfitSwapBtnPressed;
     event Action OutfitSwapBtnHeld;
@@ -26,7 +26,8 @@ public class InputController : MonoBehaviour, IInputController
     public static IInputController Instance { get; private set; }
 
     public Vector2 MovementInput { get; private set; }
-    public Vector2 RotationInput { get; private set; }
+
+    public Vector2 MousePositionInput { get; private set; }
 
     public event Action OutfitSwapBtnPressed;
     public event Action OutfitSwapBtnHeld;
@@ -71,14 +72,14 @@ public class InputController : MonoBehaviour, IInputController
         MovementInput = new Vector2(moveHorizontal, moveVertical);
 
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RotationInput = (mousePosition - (Vector2)PlayerUnit.Instance.Transform.position).normalized;
+        MousePositionInput = mousePosition;
     }
 
     private void ControllerInputs() {
         // get axis inputs for rotation
         float rotationHorizontal = Input.GetAxis("RotHorizontal");
         float rotationVertical = Input.GetAxis("RotVertical");
-        RotationInput = new Vector2(rotationHorizontal, rotationVertical);
+        MousePositionInput = new Vector2(rotationHorizontal, rotationVertical);
     }
 
     private void ButtonInputs() {

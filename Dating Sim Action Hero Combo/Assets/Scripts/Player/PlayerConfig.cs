@@ -4,26 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Contains data for player's loadout and initial start
+/// Contains data for player's loadout and initial start. This class will likely be dissolved into several different classes that will be pulled from save data. 
 /// </summary>
-public class PlayerConfig
+[CreateAssetMenu(menuName = "PlayerConfig")]
+public class PlayerConfig : ScriptableObject
 {
-    public static PlayerConfig Instance { get; private set; }
+    public const string PlayerUnitId = "PLAYER_UNIT";
 
-    public WeaponData EquippedWeapon { get; private set; }
-
-    public event Action<WeaponData> OnWeaponDataUpdated;
-
-    public static void Create() {
-        if(Instance != null) {
-            CustomLogger.Error(nameof(PlayerConfig), $"Instance has already been created!");
-            return;
-        }
-        Instance = new PlayerConfig();
-    }
-
-    public void SetEquippedWeapon(WeaponData weaponData) {
-        EquippedWeapon = weaponData;
-        OnWeaponDataUpdated?.Invoke(EquippedWeapon);
-    }
+    [SerializeField] private int _maxHealth;
+    public int MaxHealth => _maxHealth;
+    [SerializeField] private int _totalAmmoClips;
+    public int TotalAmmoClips => _totalAmmoClips;
+    [SerializeField] private WeaponData _equippedWeapon;
+    public WeaponData EquippedWeapon => _equippedWeapon;
 }

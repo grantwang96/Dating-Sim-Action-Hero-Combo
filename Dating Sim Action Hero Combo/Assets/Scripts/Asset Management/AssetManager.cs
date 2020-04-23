@@ -15,7 +15,9 @@ public class AssetManager : MonoBehaviour, IAssetManager {
 
     private Dictionary<string, AssetBundleRequest> _assetBundleRequest = new Dictionary<string, AssetBundleRequest>();
 
-    [SerializeField] private List<GameObject> _allPrefabs = new List<GameObject>();
+    [SerializeField] private List<GameObject> _combatPrefabs = new List<GameObject>();
+    [SerializeField] private List<GameObject> _unitPrefabs = new List<GameObject>();
+    [SerializeField] private List<GameObject> _uiPrefabs = new List<GameObject>();
 
     [SerializeField] private Dictionary<string, GameObject> _prefabRegistry = new Dictionary<string, GameObject>();
 
@@ -25,12 +27,14 @@ public class AssetManager : MonoBehaviour, IAssetManager {
             return;
         }
         Instance = this;
-        LoadPooledObjects();
+        LoadPrefabs(_combatPrefabs);
+        LoadPrefabs(_unitPrefabs);
+        LoadPrefabs(_uiPrefabs);
     }
 
-    private void LoadPooledObjects() {
-        for(int i = 0; i < _allPrefabs.Count; i++) {
-            _prefabRegistry.Add(_allPrefabs[i].name, _allPrefabs[i]);
+    private void LoadPrefabs(List<GameObject> prefabs) {
+        for(int i = 0; i < prefabs.Count; i++) {
+            _prefabRegistry.Add(prefabs[i].name, prefabs[i]);
         }
     }
 

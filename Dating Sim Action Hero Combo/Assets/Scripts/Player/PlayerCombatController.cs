@@ -7,10 +7,11 @@ public class PlayerCombatController : PlayerActionController
     // store currently held weapon
     private Weapon _equippedWeapon;
 
-    private static int _hackBulletCount = 800;
+    private static int _bulletCount;
 
     public PlayerCombatController(PlayerUnit unit) : base(unit) {
-        _equippedWeapon = new Weapon(unit.HackPlayerWeaponConfig);
+        _equippedWeapon = PlayerStateController.Instance.EquippedWeapon;
+        _bulletCount = PlayerStateController.Instance.StartingAmmoClips * _equippedWeapon.Data.ClipSize;
     }
 
     protected override void SubscribeToEvents() {
@@ -30,14 +31,14 @@ public class PlayerCombatController : PlayerActionController
     }
 
     private void OnShootBtnPressed() {
-        _equippedWeapon.Use(ActivateTime.OnPress, PlayerUnit.Instance, ref _hackBulletCount);
+        _equippedWeapon.Use(ActivateTime.OnPress, PlayerUnit.Instance, ref _bulletCount);
     }
 
     private void OnShootBtnHeld() {
-        _equippedWeapon.Use(ActivateTime.OnHeld, PlayerUnit.Instance, ref _hackBulletCount);
+        _equippedWeapon.Use(ActivateTime.OnHeld, PlayerUnit.Instance, ref _bulletCount);
     }
 
     private void OnShootBtnReleased() {
-        _equippedWeapon.Use(ActivateTime.OnRelease, PlayerUnit.Instance, ref _hackBulletCount);
+        _equippedWeapon.Use(ActivateTime.OnRelease, PlayerUnit.Instance, ref _bulletCount);
     }
 }

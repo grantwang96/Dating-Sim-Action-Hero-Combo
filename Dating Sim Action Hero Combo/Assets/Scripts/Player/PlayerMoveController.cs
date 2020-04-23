@@ -22,7 +22,9 @@ public class PlayerMoveController : MoveController {
     }
 
     protected override void ProcessRotation() {
-        Vector2 dir = InputController.Instance.RotationInput;
+        // TODO: pull this logic out and separate for controller support
+        Vector2 mousePosition = InputController.Instance.MousePositionInput;
+        Vector2 dir = (mousePosition - (Vector2)PlayerUnit.Instance.Transform.position).normalized;
         // ONLY change rotation if player has inputted some change
         if (!Mathf.Approximately(dir.x, 0f) || !Mathf.Approximately(dir.y, 0f)) {
             float angle = Vector2.SignedAngle(Vector2.up, dir);

@@ -55,6 +55,7 @@ GameObject:
   - component: {fileID: 8959129587825227175}
   - component: {fileID: 8493064152659096675}
   - component: {fileID: 1485896111493138205}
+  - component: {fileID: 1436418361}
   m_Layer: 0
   m_Name: NotificationsLayer
   m_TagString: Untagged
@@ -141,6 +142,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1436418361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386365767386807266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c8e4f18d417d449bcc0f1e3bec869b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiLayerId: 2
 --- !u!1 &2966075384107687872
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +204,7 @@ MonoBehaviour:
   _sceneName: 
   _pooledObjectPrefabAssets: []
   _uiPrefabAssets: []
+  _playerConfig: {fileID: 11400000, guid: 871f275e21b8a1240ae449ed71e64c2e, type: 2}
 --- !u!1 &4357854090798190591
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6514090776431484352}
+  - component: {fileID: 1436418357}
   m_Layer: 0
   m_Name: UIFunHouse
   m_TagString: Untagged
@@ -223,6 +239,22 @@ Transform:
   m_Father: {fileID: 8139055064034183520}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1436418357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4357854090798190591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c43486cb2ef443e4590d6d5060b0ae57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _layers:
+  - {fileID: 1436418363}
+  - {fileID: 1436418362}
+  - {fileID: 1436418361}
 --- !u!1 &4447081344437707307
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,6 +267,7 @@ GameObject:
   - component: {fileID: 289490433748084757}
   - component: {fileID: 7236709773042369328}
   - component: {fileID: 4844256879032886405}
+  - component: {fileID: 1436418363}
   m_Layer: 0
   m_Name: HudLayer
   m_TagString: Untagged
@@ -321,6 +354,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1436418363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4447081344437707307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c8e4f18d417d449bcc0f1e3bec869b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiLayerId: 0
 --- !u!1 &6433515247127929549
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,6 +379,7 @@ GameObject:
   - component: {fileID: 8635824232096813214}
   - component: {fileID: 403492110166301345}
   - component: {fileID: 840548377496373248}
+  - component: {fileID: 1436418362}
   m_Layer: 0
   m_Name: PanelsLayer
   m_TagString: Untagged
@@ -419,6 +466,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1436418362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6433515247127929549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c8e4f18d417d449bcc0f1e3bec869b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiLayerId: 1
 --- !u!1 &8139055062982982170
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,10 +612,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f154468b7a99c240ba0a7407eea4c2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _allPrefabs:
-  - {fileID: 437165491455309681, guid: 8288ce8cebfec2143990ee82ebefd88f, type: 3}
+  _combatPrefabs:
   - {fileID: 909176873411148852, guid: 8fadb4dc37b01c0448e4b09a1954bdd6, type: 3}
   - {fileID: 8431842786976931747, guid: 42b2faf8e8cb00d4f89bc8f38d9126aa, type: 3}
+  _unitPrefabs:
+  - {fileID: 437165491455309681, guid: 8288ce8cebfec2143990ee82ebefd88f, type: 3}
+  - {fileID: 8202479465019601318, guid: ddeed812588bede46a3a22a0db65e8b9, type: 3}
+  _uiPrefabs:
+  - {fileID: 5919136179957349158, guid: 3c096e12e98b78543875da02f03b7703, type: 3}
 --- !u!1 &8139055063519414377
 GameObject:
   m_ObjectHideFlags: 0

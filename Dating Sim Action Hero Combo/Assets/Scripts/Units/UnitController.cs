@@ -53,6 +53,10 @@ public class UnitController
         }
     }
 
+    protected void FireHealthChanged(int change) {
+        OnHealthChanged?.Invoke(change);
+    }
+
     protected virtual void OnHealDamage(int damage) {
         Health += damage;
         OnHealthChanged?.Invoke(damage);

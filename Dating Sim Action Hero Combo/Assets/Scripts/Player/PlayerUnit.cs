@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerUnit : Unit, ITileOccupant {
 
@@ -15,15 +16,18 @@ public class PlayerUnit : Unit, ITileOccupant {
 
     [SerializeField] private float _speed;
 
-    // temp
-    public WeaponData HackPlayerWeaponConfig;
+    public static event Action OnPlayerUnitInstanceSet;
 
     private void Awake() {
         Instance = this;
+        OnPlayerUnitInstanceSet?.Invoke();
     }
 
     private void Start() {
         UnitsManager.Instance.RegisterUnit(this);
+        // temp
+        UIObject playerHud = UIManager.Instance.CreateNewUIObject("prefab.ui_PlayerHud", UILayerId.HUD);
+        playerHud.Display();
     }
 
     public override void TakeDamage(int damage, DamageType damageType, Unit attacker) {
