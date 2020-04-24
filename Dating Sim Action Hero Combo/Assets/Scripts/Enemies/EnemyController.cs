@@ -8,9 +8,6 @@ public class EnemyController : NPCUnitController
     private const int EnemyIdLength = 5;
     public float Speed { get; private set; }
 
-    private AIStateDataObject _currentState;
-    private ActiveAIState _activeAIStateData; // information about the current AI State
-
     public EnemyController(EnemyData enemyData, EnemyUnit unit, string overrideId = "") {
 
         if (string.IsNullOrEmpty(overrideId)) {
@@ -24,8 +21,8 @@ public class EnemyController : NPCUnitController
         Speed = enemyData.WalkSpeed;
         EquippedWeapon = new Weapon(enemyData.EquippedWeapon);
 
-        Unit = unit;
-        unit.Initialize(enemyData.AnimatorController, .5f); // temp
+        _unit = unit;
+        unit.Initialize(this, enemyData.AnimatorController, .5f); // temp
         Unit.SetUnitTags(UnitTags.Enemy);
         UnitsManager.Instance.RegisterUnit(Unit);
         unit.Spawn();
@@ -79,13 +76,11 @@ public class EnemyController : NPCUnitController
     }
 
     private void OnSoundHeard(IntVector3 origin, Unit source) {
-        // determine if we need to change state for this
-        // don't react to sounds from friendlies
         if (source != null && (source == Unit || source.UnitTags.HasFlag(Unit.UnitTags))) {
             return;
         }
         MapSpaceTarget = origin;
-        CurrentAIStateReadyToTransition(AIStateTransitionId.OnUnitReadyToQuickMove);
+        CurrentAIStateReadyToTransition(AIStateTransitionId.OnCombatNoiseHeard);
     }
 
     #endregion

@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI State/Dead")]
-public class AIState_Dead : AIStateDataObject {
+public class AIState_Dead : AIState {
 
-    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
-        ActiveAIState deadState = new ActiveAIState();
-        return deadState;
-    }
 }

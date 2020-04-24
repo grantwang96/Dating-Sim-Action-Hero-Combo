@@ -21,8 +21,6 @@ public class UnitData : ScriptableObject
 
     [SerializeField] protected RuntimeAnimatorController _animatorController;
 
-    [SerializeField] protected List<AIStateTransitionEntry> _aiStateMachine = new List<AIStateTransitionEntry>();
-
     public string UnitPrefabId => _unitPrefabId;
     public int MaxHealth => _maxHealth;
     public DamageType Resistances => _resistances;
@@ -39,15 +37,4 @@ public class UnitData : ScriptableObject
     public UnitTags HostileTags => _hostileTags;
 
     public RuntimeAnimatorController AnimatorController => _animatorController;
-
-    public IReadOnlyList<AIStateTransitionEntry> AIStateMachine => _aiStateMachine;
-
-    public List<AIStateDataObject> GetStateForTransitionId(AIStateTransitionId transitionId) {
-        for (int i = 0; i < _aiStateMachine.Count; i++) {
-            if (_aiStateMachine[i].TransitionId == transitionId) {
-                return _aiStateMachine[i].States;
-            }
-        }
-        return new List<AIStateDataObject>();
-    }
 }

@@ -3,25 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class AIStateDataObject : ScriptableObject {
+public abstract class AIState : MonoBehaviour {
 
-    [SerializeField] protected List<AIStateDataObject> _subStates = new List<AIStateDataObject>();
+    [SerializeField] protected NPCUnit _unit;
+    [SerializeField] protected List<AIState> _subStates = new List<AIState>();
+    [SerializeField] protected List<AIStateTransitionEntry> _aiStateTransitionsEntries = new List<AIStateTransitionEntry>();
 
-    public virtual ActiveAIState Enter(NPCUnitController controller, AIStateInitializationData initData = null) {
-        ActiveAIState newState = GenerateActiveAIState(controller);
+    protected NPCUnitController _controller;
+
+    public event Action<AIStateTransitionId> OnReadyToTransition;
+
+    private void Awake() {
+        _unit.OnUnitInitialized += OnUnitInitialized;
+    }
+
+    protected virtual void OnUnitInitialized(NPCUnitController controller) {
+        _controller = controller;
+    }
+
+    public virtual void Enter(AIStateInitializationData initData = null) {
+        Debug.Log($"Entering state {name}");
         for (int i = 0; i < _subStates.Count; i++) {
-            ActiveAIState subState = _subStates[i].Enter(controller);
-            newState.AddAISubState(subState);
+            _subStates[i].Enter();
+            _subStates[i].OnReadyToTransition += OnSubStateReadyToTransition;
         }
-        return newState;
     }
     
     // start state and initialize some active AI State Data
-    public virtual bool Execute(ActiveAIState activeAIState) {
-        bool cancelAll = activeAIState.OnExecute();
-        for (int i = 0; i < activeAIState.SubStates.Count; i++) {
-            ActiveAIState subData = activeAIState.SubStates[i];
-            if (_subStates[i].Execute(subData)) {
+    public virtual bool Execute() {
+        bool cancelAll = false;
+        for (int i = 0; i < _subStates.Count; i++) {
+            _subStates[i].Execute();
+            if (_subStates[i].Execute()) {
                 cancelAll = true;
                 break;
             }
@@ -29,26 +42,47 @@ public abstract class AIStateDataObject : ScriptableObject {
         return cancelAll;
     }
 
-    public virtual void Exit(ActiveAIState activeAIState) {
-        activeAIState.OnExit();
-    } // exit state behaviour
-    
-    protected abstract ActiveAIState GenerateActiveAIState(NPCUnitController controller);
+    // exit state behaviour
+    public virtual void Exit() {
+        for (int i = 0; i < _subStates.Count; i++) {
+            _subStates[i].Exit();
+            _subStates[i].OnReadyToTransition -= OnSubStateReadyToTransition;
+        }
+    }
+
+    public virtual void GetStatesFor(AIStateTransitionId transitionId, List<AIState> possibleStates) {
+        for(int i = 0; i < _aiStateTransitionsEntries.Count; i++) {
+            if(_aiStateTransitionsEntries[i].TransitionId == transitionId) {
+                possibleStates.AddRange(_aiStateTransitionsEntries[i].States);
+            }
+        }
+        for(int i = 0; i < _subStates.Count; i++) {
+            _subStates[i].GetStatesFor(transitionId, possibleStates);
+        }
+    }
+
+    protected void SetNextTransition(AIStateTransitionId transitionId) {
+        OnReadyToTransition?.Invoke(transitionId);
+    }
+
+    protected void OnSubStateReadyToTransition(AIStateTransitionId transitionId) {
+        SetNextTransition(transitionId);
+    }
 }
 
 [System.Serializable]
 public class AIStateTransitionEntry {
 
     [SerializeField] private AIStateTransitionId _transitionId;
-    [SerializeField] private List<AIStateDataObject> _states = new List<AIStateDataObject>();
+    [SerializeField] private List<AIState> _states = new List<AIState>();
 
     public AIStateTransitionId TransitionId => _transitionId;
-    public List<AIStateDataObject> States => _states;
+    public List<AIState> States => _states;
 }
 
 public enum AIStateTransitionId {
     OnUnitInitialized,
-    OnUnitReadyToMove,
+    OnIdleFinished,
     OnUnitMoveComplete,
     OnUnitEnemyDiscovered,
     OnUnitAlerted,
@@ -65,34 +99,6 @@ public enum AIStateTransitionId {
     OnUnitChase,
     OnUnitReadyToQuickMove,
     OnCombatNoiseHeard
-}
-
-// information about the current AI State
-public class ActiveAIState {
-
-    protected List<ActiveAIState> _subStates = new List<ActiveAIState>();
-    public IReadOnlyList<ActiveAIState> SubStates => _subStates;
-
-    public event Action<AIStateTransitionId> OnReadyToTransition;
-    
-    public void AddAISubState(ActiveAIState data) {
-        _subStates.Add(data);
-        data.OnReadyToTransition += SetNextTransition;
-    }
-
-    protected void SetNextTransition(AIStateTransitionId transitionId) {
-        OnReadyToTransition?.Invoke(transitionId);
-    }
-
-    public virtual bool OnExecute() {
-        return false;
-    }
-
-    public virtual void OnExit() {
-        for (int i = 0; i < SubStates.Count; i++) {
-            SubStates[i].OnReadyToTransition -= SetNextTransition;
-        }
-    }
 }
 
 // any additional data that the AI State needs will live here

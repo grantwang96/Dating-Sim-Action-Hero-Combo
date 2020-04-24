@@ -2,31 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AIState_Attack : AIStateDataObject
+public abstract class AIState_Attack : AIState
 {
-    
-}
+    [SerializeField] protected NPCMoveController _moveController;
 
-public abstract class ActiveAttackState : ActiveAIState {
-
-    protected Unit _unit;
     protected Unit _target;
     protected UnitData _unitData;
-    protected NPCMoveController _moveController;
     protected Weapon _equippedWeapon;
 
-    public ActiveAttackState(NPCUnitController controller) {
-        _unit = controller.Unit;
-        _unitData = controller.Data;
-        _target = controller.FocusedTarget;
-        _equippedWeapon = controller.EquippedWeapon;
-        _moveController = _unit.GetComponent<NPCMoveController>();
+    public override void Enter(AIStateInitializationData initData = null) {
+        _unitData = _controller.Data;
+        _target = _controller.FocusedTarget;
+        _equippedWeapon = _controller.EquippedWeapon;
         if (_moveController != null) {
             _moveController.ClearDestination();
             _moveController.SetLookTarget(_target.transform);
         }
+        base.Enter(initData);
     }
-
+    
     protected virtual bool CanAttack() {
         return true;
     }

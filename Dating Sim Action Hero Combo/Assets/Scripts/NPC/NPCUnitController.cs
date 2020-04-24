@@ -5,10 +5,11 @@ using System;
 
 public class NPCUnitController : UnitController
 {
-    private AIStateDataObject _currentState;
-    private ActiveAIState _activeAIStateData; // information about the current AI State
-    
-    public AIStateDataObject QueuedState { get; set; }
+    protected AIState _currentState;
+
+    protected NPCUnit _unit;
+    public override Unit Unit => _unit;
+    public AIState QueuedState { get; set; }
     public Unit FocusedTarget { get; set; }
 
     public event Action<AIStateTransitionId, NPCUnitController> OnAIStateReadyToTransition;
@@ -22,25 +23,27 @@ public class NPCUnitController : UnitController
     }
 
     protected virtual void CurrentAIStateReadyToTransition(AIStateTransitionId transitionId) {
-        _activeAIStateData.OnReadyToTransition -= CurrentAIStateReadyToTransition;
         OnAIStateReadyToTransition?.Invoke(transitionId, this);
     }
     
     // can be called internally or used as override by manager
     public virtual void TransitionState(AIStateTransitionId transitionId) {
         if (_currentState != null) {
-            _currentState.Exit(_activeAIStateData);
+            List<AIState> possibleNextStates = new List<AIState>();
+            _currentState.GetStatesFor(transitionId, possibleNextStates);
+            // if there's nothing to transition to, exit
+            if (possibleNextStates.Count == 0) {
+                CustomLogger.Log(nameof(NPCUnitController), $"No transitions for id {transitionId}");
+                return;
+            }
+            _currentState.OnReadyToTransition -= CurrentAIStateReadyToTransition;
+            _currentState.Exit();
+            _currentState = possibleNextStates[UnityEngine.Random.Range(0, possibleNextStates.Count)];
+        } else {
+            _currentState = _unit.OnUnitInitializedState;
         }
-        List<AIStateDataObject> possibleNextStates = Data.GetStateForTransitionId(transitionId);
-        if (possibleNextStates.Count == 0) {
-            CustomLogger.Error(nameof(UnitController), $"Unit Data Object {Data.name} does not have any states for transition id {transitionId}");
-            _currentState = null;
-            return;
-        }
-        _currentState = possibleNextStates[UnityEngine.Random.Range(0, possibleNextStates.Count)];
-        Debug.Log($"Transitioning to state {_currentState.name}");
-        _activeAIStateData = _currentState.Enter(this);
-        _activeAIStateData.OnReadyToTransition += CurrentAIStateReadyToTransition;
+        _currentState.Enter();
+        _currentState.OnReadyToTransition += CurrentAIStateReadyToTransition;
     }
     
     // called by Unit manager on update loop
@@ -48,6 +51,6 @@ public class NPCUnitController : UnitController
         if (_currentState == null) {
             return;
         }
-        _currentState.Execute(_activeAIStateData);
+        _currentState.Execute();
     }
 }

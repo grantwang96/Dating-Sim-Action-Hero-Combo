@@ -3,37 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI State/Idle")]
-public class AIState_Idle : AIStateDataObject {
+public class AIState_Idle : AIState {
 
     [SerializeField] private float _minimumIdleTime;
     [SerializeField] private float _maximumIdleTime;
 
-    protected override ActiveAIState GenerateActiveAIState(NPCUnitController unitController) {
-        float duration = Random.Range(_minimumIdleTime, _maximumIdleTime);
-        ActiveIdleState newState = new ActiveIdleState(duration);
-        return newState;
-    }
-}
+    private float _duration;
+    private float _currentTime;
 
-public class ActiveIdleState : ActiveAIState {
-
-    public readonly float Duration;
-    public float CurrentTime { get; private set; }
-
-    public ActiveIdleState(float duration) : base() {
-        Duration = duration;
-        CurrentTime = 0f;
+    public override void Enter(AIStateInitializationData initData = null) {
+        _duration = Random.Range(_minimumIdleTime, _maximumIdleTime);
+        _currentTime = 0f;
+        base.Enter(initData);
     }
 
-    public override bool OnExecute() {
-        base.OnExecute();
+    public override bool Execute() {
+        base.Execute();
         return IncrementTime();
     }
 
     private bool IncrementTime() {
-        CurrentTime += Time.deltaTime;
-        if (CurrentTime >= Duration) {
-            SetNextTransition(AIStateTransitionId.OnUnitReadyToMove);
+        _currentTime += Time.deltaTime;
+        if (_currentTime >= _duration) {
+            SetNextTransition(AIStateTransitionId.OnIdleFinished);
             return true;
         }
         return false;

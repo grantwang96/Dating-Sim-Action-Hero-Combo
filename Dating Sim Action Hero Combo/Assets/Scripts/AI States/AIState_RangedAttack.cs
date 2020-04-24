@@ -3,42 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI State/Ranged Attack")]
-public class AIState_RangedAttack : AIStateDataObject
+public class AIState_RangedAttack : AIState_Attack
 {
-    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
-        ActiveRangedAttackState rangedAttackState = new ActiveRangedAttackState(controller);
-        return rangedAttackState;
-    }
-}
-
-public class ActiveRangedAttackState : ActiveAttackState {
- 
-    public ActiveRangedAttackState(NPCUnitController controller) : base(controller) {
-
-    }
-
-    // attempt to fire weapon continuously
-    public override bool OnExecute() {
+    public override bool Execute() {
         // fail if there is no move controller or target
-        if(_moveController == null || _target == null) {
+        if (_moveController == null || _target == null) {
             SetNextTransition(AIStateTransitionId.OnUnitEnemyLost);
             return true;
         }
-        base.OnExecute();
+        base.Execute();
         if (!CanAttack()) {
             LostTarget();
             return true;
         }
         Attack();
-        return false;
-    }
-
-    protected override bool CanAttack() {
-        return ActiveScanState.Scan(_target, _unit.transform, _unitData.VisionRange, _unitData.VisionLayers);
+        return base.Execute();
     }
 
     private void LostTarget() {
         _moveController.SetLookTarget(null);
         SetNextTransition(AIStateTransitionId.OnUnitEnemyLost);
+    }
+
+    protected override bool CanAttack() {
+        return AIState_Scan.Scan(_target, _unit.transform, _unitData.VisionRange, _unitData.VisionLayers);
     }
 }

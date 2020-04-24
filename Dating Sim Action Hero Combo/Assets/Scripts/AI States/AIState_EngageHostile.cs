@@ -2,38 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI State/Engage Hostile")]
-public class AIState_EngageHostile : AIStateDataObject {
+public class AIState_EngageHostile : AIState {
 
-    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
-        ActiveEngageHostileState activeState = new ActiveEngageHostileState(controller);
-        return activeState;
-    }
-}
-
-public class ActiveEngageHostileState : ActiveAIState {
-
-    private NPCUnitController _controller;
-    private Weapon _equippedWeapon;
-
-    public ActiveEngageHostileState(NPCUnitController controller) {
-        _controller = controller;
-        _equippedWeapon = controller.EquippedWeapon;
-    }
-
-    public override bool OnExecute() {
-        if (_equippedWeapon == null) {
+    public override bool Execute() {
+        if (_controller.EquippedWeapon == null) {
             // set the controller to run away or find a new weapon
             SetNextTransition(AIStateTransitionId.OnUnitDefeated);
             return true;
         }
-        if (_equippedWeapon.Data.IsRanged) {
+        if (_controller.EquippedWeapon.Data.IsRanged) {
             // set ranged attack state
             SetNextTransition(AIStateTransitionId.OnUnitRangedAttack);
         } else {
             // set melee attack state
             SetNextTransition(AIStateTransitionId.OnUnitMeleeAttack);
         }
-        return true;
+        return base.Execute();
     }
 }

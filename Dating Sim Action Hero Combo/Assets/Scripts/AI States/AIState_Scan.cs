@@ -2,44 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI State/Scan")]
-public class AIState_Scan : AIStateDataObject {
+public class AIState_Scan : AIState {
+    
+    [SerializeField] private float _visionAngle;
+    [SerializeField] private float _visionRange;
+    [SerializeField] private LayerMask _visionLayers;
+    [SerializeField] private UnitTags _hostileTags;
 
+    [SerializeField] private Transform _unitTransform;
     [SerializeField] private AIStateTransitionId _onHostileFound;
-
-    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
-        ActiveScanState newState = new ActiveScanState(controller, _onHostileFound);
-        return newState;
-    }
-}
-
-public class ActiveScanState : ActiveAIState {
-
-    private float _visionAngle;
-    private float _visionRange;
-    private LayerMask _visionLayers;
-    private UnitTags _hostileTags;
-
-    private Transform _unitTransform;
-    private NPCUnitController _controller;
-    private AIStateTransitionId _onHostileFound;
 
     private List<Unit> _hostiles;
 
-    public ActiveScanState(NPCUnitController controller, AIStateTransitionId onHostileFound) : base() {
-        _visionAngle = controller.Data.VisionAngle;
-        _visionRange = controller.Data.VisionRange;
-        _visionLayers = controller.Data.VisionLayers;
-        _hostileTags = controller.Data.HostileTags;
-        _onHostileFound = onHostileFound;
-
-        _controller = controller;
-        _unitTransform = controller.Unit.transform;
+    public override void Enter(AIStateInitializationData initData = null) {
+        _visionAngle = _controller.Data.VisionAngle;
+        _visionRange = _controller.Data.VisionRange;
+        _visionLayers = _controller.Data.VisionLayers;
+        _hostileTags = _controller.Data.HostileTags;
+        _unitTransform = _controller.Unit.transform;
         CreateHostilesList();
+
+        base.Enter(initData);
     }
 
-    public override bool OnExecute() {
-        base.OnExecute();
+    private void CreateHostilesList() {
+        _hostiles = UnitsManager.Instance.GetUnitListByTags(_hostileTags);
+    }
+
+    public override bool Execute() {
+        base.Execute();
         bool foundHostile = ScanAll();
         if (foundHostile) {
             OnFoundHostile();
@@ -52,13 +43,9 @@ public class ActiveScanState : ActiveAIState {
         SetNextTransition(_onHostileFound);
     }
 
-    private void CreateHostilesList() {
-        _hostiles = UnitsManager.Instance.GetUnitListByTags(_hostileTags);
-    }
-
     private bool ScanAll() {
         bool foundHostile = false;
-        for(int i = 0; i < _hostiles.Count; i++) {
+        for (int i = 0; i < _hostiles.Count; i++) {
             if (Scan(_hostiles[i], _unitTransform, _visionRange, _visionLayers, _visionAngle)) {
                 _controller.FocusedTarget = _hostiles[i];
                 foundHostile = true;
@@ -94,3 +81,4 @@ public class ActiveScanState : ActiveAIState {
         return found;
     }
 }
+

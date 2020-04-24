@@ -3,37 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI State/Move")]
-public class AIState_Move : AIStateDataObject
+public class AIState_Move : AIState
 {
     [SerializeField] private bool _fullSpeed;
+    [SerializeField] private NPCMoveController _moveController;
+    [SerializeField] private IntVector3 _nextDestination;
 
-    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
-        float speed = _fullSpeed ? controller.Data.RunSpeed : controller.Data.WalkSpeed;
-        NPCUnit movableUnit = controller.Unit as NPCUnit;
-        if(movableUnit == null) {
-            return null;
-        }
-        ActiveMoveState moveState = new ActiveMoveState(controller.MapSpaceTarget, movableUnit.MoveController, speed);
-        return moveState;
-    }
-}
-
-public class ActiveMoveState : ActiveAIState {
-
-    private IntVector3 _nextDestination;
-    private NPCMoveController _moveController;
-
-    public ActiveMoveState(IntVector3 nextDestination, MoveController moveController, float speed) {
+    public override void Enter(AIStateInitializationData initData = null) {
+        float speed = _fullSpeed ? _controller.Data.RunSpeed : _controller.Data.WalkSpeed;
         // Get path to next destination here
-        _moveController = moveController as NPCMoveController;
         if(_moveController == null) {
-            CustomLogger.Error(nameof(ActiveMoveState), $"Move controller was not of type [{nameof(NPCMoveController)}]");
             return;
         }
+        _nextDestination = _controller.MapSpaceTarget;
         _moveController.OnArrivedTargetDestination += OnArrivedTargetDestination;
-        _moveController.SetDestination(speed, nextDestination);
+        _moveController.SetDestination(speed, _nextDestination);
+        base.Enter(initData);
     }
-
+    
     private void OnArrivedTargetDestination() {
         _moveController.OnArrivedTargetDestination -= OnArrivedTargetDestination;
         SetNextTransition(AIStateTransitionId.OnUnitMoveComplete);

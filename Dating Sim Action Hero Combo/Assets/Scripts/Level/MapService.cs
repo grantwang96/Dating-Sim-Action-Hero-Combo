@@ -134,8 +134,12 @@ public partial class MapService
                     ITileInfo neighborTileX = LevelDataManager.Instance.GetTileAt(current.X + dirX, current.Y);
                     ITileInfo neighborTileY = LevelDataManager.Instance.GetTileAt(current.X, current.Y + dirY);
                     // check if both tiles are available
-                    _canTraverse &= !neighborTileX.Data.IsSolid;
-                    _canTraverse &= !neighborTileY.Data.IsSolid;
+                    if (neighborTileX != null) {
+                        _canTraverse &= !neighborTileX.Data.IsSolid;
+                    }
+                    if(neighborTileY != null) {
+                        _canTraverse &= !neighborTileY.Data.IsSolid;
+                    }
                 }
 
                 if (ContainsNode(neighborX, neighborY)) {

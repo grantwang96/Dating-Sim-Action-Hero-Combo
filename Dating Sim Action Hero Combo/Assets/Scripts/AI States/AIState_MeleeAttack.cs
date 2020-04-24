@@ -3,28 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI State/Melee Attack")]
-public class AIState_MeleeAttack : AIStateDataObject {
+public class AIState_MeleeAttack : AIState_Attack {
 
-    protected override ActiveAIState GenerateActiveAIState(NPCUnitController controller) {
-        ActiveAIState aiState = new ActiveMeleeState(controller);
-        return aiState;
-    }
-}
-
-public class ActiveMeleeState : ActiveAttackState {
-    
-    public ActiveMeleeState(NPCUnitController controller) : base(controller) {
-
-    }
-
-    public override bool OnExecute() {
+    public override bool Execute() {
         // fail if there is no move controller or target
         if (_moveController == null || _target == null) {
             SetNextTransition(AIStateTransitionId.OnUnitEnemyLost);
             return true;
         }
-        base.OnExecute();
-        if(!CanAttack()) {
+        base.Execute();
+        if (!CanAttack()) {
             SetNextTransition(AIStateTransitionId.OnUnitChase);
             return true;
         }

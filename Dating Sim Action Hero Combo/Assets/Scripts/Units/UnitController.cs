@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class UnitController
+public abstract class UnitController
 {
     public string UnitId { get; protected set; }
     public int Health { get; protected set; }
-    public Unit Unit { get; protected set; }
     public UnitData Data { get; protected set; }
 
     public Weapon EquippedWeapon { get; protected set; }
     public IntVector3 MapPosition => Unit.MoveController.MapPosition;
     public IntVector3 MapSpaceTarget { get; set; }
-    
+
+    public virtual Unit Unit { get; }
+
     public event Action<int> OnHealthChanged;
     public event Action<UnitController> OnUnitDefeated;
 

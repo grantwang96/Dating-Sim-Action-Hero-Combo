@@ -39,6 +39,10 @@ public abstract class Unit : MonoBehaviour, IDamageable, ISoundListener
     public virtual void OnSoundHeard(IntVector3 origin, Unit source = null) {
         OnCombatSoundHeard?.Invoke(origin, source);
     }
+
+    public virtual void SetUnitComponent() {
+
+    }
 }
 
 [System.Flags]

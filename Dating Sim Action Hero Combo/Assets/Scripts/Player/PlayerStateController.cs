@@ -52,7 +52,6 @@ public class PlayerStateController : UnitController {
         Health -= totalDamage;
         FireHealthChanged(-totalDamage);
         if (Health <= 0) {
-            UnitsManager.Instance.DeregisterUnit(Unit);
             UnitDefeated();
         }
     }
