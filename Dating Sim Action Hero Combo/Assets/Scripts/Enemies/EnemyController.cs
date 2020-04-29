@@ -19,7 +19,7 @@ public class EnemyController : NPCUnitController
         Data = enemyData;
         Health = enemyData.MaxHealth;
         Speed = enemyData.WalkSpeed;
-        EquippedWeapon = new Weapon(enemyData.EquippedWeapon);
+        EquippedWeapon = new Weapon(enemyData.EquippedWeapon, 999);
 
         _unit = unit;
         unit.Initialize(this, enemyData.AnimatorController, .5f); // temp

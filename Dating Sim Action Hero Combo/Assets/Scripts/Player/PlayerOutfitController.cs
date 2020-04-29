@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerOutfitController : MonoBehaviour
 {
+    public static PlayerOutfitController Instance { get; private set; }
+
     [SerializeField] private PlayerUnit _unit;
     [SerializeField] private bool _agentMode;
     private bool _outfitChangeInProgress;
@@ -13,8 +15,11 @@ public class PlayerOutfitController : MonoBehaviour
     private IPlayerActionController _currentSet;
 
     public bool AgentMode => _agentMode;
-    
-    // Start is called before the first frame update
+
+    private void Awake() {
+        Instance = this;
+    }
+
     private void Start() {
         _civilianSet = new PlayerCivilianController(_unit);
         _combatSet = new PlayerCombatController(_unit);

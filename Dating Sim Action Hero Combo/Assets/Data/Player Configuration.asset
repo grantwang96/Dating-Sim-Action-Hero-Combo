@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 100
   _totalAmmoClips: 5
-  _equippedWeapon: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}
+  _currentLoadout: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}

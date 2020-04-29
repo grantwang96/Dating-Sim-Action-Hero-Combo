@@ -499,6 +499,7 @@ MonoBehaviour:
   - _transitionId: 4
     _states:
     - {fileID: 1237924413255895954}
+  _moveController: {fileID: 2059632087369443480}
   _animator: {fileID: 437165491455309684}
 --- !u!1 &2749641696868224123
 GameObject:

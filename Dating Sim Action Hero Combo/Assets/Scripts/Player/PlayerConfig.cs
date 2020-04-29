@@ -15,6 +15,6 @@ public class PlayerConfig : ScriptableObject
     public int MaxHealth => _maxHealth;
     [SerializeField] private int _totalAmmoClips;
     public int TotalAmmoClips => _totalAmmoClips;
-    [SerializeField] private WeaponData _equippedWeapon;
-    public WeaponData EquippedWeapon => _equippedWeapon;
+    [SerializeField] private WeaponData _currentLoadout;
+    public WeaponData CurrentLoadout => _currentLoadout;
 }

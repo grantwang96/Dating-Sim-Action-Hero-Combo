@@ -1,17 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerCombatController : PlayerActionController
 {
-    // store currently held weapon
-    private Weapon _equippedWeapon;
+    public static PlayerCombatController Instance { get; private set; }
 
-    private static int _bulletCount;
+    // store currently held weapon
+    public Weapon EquippedWeapon { get; private set; }
+
+    public event Action<int> OnAmmoUpdated;
+    public event Action OnReloadStarted;
+    public event Action OnReloadFinished;
 
     public PlayerCombatController(PlayerUnit unit) : base(unit) {
-        _equippedWeapon = PlayerStateController.Instance.EquippedWeapon;
-        _bulletCount = PlayerStateController.Instance.StartingAmmoClips * _equippedWeapon.Data.ClipSize;
+        Instance = this;
+        UpdateEquippedWeapon(PlayerStateController.Instance.EquippedWeapon);
+    }
+
+    private void UpdateEquippedWeapon(Weapon weapon) {
+        if(EquippedWeapon != null) {
+            weapon.OnReloadStart -= ReloadStarted;
+            weapon.OnReloadFinish -= ReloadFinished;
+        }
+        EquippedWeapon = weapon;
+        EquippedWeapon.OnReloadStart += ReloadStarted;
+        EquippedWeapon.OnReloadFinish += ReloadFinished;
     }
 
     protected override void SubscribeToEvents() {
@@ -31,14 +46,25 @@ public class PlayerCombatController : PlayerActionController
     }
 
     private void OnShootBtnPressed() {
-        _equippedWeapon.Use(ActivateTime.OnPress, PlayerUnit.Instance, ref _bulletCount);
+        EquippedWeapon.Use(ActivateTime.OnPress, PlayerUnit.Instance);
+        OnAmmoUpdated?.Invoke(EquippedWeapon.CurrentClip);
     }
 
     private void OnShootBtnHeld() {
-        _equippedWeapon.Use(ActivateTime.OnHeld, PlayerUnit.Instance, ref _bulletCount);
+        EquippedWeapon.Use(ActivateTime.OnHeld, PlayerUnit.Instance);
+        OnAmmoUpdated?.Invoke(EquippedWeapon.CurrentClip);
     }
 
     private void OnShootBtnReleased() {
-        _equippedWeapon.Use(ActivateTime.OnRelease, PlayerUnit.Instance, ref _bulletCount);
+        EquippedWeapon.Use(ActivateTime.OnRelease, PlayerUnit.Instance);
+        OnAmmoUpdated?.Invoke(EquippedWeapon.CurrentClip);
+    }
+
+    private void ReloadStarted() {
+        OnReloadStarted?.Invoke();
+    }
+
+    private void ReloadFinished() {
+        OnReloadFinished?.Invoke();
     }
 }

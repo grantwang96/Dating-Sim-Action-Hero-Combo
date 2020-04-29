@@ -30,7 +30,7 @@ public class PlayerStateController : UnitController {
     private void ResetController() {
         Health = _config.MaxHealth;
         // temp until save system works
-        EquippedWeapon = new Weapon(_config.EquippedWeapon);
+        EquippedWeapon = new Weapon(_config.CurrentLoadout, _config.TotalAmmoClips * _config.CurrentLoadout.ClipSize);
     }
 
     private void OnPlayerUnitSpawned() {

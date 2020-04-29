@@ -24,8 +24,14 @@ public class FillBar : MonoBehaviour
 
     public void UpdateValue(float percentage) {
         _percentage = Mathf.Clamp(percentage, 0f, 1f);
-        Vector2 fillBarSize = _fillBar.rectTransform.sizeDelta;
         _isLerping = true;
+    }
+
+    public void UpdateValueInstant(float percentage) {
+        _percentage = Mathf.Clamp(percentage, 0f, 1f);
+        _isLerping = false;
+        float targetSize = _container.sizeDelta.x * _percentage;
+        _fillBar.rectTransform.sizeDelta = new Vector2(targetSize, _container.sizeDelta.y);
     }
 
     private void UpdateBarSize() {

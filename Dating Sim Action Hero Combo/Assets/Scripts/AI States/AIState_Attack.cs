@@ -26,7 +26,6 @@ public abstract class AIState_Attack : AIState
     }
 
     protected virtual void Attack() {
-        int ammo = _equippedWeapon.Data.ClipSize;
-        _equippedWeapon.Use(_equippedWeapon.Data.ActivateTime, _unit, ref ammo);
+        _equippedWeapon.Use(_equippedWeapon.Data.ActivateTime, _unit);
     }
 }
