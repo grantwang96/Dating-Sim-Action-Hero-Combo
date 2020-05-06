@@ -30,22 +30,29 @@ public class Weapon
         }
         
         // wait until reloading is finished
-        if (!IsReloadingComplete()) {
+        if (_isReloading) {
             return;
         }
 
         // try to use the weapon
         if (Data.TryActivate(time, unit, _weaponState)) {
-            CurrentClip--;
+            CurrentClip = Mathf.Max(CurrentClip - Data.AmmoPerUse, 0);
         }
 
         // if we've finished the clip
         if (CurrentClip == 0 && !_isReloading) {
-            _isReloading = true;
-            _startReloadTime = Time.time;
-            MonoBehaviourMaster.Instance.OnUpdate += OnUpdate;
-            OnReloadStart?.Invoke();
+            Reload();
         }
+    }
+
+    public void Reload() {
+        if (_isReloading || CurrentClip == Data.ClipSize) {
+            return;
+        }
+        _isReloading = true;
+        _startReloadTime = Time.time;
+        MonoBehaviourMaster.Instance.OnUpdate += OnUpdate;
+        OnReloadStart?.Invoke();
     }
 
     private void OnUpdate() {

@@ -35,6 +35,8 @@ public class PlayerCombatController : PlayerActionController
         InputController.Instance.ShootBtnPressed += OnShootBtnPressed;
         InputController.Instance.ShootBtnHeld += OnShootBtnHeld;
         InputController.Instance.ShootBtnReleased += OnShootBtnReleased;
+
+        InputController.Instance.OnReloadBtnPressed += OnReloadBtnPressed;
     }
 
     protected override void UnsubscribeToEvents() {
@@ -43,6 +45,8 @@ public class PlayerCombatController : PlayerActionController
         InputController.Instance.ShootBtnPressed -= OnShootBtnPressed;
         InputController.Instance.ShootBtnHeld -= OnShootBtnHeld;
         InputController.Instance.ShootBtnReleased -= OnShootBtnReleased;
+
+        InputController.Instance.OnReloadBtnPressed -= OnReloadBtnPressed;
     }
 
     private void OnShootBtnPressed() {
@@ -58,6 +62,10 @@ public class PlayerCombatController : PlayerActionController
     private void OnShootBtnReleased() {
         EquippedWeapon.Use(ActivateTime.OnRelease, PlayerUnit.Instance);
         OnAmmoUpdated?.Invoke(EquippedWeapon.CurrentClip);
+    }
+
+    private void OnReloadBtnPressed() {
+        EquippedWeapon.Reload();
     }
 
     private void ReloadStarted() {

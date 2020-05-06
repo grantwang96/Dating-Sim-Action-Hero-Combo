@@ -12,6 +12,8 @@ public abstract class WeaponData : ScriptableObject
 
     [SerializeField] private int _clipSize;
     public int ClipSize => _clipSize;
+    [SerializeField] private int _ammoPerUse;
+    public int AmmoPerUse => _ammoPerUse;
     [SerializeField] private int _defaultStartAmount;
     public int DefaultStartAmount => _defaultStartAmount;
     [SerializeField] private float _reloadTime;

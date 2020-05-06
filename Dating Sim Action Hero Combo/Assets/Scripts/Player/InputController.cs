@@ -19,6 +19,10 @@ public interface IInputController {
     event Action ShootBtnPressed;
     event Action ShootBtnHeld;
     event Action ShootBtnReleased;
+
+    event Action OnReloadBtnPressed;
+    event Action OnReloadBtnHeld;
+    event Action OnReloadBtnReleased;
 }
 
 public class InputController : MonoBehaviour, IInputController
@@ -40,6 +44,10 @@ public class InputController : MonoBehaviour, IInputController
     public event Action ShootBtnPressed;
     public event Action ShootBtnHeld;
     public event Action ShootBtnReleased;
+
+    public event Action OnReloadBtnPressed;
+    public event Action OnReloadBtnHeld;
+    public event Action OnReloadBtnReleased;
 
     private void Awake() {
         // internal class dependencies here
@@ -87,6 +95,7 @@ public class InputController : MonoBehaviour, IInputController
         ButtonInput("Fire1", ShootBtnPressed, ShootBtnHeld, ShootBtnReleased);
         ButtonInput("Interact", InteractBtnPressed, InteractBtnHeld, InteractBtnReleased);
         ButtonInput("SwitchOutfit", OutfitSwapBtnPressed, OutfitSwapBtnHeld, OutfitSwapBtnReleased);
+        ButtonInput("Reload", OnReloadBtnPressed, OnReloadBtnHeld, OnReloadBtnReleased);
     }
 
     private void ButtonInput(string inputName, Action pressed, Action held, Action released) {

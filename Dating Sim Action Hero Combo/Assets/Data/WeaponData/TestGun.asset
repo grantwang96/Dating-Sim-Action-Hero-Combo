@@ -16,6 +16,7 @@ MonoBehaviour:
   _cooldownTime: 0.3
   _isRanged: 1
   _clipSize: 12
+  _ammoPerUse: 1
   _defaultStartAmount: 12
   _reloadTime: 3
   _sprite: {fileID: 0}
