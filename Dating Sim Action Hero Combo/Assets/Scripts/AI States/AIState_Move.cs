@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI State/Move")]
 public class AIState_Move : AIState
 {
     [SerializeField] private bool _fullSpeed;

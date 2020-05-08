@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI State/Alert")]
 public class AIState_Alert : AIState {
 
     private const string AlertStateName = "Alert";

@@ -33,7 +33,6 @@ public class NPCUnitController : UnitController
             _currentState.GetStatesFor(transitionId, possibleNextStates);
             // if there's nothing to transition to, exit
             if (possibleNextStates.Count == 0) {
-                CustomLogger.Log(nameof(NPCUnitController), $"No transitions for id {transitionId}");
                 return;
             }
             _currentState.OnReadyToTransition -= CurrentAIStateReadyToTransition;
@@ -42,8 +41,8 @@ public class NPCUnitController : UnitController
         } else {
             _currentState = _unit.OnUnitInitializedState;
         }
-        _currentState.Enter();
         _currentState.OnReadyToTransition += CurrentAIStateReadyToTransition;
+        _currentState.Enter();
     }
     
     // called by Unit manager on update loop

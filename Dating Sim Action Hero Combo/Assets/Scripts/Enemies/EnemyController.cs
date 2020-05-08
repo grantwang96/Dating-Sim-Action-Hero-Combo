@@ -70,6 +70,7 @@ public class EnemyController : NPCUnitController
             return;
         }
         if (attacker.UnitTags.HasFlag(UnitTags.Player) || attacker.UnitTags.HasFlag(UnitTags.Law_Enforcement)) {
+            MapSpaceTarget = attacker.MoveController.MapPosition;
             FocusedTarget = attacker;
         }
         CurrentAIStateReadyToTransition(AIStateTransitionId.OnUnitTakeDamage);

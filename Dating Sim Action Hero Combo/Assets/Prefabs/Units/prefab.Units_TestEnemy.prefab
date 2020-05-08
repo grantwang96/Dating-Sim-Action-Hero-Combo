@@ -329,6 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621199ac4dda6a940a3379b94d18d44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates:
   - {fileID: 6580716492825467943}
@@ -391,10 +392,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e6479b840497a24cab75f3341f3d21f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates: []
   _aiStateTransitionsEntries:
   - _transitionId: 5
+    _states:
+    - {fileID: 2211386955192508375}
+  - _transitionId: 15
     _states:
     - {fileID: 2211386955192508375}
   _moveController: {fileID: 2059632087369443480}
@@ -441,6 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4a7974257860747b988bb2658910f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates: []
   _aiStateTransitionsEntries:
@@ -493,6 +499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1821d1718fe20bc41ba63294108eb3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates: []
   _aiStateTransitionsEntries:
@@ -544,6 +551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621199ac4dda6a940a3379b94d18d44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates:
   - {fileID: 6580716492825467943}
@@ -647,6 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f487bb6885449754bbeda8148ac0774b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates:
   - {fileID: 6580716492825467943}
@@ -711,6 +720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e81169081a0914d904582a9dc998ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates: []
   _aiStateTransitionsEntries: []
@@ -765,6 +775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d65ef26817aadc40a71e7753d63f23c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _active: 0
   _unit: {fileID: 437165491455309683}
   _subStates: []
   _aiStateTransitionsEntries:

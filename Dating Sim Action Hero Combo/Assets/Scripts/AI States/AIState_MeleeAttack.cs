@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI State/Melee Attack")]
 public class AIState_MeleeAttack : AIState_Attack {
 
     public override bool Execute() {

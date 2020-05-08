@@ -5,6 +5,7 @@ using System;
 
 public abstract class AIState : MonoBehaviour {
 
+    [SerializeField] protected bool _active;
     [SerializeField] protected NPCUnit _unit;
     [SerializeField] protected List<AIState> _subStates = new List<AIState>();
     [SerializeField] protected List<AIStateTransitionEntry> _aiStateTransitionsEntries = new List<AIStateTransitionEntry>();
@@ -22,11 +23,11 @@ public abstract class AIState : MonoBehaviour {
     }
 
     public virtual void Enter(AIStateInitializationData initData = null) {
-        Debug.Log($"Entering state {name}");
         for (int i = 0; i < _subStates.Count; i++) {
             _subStates[i].Enter();
             _subStates[i].OnReadyToTransition += OnSubStateReadyToTransition;
         }
+        _active = true;
     }
     
     // start state and initialize some active AI State Data
@@ -48,6 +49,7 @@ public abstract class AIState : MonoBehaviour {
             _subStates[i].Exit();
             _subStates[i].OnReadyToTransition -= OnSubStateReadyToTransition;
         }
+        _active = true;
     }
 
     public virtual void GetStatesFor(AIStateTransitionId transitionId, List<AIState> possibleStates) {

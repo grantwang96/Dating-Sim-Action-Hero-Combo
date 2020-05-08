@@ -18,7 +18,7 @@ MonoBehaviour:
   _clipSize: 12
   _ammoPerUse: 1
   _defaultStartAmount: 12
-  _reloadTime: 3
+  _reloadTime: 1.5
   _sprite: {fileID: 0}
   _icon: {fileID: 0}
   _pooledWeaponSoundBoxId: prefab.Combat_WeaponSoundBox

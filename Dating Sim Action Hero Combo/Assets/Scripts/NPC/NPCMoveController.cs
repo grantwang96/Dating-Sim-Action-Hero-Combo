@@ -17,7 +17,11 @@ public class NPCMoveController : MoveController
     
     public void SetDestination(float speed, IntVector3 destination) {
         _currentPath.Clear();
-        Mapservice.GetPathToDestination(MapPosition, destination, out _currentPath);
+        PathStatus pathStatus = Mapservice.GetPathToDestination(MapPosition, destination, out _currentPath);
+        if(pathStatus == PathStatus.Invalid) {
+            ClearDestination();
+            ArrivedFinalDestination();
+        }
         _moveSpeed = speed;
         _isMoving = true;
         UpdateCurrentDestination();

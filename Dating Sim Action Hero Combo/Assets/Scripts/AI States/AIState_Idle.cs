@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI State/Idle")]
 public class AIState_Idle : AIState {
 
     [SerializeField] private float _minimumIdleTime;

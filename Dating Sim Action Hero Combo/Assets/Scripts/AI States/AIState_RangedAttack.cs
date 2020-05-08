@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI State/Ranged Attack")]
 public class AIState_RangedAttack : AIState_Attack
 {
     public override bool Execute() {

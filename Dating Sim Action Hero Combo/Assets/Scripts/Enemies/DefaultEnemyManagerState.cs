@@ -12,13 +12,12 @@ public class DefaultEnemyManagerState : EnemyManagerState {
                 break;
             case AIStateTransitionId.OnUnitAlerted:
                 // enter an aggro state?
-                MoveGuardsToLastKnownLoc(controller);
                 BroadcastUnitStateChange(AIStateTransitionId.OnUnitAllyAlert, controller);
                 break;
             case AIStateTransitionId.OnUnitEnemyLost:
                 // potentially change manager state
                 // TODO: depending on enemy type, do something different (some might chase, some might hold position)
-                IntVector3 targetPosition = controller.FocusedTarget.MoveController.MapPosition;
+                IntVector3 targetPosition = controller.MapSpaceTarget;
                 AssignRunTarget(controller, targetPosition);
                 break;
             case AIStateTransitionId.OnUnitDefeated:
@@ -31,7 +30,7 @@ public class DefaultEnemyManagerState : EnemyManagerState {
     }
 
     private void MoveGuardsToLastKnownLoc(NPCUnitController controller) {
-        IntVector3 targetPosition = controller.FocusedTarget.MoveController.MapPosition;
+        IntVector3 targetPosition = controller.MapSpaceTarget;
 
         // TODO: filter by enemy type
 
@@ -60,8 +59,7 @@ public class DefaultEnemyManagerState : EnemyManagerState {
     }
 
     private void AssignNewWanderTarget(NPCUnitController controller) {
-        int searchRadius = Random.Range(controller.Data.WanderRadiusMin, controller.Data.WanderRadiusMax);
-        List<IntVector3> traversableTiles = MapService.GetTraversableTiles(searchRadius, controller.MapPosition, controller.Data.WanderRadiusMin);
+        List<IntVector3> traversableTiles = MapService.GetTraversableTiles(controller.Data.WanderRadiusMax, controller.MapPosition, controller.Data.WanderRadiusMin);
         IntVector3 nextDestination = traversableTiles[Random.Range(0, traversableTiles.Count)];
         controller.MapSpaceTarget = nextDestination;
     }

@@ -36,4 +36,10 @@ public struct IntVector3 {
     public override string ToString() {
         return $"IntVector3({x}, {y}, {z})";
     }
+
+    public override bool Equals(object obj) {
+        if(obj == null) { return false; }
+        IntVector3 other = (IntVector3)obj;
+        return other.x == this.x && other.y == this.y && other.z == this.z;
+    }
 }

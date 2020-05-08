@@ -6,10 +6,8 @@ using UnityEngine;
 /// </summary>
 public partial class Mapservice
 {
-    private static List<TileNode> _toBeVisited = new List<TileNode>();
-    private static List<IntVector3> _alreadyVisited = new List<IntVector3>();
 
-    public const int NumTriesAbort = 100;
+    public const int NumTriesAbort = 500;
 
     private static IntVector3[] _directions = {
         new IntVector3(1, 0),
@@ -24,9 +22,16 @@ public partial class Mapservice
 
     public static PathStatus GetPathToDestination(IntVector3 startPosition, IntVector3 targetDestination, out List<IntVector3> path) {
         path = new List<IntVector3>();
+        List<TileNode> toBeVisited = new List<TileNode>();
+        List<IntVector3> alreadyVisited = new List<IntVector3>();
 
         if (!LevelDataManager.Instance.IsWithinMap(targetDestination)) {
             CustomLogger.Warn(nameof(MapService), $"Target Destination {targetDestination} is out of bounds!");
+            return PathStatus.Invalid;
+        }
+        ITileInfo info = LevelDataManager.Instance.GetTileAt(targetDestination.x, targetDestination.y);
+        if (info != null && info.Data.IsSolid) {
+            CustomLogger.Warn(nameof(MapService), $"Target Destination {targetDestination} is solid!");
             return PathStatus.Invalid;
         }
 
@@ -34,8 +39,8 @@ public partial class Mapservice
         int startY = startPosition.y;
         int targetX = targetDestination.x;
         int targetY = targetDestination.y;
-        _toBeVisited.Clear();
-        _alreadyVisited.Clear();
+        toBeVisited.Clear();
+        alreadyVisited.Clear();
 
         TileNode current = new TileNode() {
             X = startX,
@@ -43,14 +48,14 @@ public partial class Mapservice
             DistanceFromStart = 0,
             TotalCost = 0
         };
-        _toBeVisited.Add(current);
+        toBeVisited.Add(current);
         int count = 0;
-        while(_toBeVisited.Count != 0) {
+        while(toBeVisited.Count != 0) {
             // get current node
             count++;
-            current = GetLowestCostNode();
+            current = GetLowestCostNode(toBeVisited);
             // remove from to be visited
-            _toBeVisited.Remove(current);
+            toBeVisited.Remove(current);
 
             // if we've hit our destination
             if (current.X == targetX && current.Y == targetY) {
@@ -60,16 +65,18 @@ public partial class Mapservice
                 }
                 return PathStatus.Complete;
             }
+
             for(int i = 0; i < _directions.Length; i++) {
                 int dirX =_directions[i].x;
                 int dirY = _directions[i].y;
                 int neighborX = current.X + dirX;
                 int neighborY = current.Y + dirY;
-                if (_alreadyVisited.Contains(new IntVector3(neighborX, neighborY))) {
+                IntVector3 neighbor = new IntVector3(neighborX, neighborY);
+                if (alreadyVisited.Contains(neighbor)) {
                     continue;
                 }
-                ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = info != null && !info.Data.IsSolid;
+                ITileInfo tileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
+                bool _canTraverse = tileInfo != null && !tileInfo.Data.IsSolid;
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -88,8 +95,9 @@ public partial class Mapservice
                     continue;
                 }
 
-                if (TryGetNode(neighborX, neighborY, out int index)) {
-                    TileNode toBeVisitedNode = _toBeVisited[index];
+                // if this node is in "to be visited", check to see if the distance value needs to be updated and skipped
+                if (TryGetNode(neighborX, neighborY, toBeVisited, out int index)) {
+                    TileNode toBeVisitedNode = toBeVisited[index];
                     if (distanceFromStart < toBeVisitedNode.DistanceFromStart) {
                         toBeVisitedNode.DistanceFromStart = distanceFromStart;
                         continue;
@@ -104,21 +112,21 @@ public partial class Mapservice
                     DistanceFromStart = distanceFromStart,
                     Parent = current
                 };
-                _toBeVisited.Add(newNode);
+                toBeVisited.Add(newNode);
             }
-            _alreadyVisited.Add(new IntVector3(current.X, current.Y));
+            alreadyVisited.Add(new IntVector3(current.X, current.Y));
 
             if (count > NumTriesAbort) {
-                CustomLogger.Error(nameof(MapService), $"{nameof(GetPathToDestination)} Aborting after {count} steps!");
+                CustomLogger.Error(nameof(MapService), $"In \"{nameof(GetPathToDestination)}\" Failed to path find to {targetDestination}! Aborting...");
                 break;
             }
         }
         return PathStatus.Invalid;
     }
 
-    private static bool TryGetNode(int x, int y, out int index) {
-        for(int i = 0; i < _toBeVisited.Count; i++) {
-            if(_toBeVisited[i].X == x && _toBeVisited[i].Y == y) {
+    private static bool TryGetNode(int x, int y, List<TileNode> toBeVisited, out int index) {
+        for(int i = 0; i < toBeVisited.Count; i++) {
+            if(toBeVisited[i].X == x && toBeVisited[i].Y == y) {
                 index = i;
                 return true;
             }
@@ -127,14 +135,14 @@ public partial class Mapservice
         return false;
     }
 
-    private static TileNode GetLowestCostNode() {
-        if(_toBeVisited.Count == 0) {
+    private static TileNode GetLowestCostNode(List<TileNode> toBeVisited) {
+        if(toBeVisited.Count == 0) {
             return null;
         }
-        TileNode lowestCostNode = _toBeVisited[0];
-        for(int i = 1; i < _toBeVisited.Count; i++) {
-            if(_toBeVisited[i].TotalCost < lowestCostNode.TotalCost) {
-                lowestCostNode = _toBeVisited[i];
+        TileNode lowestCostNode = toBeVisited[0];
+        for(int i = 1; i < toBeVisited.Count; i++) {
+            if(toBeVisited[i].TotalCost < lowestCostNode.TotalCost) {
+                lowestCostNode = toBeVisited[i];
             }
         }
         return lowestCostNode;

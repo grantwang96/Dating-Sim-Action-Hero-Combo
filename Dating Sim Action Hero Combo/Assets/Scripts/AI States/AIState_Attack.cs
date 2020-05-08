@@ -12,12 +12,15 @@ public abstract class AIState_Attack : AIState
 
     public override void Enter(AIStateInitializationData initData = null) {
         _unitData = _controller.Data;
+        // if there is not target present (ex. heard a noise)
+        if(_controller.FocusedTarget == null) {
+            SetNextTransition(AIStateTransitionId.OnUnitChase);
+            return;
+        }
         _target = _controller.FocusedTarget;
         _equippedWeapon = _controller.EquippedWeapon;
-        if (_moveController != null) {
-            _moveController.ClearDestination();
-            _moveController.SetLookTarget(_target.transform);
-        }
+        _moveController.ClearDestination();
+        _moveController.SetLookTarget(_target.transform);
         base.Enter(initData);
     }
     

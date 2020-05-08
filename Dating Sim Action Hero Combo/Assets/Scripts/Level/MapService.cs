@@ -3,9 +3,6 @@ using UnityEngine;
 
 public partial class MapService
 {
-    private static List<TileNode> _toBeVisited = new List<TileNode>();
-    private static List<IntVector3> _alreadyVisited = new List<IntVector3>();
-
     public const int NumTriesAbort = 100;
 
     public static IntVector3[] Directions = {
@@ -20,8 +17,8 @@ public partial class MapService
     };
 
     public static List<IntVector3> GetPositionsWithinRadius(int minDistance, IntVector3 start, int radius) {
-        _toBeVisited.Clear();
-        _alreadyVisited.Clear();
+        List<TileNode> toBeVisited = new List<TileNode>();
+        List<IntVector3> alreadyVisited = new List<IntVector3>();
 
         if (!LevelDataManager.Instance.IsWithinMap(start)) {
             CustomLogger.Warn(nameof(MapService), $"Starting position '{start}' is out of bounds!");
@@ -35,15 +32,15 @@ public partial class MapService
             DistanceFromStart = 0
         };
 
-        _toBeVisited.Add(current);
+        toBeVisited.Add(current);
         int count = 0;
 
-        while (_toBeVisited.Count != 0) {
+        while (toBeVisited.Count != 0) {
             count++;
-            current = _toBeVisited[0];
+            current = toBeVisited[0];
             TryAddToList(minDistance, traversableTargets, current);
-            _toBeVisited.RemoveAt(0);
-            _alreadyVisited.Add(new IntVector3(current.X, current.Y));
+            toBeVisited.RemoveAt(0);
+            alreadyVisited.Add(new IntVector3(current.X, current.Y));
 
             for (int i = 0; i < Directions.Length; i++) {
                 int dirX = Directions[i].x;
@@ -54,16 +51,16 @@ public partial class MapService
                 int distanceFromStart = Mapservice.DistanceFromStart(start.x, start.y, neighborX, neighborY);
                 if (distanceFromStart > radius) {
                     continue;
-                }
+                } // stay within the radius
 
-                if (_alreadyVisited.Contains(new IntVector3(neighborX, neighborY))) {
+                if (alreadyVisited.Contains(new IntVector3(neighborX, neighborY))) {
                     continue;
-                }
+                } // don't re-attempt tiles we've already checked
 
                 ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
                 bool _canTraverse = info != null && !info.Data.IsSolid;
 
-                if (!_canTraverse || ContainsNode(neighborX, neighborY)) {
+                if (!_canTraverse || ContainsNode(neighborX, neighborY, toBeVisited)) {
                     continue;
                 }
 
@@ -72,7 +69,7 @@ public partial class MapService
                     Y = neighborY,
                     DistanceFromStart = distanceFromStart
                 };
-                _toBeVisited.Add(newNode);
+                toBeVisited.Add(newNode);
             }
             if (count > NumTriesAbort) {
                 CustomLogger.Error(nameof(MapService), $"{nameof(GetTraversableTiles)} Aborting after {count} steps!");
@@ -84,8 +81,8 @@ public partial class MapService
     }
 
     public static List<IntVector3> GetTraversableTiles(int radius, IntVector3 start, int minDistance = 0) {
-        _toBeVisited.Clear();
-        _alreadyVisited.Clear();
+        List<TileNode> toBeVisited = new List<TileNode>();
+        List<IntVector3> alreadyVisited = new List<IntVector3>();
 
         if(!LevelDataManager.Instance.IsWithinMap(start)) {
             CustomLogger.Warn(nameof(MapService), $"Starting position '{start}' is out of bounds!");
@@ -99,28 +96,29 @@ public partial class MapService
             DistanceFromStart = 0
         };
 
-        _toBeVisited.Add(current);
+        toBeVisited.Add(current);
         int count = 0;
 
-        while(_toBeVisited.Count != 0) {
+        while(toBeVisited.Count != 0) {
             count++;
-            current = _toBeVisited[0];
+            current = toBeVisited[0];
             TryAddToList(minDistance, traversableTargets, current);
-            _toBeVisited.RemoveAt(0);
-            _alreadyVisited.Add(new IntVector3(current.X, current.Y));
+            toBeVisited.RemoveAt(0);
+            alreadyVisited.Add(new IntVector3(current.X, current.Y));
 
             for(int i = 0; i < Directions.Length; i++) {
                 int dirX = Directions[i].x;
                 int dirY = Directions[i].y;
                 int neighborX = current.X + Directions[i].x;
                 int neighborY = current.Y + Directions[i].y;
+                IntVector3 neighbor = new IntVector3(neighborX, neighborY);
 
                 int distanceFromStart = Mapservice.DistanceFromStart(start.x, start.y, neighborX, neighborY);
                 if(distanceFromStart > radius) {
                     continue;
                 }
 
-                if (_alreadyVisited.Contains(new IntVector3(neighborX, neighborY))) {
+                if (alreadyVisited.Contains(neighbor) || !LevelDataManager.Instance.IsWithinMap(neighbor)) {
                     continue;
                 }
 
@@ -142,7 +140,7 @@ public partial class MapService
                     }
                 }
 
-                if (ContainsNode(neighborX, neighborY)) {
+                if (ContainsNode(neighborX, neighborY, toBeVisited)) {
                     continue;
                 }
 
@@ -151,7 +149,7 @@ public partial class MapService
                     Y = neighborY,
                     DistanceFromStart = distanceFromStart
                 };
-                _toBeVisited.Add(newNode);
+                toBeVisited.Add(newNode);
             }
             if(count > NumTriesAbort) {
                 CustomLogger.Error(nameof(MapService), $"{nameof(GetTraversableTiles)} Aborting after {count} steps!");
@@ -172,9 +170,9 @@ public partial class MapService
         }
     }
 
-    private static bool ContainsNode(int x, int y) {
-        for (int i = 0; i < _toBeVisited.Count; i++) {
-            if (_toBeVisited[i].X == x && _toBeVisited[i].Y == y) {
+    private static bool ContainsNode(int x, int y, List<TileNode> toBeVisited) {
+        for (int i = 0; i < toBeVisited.Count; i++) {
+            if (toBeVisited[i].X == x && toBeVisited[i].Y == y) {
                 return true;
             }
         }
