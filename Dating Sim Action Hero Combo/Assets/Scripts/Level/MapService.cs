@@ -47,18 +47,20 @@ public partial class MapService
                 int dirY = Directions[i].y;
                 int neighborX = current.X + Directions[i].x;
                 int neighborY = current.Y + Directions[i].y;
-
-                int distanceFromStart = Mapservice.DistanceFromStart(start.x, start.y, neighborX, neighborY);
+                IntVector3 neighbor = new IntVector3(neighborX, neighborY);
+                int distanceFromStart = DistanceFromStart(start.x, start.y, neighborX, neighborY);
                 if (distanceFromStart > radius) {
                     continue;
                 } // stay within the radius
-
+                if(!LevelDataManager.Instance.IsWithinMap(neighbor)) {
+                    continue;
+                } // don't check outside of map
                 if (alreadyVisited.Contains(new IntVector3(neighborX, neighborY))) {
                     continue;
                 } // don't re-attempt tiles we've already checked
 
                 ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = info != null && !info.Data.IsSolid;
+                bool _canTraverse = info != null && info.Occupant == null;
 
                 if (!_canTraverse || ContainsNode(neighborX, neighborY, toBeVisited)) {
                     continue;
@@ -113,8 +115,8 @@ public partial class MapService
                 int neighborY = current.Y + Directions[i].y;
                 IntVector3 neighbor = new IntVector3(neighborX, neighborY);
 
-                int distanceFromStart = Mapservice.DistanceFromStart(start.x, start.y, neighborX, neighborY);
-                if(distanceFromStart > radius) {
+                int distanceFromStart = DistanceFromStart(start.x, start.y, neighborX, neighborY);
+                if (distanceFromStart > radius) {
                     continue;
                 }
 
@@ -123,7 +125,7 @@ public partial class MapService
                 }
 
                 ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = info != null && !info.Data.IsSolid;
+                bool _canTraverse = info != null && info.Occupant == null;
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -133,10 +135,10 @@ public partial class MapService
                     ITileInfo neighborTileY = LevelDataManager.Instance.GetTileAt(current.X, current.Y + dirY);
                     // check if both tiles are available
                     if (neighborTileX != null) {
-                        _canTraverse &= !neighborTileX.Data.IsSolid;
+                        _canTraverse &= neighborTileX.Occupant == null;
                     }
                     if(neighborTileY != null) {
-                        _canTraverse &= !neighborTileY.Data.IsSolid;
+                        _canTraverse &= neighborTileY.Occupant == null;
                     }
                 }
 

@@ -4,10 +4,9 @@ using UnityEngine;
 /// <summary>
 /// Class that helps build paths for NPCs and enemies
 /// </summary>
-public partial class Mapservice
-{
 
-    public const int NumTriesAbort = 500;
+public partial class MapService
+{
 
     private static IntVector3[] _directions = {
         new IntVector3(1, 0),
@@ -20,8 +19,8 @@ public partial class Mapservice
         new IntVector3(1, 1)
     };
 
-    public static PathStatus GetPathToDestination(IntVector3 startPosition, IntVector3 targetDestination, out List<IntVector3> path) {
-        path = new List<IntVector3>();
+    public static PathStatus GetPathToDestination(IntVector3 startPosition, IntVector3 targetDestination, List<IntVector3> path) {
+        path?.Clear();
         List<TileNode> toBeVisited = new List<TileNode>();
         List<IntVector3> alreadyVisited = new List<IntVector3>();
 
@@ -30,7 +29,7 @@ public partial class Mapservice
             return PathStatus.Invalid;
         }
         ITileInfo info = LevelDataManager.Instance.GetTileAt(targetDestination.x, targetDestination.y);
-        if (info != null && info.Data.IsSolid) {
+        if (info != null && info.Occupant != null) {
             CustomLogger.Warn(nameof(MapService), $"Target Destination {targetDestination} is solid!");
             return PathStatus.Invalid;
         }
@@ -75,8 +74,11 @@ public partial class Mapservice
                 if (alreadyVisited.Contains(neighbor)) {
                     continue;
                 }
+                if(!LevelDataManager.Instance.IsWithinMap(neighbor)) {
+                    continue;
+                }
                 ITileInfo tileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = tileInfo != null && !tileInfo.Data.IsSolid;
+                bool _canTraverse = tileInfo != null && tileInfo.Occupant == null;
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -85,8 +87,8 @@ public partial class Mapservice
                     ITileInfo neighborTileX = LevelDataManager.Instance.GetTileAt(current.X + dirX, current.Y);
                     ITileInfo neighborTileY = LevelDataManager.Instance.GetTileAt(current.X, current.Y + dirY);
                     // check if both tiles are available
-                    _canTraverse &= !neighborTileX.Data.IsSolid;
-                    _canTraverse &= !neighborTileY.Data.IsSolid;
+                    _canTraverse &= neighborTileX.Occupant == null;
+                    _canTraverse &= neighborTileY.Occupant == null;
                 }
 
                 int distanceFromStart = DistanceFromStart(startX, startY, neighborX, neighborY);

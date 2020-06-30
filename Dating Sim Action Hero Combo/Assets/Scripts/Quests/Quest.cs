@@ -7,12 +7,13 @@ public class Quest : ScriptableObject
 {
 
     public enum QuestStatus {
-        NotStarted, Ongoing, Completed, Failed
+        NotStarted, Ongoing, Completed, Failed, Aborted
     }
 
     public QuestStatus Status { get; protected set; }
 
     public event Action OnCompleted;
+    public event Action OnAbort;
     public event Action OnFailed;
 
     public virtual void Begin() {
@@ -24,8 +25,13 @@ public class Quest : ScriptableObject
         OnCompleted?.Invoke();
     }
 
-    protected void FireOnFaile() {
+    protected void FireOnFailed() {
         Status = QuestStatus.Failed;
+        OnFailed?.Invoke();
+    }
+
+    protected void FireOnAbort() {
+        Status = QuestStatus.Aborted;
         OnFailed?.Invoke();
     }
 }

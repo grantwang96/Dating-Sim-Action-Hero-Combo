@@ -7,12 +7,16 @@ public class EliminateTargetQuest : Quest
 {
     [SerializeField] private string _unitId;
     [SerializeField] private string _unitType;
-    [SerializeField] private Vector2 _location;
+    [SerializeField] private string _spawnId;
 
     public override void Begin() {
         base.Begin();
-
-        EnemyManager.Instance.SpawnEnemy(_location, _unitType, _unitId);
+        if(!LevelDataManager.Instance.TryGetEnemySpawn(_spawnId, out EnemySpawn spawn)) {
+            CustomLogger.Error(nameof(EliminateTargetQuest), $"Could not retrieve enemy spawn point with id {_spawnId}!");
+            FireOnAbort();
+            return;
+        }
+        spawn.Spawn(_unitType, _unitId);
         EnemyManager.Instance.OnEnemyDefeated += OnEnemyDefeated;
     }
 

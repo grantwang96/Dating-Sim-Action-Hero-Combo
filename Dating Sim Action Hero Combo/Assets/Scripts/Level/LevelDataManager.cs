@@ -15,6 +15,10 @@ public interface ILevelDataManager {
     ITileInfo GetTileAt(int x, int y);
     List<ITileInfo> GetTilesWithinRadius(IntVector3 position, int radius);
     void SetOccupant(IntVector3 position, ITileOccupant occupant);
+
+    bool TryGetEnemySpawn(string id, out EnemySpawn spawn);
+    void RegisterEnemySpawn(string id, EnemySpawn spawn);
+    void DeregisterEnemySpawn(string id);
 }
 
 public enum PathStatus {
@@ -34,6 +38,8 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
 
     [SerializeField] private TileData _defaultTileData; // default tile (empty, probably)
     [SerializeField] private TileData[] _tileDatas; // tile datas to preload
+
+    private Dictionary<string, EnemySpawn> _enemySpawnPoints = new Dictionary<string, EnemySpawn>();
 
     private ITileInfo[][] _tiles;
     private Dictionary<string, TileData> _tileConfig = new Dictionary<string, TileData>();
@@ -116,5 +122,20 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
         worldPosition.x = x - (_mapSizeX / 2f);
         worldPosition.y = y - (_mapSizeY / 2f);
         return worldPosition;
+    }
+
+    public bool TryGetEnemySpawn(string id, out EnemySpawn spawn) {
+        return _enemySpawnPoints.TryGetValue(id, out spawn);
+    }
+
+    public void RegisterEnemySpawn(string id, EnemySpawn spawn) {
+        if (_enemySpawnPoints.ContainsKey(id)) {
+            return;
+        }
+        _enemySpawnPoints.Add(id, spawn);
+    }
+
+    public void DeregisterEnemySpawn(string id) {
+        _enemySpawnPoints.Remove(id);
     }
 }
