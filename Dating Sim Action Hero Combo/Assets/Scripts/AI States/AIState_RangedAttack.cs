@@ -4,27 +4,29 @@ using UnityEngine;
 
 public class AIState_RangedAttack : AIState_Attack
 {
-    public override bool Execute() {
+    [SerializeField] private NPCTargetManager _npcTargetManager;
+
+    public override void Execute() {
         // fail if there is no move controller or target
         if (_moveController == null || _target == null) {
-            SetNextTransition(AIStateTransitionId.OnUnitEnemyLost);
-            return true;
+            OnLostTarget();
+            return;
         }
         base.Execute();
         if (!CanAttack()) {
-            LostTarget();
-            return true;
+            OnLostTarget();
+            return;
         }
         Attack();
-        return base.Execute();
+        base.Execute();
     }
 
-    private void LostTarget() {
+    protected override void OnLostTarget() {
         _moveController.SetLookTarget(null);
-        SetNextTransition(AIStateTransitionId.OnUnitEnemyLost);
+        base.OnLostTarget();
     }
 
     protected override bool CanAttack() {
-        return AIState_Scan.Scan(_target, _unit.transform, _unitData.VisionRange, _unitData.VisionLayers);
+        return _npcTargetManager.ScanForHostile(_npcTargetManager.CurrentTarget);
     }
 }

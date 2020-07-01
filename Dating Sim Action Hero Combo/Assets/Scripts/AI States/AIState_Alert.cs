@@ -8,6 +8,7 @@ public class AIState_Alert : AIState {
 
     [SerializeField] private NPCMoveController _moveController;
     [SerializeField] private Animator _animator;
+    [SerializeField] private AIState _onAnimationCompleteState;
 
     private bool _isComplete;
     
@@ -26,24 +27,23 @@ public class AIState_Alert : AIState {
         StartAnimation();
     }
 
-    public override bool Execute() {
+    public override void Execute() {
         base.Execute();
         if (_isComplete) {
-            return true;
+            return;
         }
         AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
         if (info.IsName(AIState_Alert.AlertStateName) && info.normalizedTime >= 1f) {
             OnAlertAnimationComplete();
-            return true;
+            return;
         }
-        return false;
     }
 
     private void OnAlertAnimationComplete() {
         // change animation state
         // temp: Force change animation to normal
         _animator.Play("Normal");
-        SetNextTransition(AIStateTransitionId.OnUnitAlerted);
+        SetReadyToTransition(_onAnimationCompleteState);
         _isComplete = true;
     }
 }

@@ -6,8 +6,12 @@ using System;
 public abstract class MoveController : MonoBehaviour {
 
     [SerializeField] protected Rigidbody2D _rigidbody;
+    [SerializeField] protected Transform _body;
+    [SerializeField] protected Transform _front;
 
     public IntVector3 MapPosition { get; protected set; }
+    public Transform Body => _body;
+    public Transform Front => _front;
 
     protected abstract void ProcessMovement();
     protected abstract void ProcessRotation();

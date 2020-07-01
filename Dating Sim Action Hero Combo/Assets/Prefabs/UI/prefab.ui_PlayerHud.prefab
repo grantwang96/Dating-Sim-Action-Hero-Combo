@@ -173,11 +173,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4820546905944142814, guid: a1ee55e10114a2e44a25c1c581184bef,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 40
-      objectReference: {fileID: 0}
     - target: {fileID: 4820546905944142815, guid: a1ee55e10114a2e44a25c1c581184bef,
         type: 3}
       propertyPath: m_Color.r
@@ -192,6 +187,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.b
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4820546905944142814, guid: a1ee55e10114a2e44a25c1c581184bef,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4820546905274305709, guid: a1ee55e10114a2e44a25c1c581184bef,
         type: 3}
@@ -345,11 +345,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4820546905944142814, guid: a1ee55e10114a2e44a25c1c581184bef,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 4820546905944142815, guid: a1ee55e10114a2e44a25c1c581184bef,
         type: 3}
       propertyPath: m_Color.r
@@ -364,6 +359,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.b
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4820546905944142814, guid: a1ee55e10114a2e44a25c1c581184bef,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1ee55e10114a2e44a25c1c581184bef, type: 3}

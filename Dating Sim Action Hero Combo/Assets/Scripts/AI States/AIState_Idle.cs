@@ -10,23 +10,24 @@ public class AIState_Idle : AIState {
     private float _duration;
     private float _currentTime;
 
+    [SerializeField] private AIState _onIdleComplete;
+
     public override void Enter(AIStateInitializationData initData = null) {
         _duration = Random.Range(_minimumIdleTime, _maximumIdleTime);
         _currentTime = 0f;
         base.Enter(initData);
     }
 
-    public override bool Execute() {
+    public override void Execute() {
         base.Execute();
-        return IncrementTime();
+        IncrementTime();
     }
 
-    private bool IncrementTime() {
+    private void IncrementTime() {
         _currentTime += Time.deltaTime;
         if (_currentTime >= _duration) {
-            SetNextTransition(AIStateTransitionId.OnIdleFinished);
-            return true;
+            SetReadyToTransition(_onIdleComplete);
+            return;
         }
-        return false;
     }
 }

@@ -23,8 +23,6 @@ public class UnitsManager : MonoBehaviour, IUnitsManager
     public void RegisterUnit(Unit unit) {
         _allUnits.Add(unit);
         AddUnitToUnitsByTags(unit, unit.UnitTags);
-
-        unit.OnUnitTagsSet += OnUnitTagsUpdated;
     }
 
     private void AddUnitToUnitsByTags(Unit unit, UnitTags tags) {
@@ -37,7 +35,6 @@ public class UnitsManager : MonoBehaviour, IUnitsManager
     public void DeregisterUnit(Unit unit) {
         _allUnits.Remove(unit);
         RemoveUnitFromUnitsByTags(unit, unit.UnitTags);
-        unit.OnUnitTagsSet -= OnUnitTagsUpdated;
     }
 
     private void RemoveUnitFromUnitsByTags(Unit unit, UnitTags tags) {

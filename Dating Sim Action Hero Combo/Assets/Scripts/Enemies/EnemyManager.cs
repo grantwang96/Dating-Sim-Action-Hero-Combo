@@ -1,17 +1,15 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public interface IEnemyManager {
 
-    IReadOnlyList<EnemyController> AllEnemies { get; }
+    IReadOnlyList<EnemyUnit> AllEnemies { get; }
 
-    event Action<AIStateTransitionId, NPCUnitController> OnUnitBroadcastMessage;
-    event Action<UnitController> OnEnemyDefeated;
+    event Action<Unit> OnEnemyDefeated;
 
     void SpawnEnemy(Vector2 position, string enemyType, string overrideId);
-    void DespawnEnemy(EnemyController controller);
+    void DespawnEnemy(EnemyUnit controller);
 }
 
 public class EnemyManager : MonoBehaviour, IEnemyManager
@@ -20,48 +18,21 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
     [SerializeField] private List<EnemyData> _allEnemyTypes = new List<EnemyData>();
 
     private Dictionary<string, EnemyData> _enemyDataConfig = new Dictionary<string, EnemyData>();
-    private List<EnemyController> _enemyControllers = new List<EnemyController>();
+    private List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
     // dictionary of enemies by job <Job, List<EnemyController>;
 
-    [SerializeField] private EnemyManagerState _currentState;
-    [SerializeField] private List<EM_StateTransitionEntry> _EMStateTransitionEntries = new List<EM_StateTransitionEntry>();
-    private Dictionary<EM_StateTransitionId, EnemyManagerState> _stateList = new Dictionary<EM_StateTransitionId, EnemyManagerState>();
-
-    public IReadOnlyList<EnemyController> AllEnemies => _enemyControllers;
-
-    public event Action<AIStateTransitionId, NPCUnitController> OnUnitBroadcastMessage;
-    public event Action<UnitController> OnEnemyDefeated;
+    public IReadOnlyList<EnemyUnit> AllEnemies => _enemyUnits;
+    public event Action<Unit> OnEnemyDefeated;
 
     #region INITIALIZATION
     private void Awake() {
         Instance = this;
         LoadEnemyConfig();
-        LoadManagerStates();
-        ChangeState(_currentState);
     }
 
     private void LoadEnemyConfig() {
         for(int i = 0; i < _allEnemyTypes.Count; i++) {
             _enemyDataConfig.Add(_allEnemyTypes[i].name, _allEnemyTypes[i]);
-        }
-    }
-
-    private void LoadManagerStates() {
-        _stateList.Clear();
-        for (int i = 0; i < _EMStateTransitionEntries.Count; i++) {
-            _stateList.Add(_EMStateTransitionEntries[i].TransitionId, _EMStateTransitionEntries[i].State);
-        }
-    }
-    #endregion
-
-    #region UPDATE LOOP
-    private void Update() {
-        ProcessEnemyControllers();
-    }
-
-    private void ProcessEnemyControllers() {
-        for(int i = 0; i < _enemyControllers.Count; i++) {
-            _enemyControllers[i].ExecuteState();
         }
     }
     #endregion
@@ -89,48 +60,16 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         // prep unit
         unit.transform.position = position;
 
-        // create enemy controller for unit here
-        EnemyController enemyController = new EnemyController(data, unit, overrideId);
-        enemyController.OnAIStateReadyToTransition += OnAIStateReadyToTransition;
-        enemyController.OnUnitDefeated += OnUnitDefeated;
-        enemyController.TransitionState(AIStateTransitionId.OnUnitInitialized);
-
         // add enemy controller to list and dictionary
-        _enemyControllers.Add(enemyController);
+        _enemyUnits.Add(unit);
     }
 
-    public void DespawnEnemy(EnemyController controller) {
+    public void DespawnEnemy(EnemyUnit controller) {
         // remove from all listings
-        controller.Dispose();
-        _enemyControllers.Remove(controller);
-    }
-    
-    private void OnAIStateReadyToTransition(AIStateTransitionId id, NPCUnitController controller) {
-        _currentState.OnControllerReadyToTransition(id, controller);
+        _enemyUnits.Remove(controller);
     }
 
-    private void BroadcastMessageToUnits(AIStateTransitionId id, NPCUnitController controller) {
-        OnUnitBroadcastMessage?.Invoke(id, controller);
-    }
-
-    private void ChangeState(EnemyManagerState newState) {
-        if(_currentState != null) {
-            _currentState.Exit();
-            _currentState.OnBroadcastUnitStateChange -= BroadcastMessageToUnits;
-        }
-        _currentState = newState;
-        _currentState.Enter();
-        _currentState.OnBroadcastUnitStateChange += BroadcastMessageToUnits;
-    }
-
-    private void OnUnitDefeated(UnitController unit) {
-        unit.OnUnitDefeated -= OnUnitDefeated;
+    private void OnUnitDefeated(Unit unit) {
         OnEnemyDefeated?.Invoke(unit);
     }
-}
-
-[System.Serializable]
-public class EM_StateTransitionEntry {
-    public EM_StateTransitionId TransitionId;
-    public EnemyManagerState State;
 }

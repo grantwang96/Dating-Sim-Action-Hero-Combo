@@ -5,44 +5,22 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class Unit : MonoBehaviour, IDamageable, ISoundListener
+public class Unit : MonoBehaviour
 {
     [SerializeField] private UnitTags _unitTags;
     public UnitTags UnitTags => _unitTags;
 
     [SerializeField] protected Animator _animator;
+    [SerializeField] protected MoveController _moveController;
+    [SerializeField] protected UnitDamageable _damageable;
+    [SerializeField] protected UnitAnimationController _animationController;
+    [SerializeField] protected UnitData _unitData;
+
     public Animator Animator => _animator;
-    public abstract MoveController MoveController { get; }
-
-    public abstract Transform Transform { get; }
-    public abstract Transform Front { get; }
-
-    public event Action<Unit, UnitTags> OnUnitTagsSet;
-    public event Action<int, DamageType, Unit> OnTakeDamage;
-    public event Action<int> OnHealDamage;
-
-    public event Action<IntVector3, Unit> OnCombatSoundHeard;
-
-    public virtual void SetUnitTags(UnitTags newTags) {
-        OnUnitTagsSet?.Invoke(this, newTags);
-        _unitTags = newTags;
-    }
-
-    public virtual void TakeDamage(int damage, DamageType damageType, Unit attacker) {
-        OnTakeDamage?.Invoke(damage, damageType, attacker);
-    }
-
-    public virtual void Heal(int damage) {
-        OnHealDamage?.Invoke(damage);
-    }
-
-    public virtual void OnSoundHeard(IntVector3 origin, Unit source = null) {
-        OnCombatSoundHeard?.Invoke(origin, source);
-    }
-
-    public virtual void SetUnitComponent() {
-
-    }
+    public MoveController MoveController => _moveController;
+    public IDamageable Damageable => _damageable;
+    public IAnimationController AnimationController => _animationController;
+    public UnitData UnitData => _unitData;
 }
 
 [System.Flags]

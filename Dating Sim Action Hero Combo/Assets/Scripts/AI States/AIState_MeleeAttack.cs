@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class AIState_MeleeAttack : AIState_Attack {
 
-    public override bool Execute() {
+    [SerializeField] private AIState _onTargetOutOfRange;
+
+    public override void Execute() {
         // fail if there is no move controller or target
         if (_moveController == null || _target == null) {
-            SetNextTransition(AIStateTransitionId.OnUnitEnemyLost);
-            return true;
+            OnLostTarget();
+            return;
         }
         base.Execute();
         if (!CanAttack()) {
-            SetNextTransition(AIStateTransitionId.OnUnitChase);
-            return true;
+            SetReadyToTransition(_onTargetOutOfRange);
+            return;
         }
         Attack();
-        return false;
     }
 
     protected override bool CanAttack() {

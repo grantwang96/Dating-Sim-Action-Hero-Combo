@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateController : UnitController {
+public class PlayerStateController {
 
     public static PlayerStateController Instance { get; private set; }
 
+    public Weapon EquippedWeapon { get; protected set; }
     public int StartingAmmoClips => _config.TotalAmmoClips;
 
     private PlayerConfig _config;
@@ -22,37 +23,24 @@ public class PlayerStateController : UnitController {
     }
 
     private PlayerStateController(PlayerConfig config) {
-        UnitId = PlayerConfig.PlayerUnitId;
         _config = config;
         PlayerUnit.OnPlayerUnitInstanceSet += OnPlayerUnitSpawned;
     }
 
     private void ResetController() {
-        Health = _config.MaxHealth;
         // temp until save system works
         EquippedWeapon = new Weapon(_config.CurrentLoadout, _config.TotalAmmoClips * _config.CurrentLoadout.ClipSize);
     }
 
     private void OnPlayerUnitSpawned() {
-        PlayerUnit.Instance.OnTakeDamage += OnTakeDamage;
-        PlayerUnit.Instance.OnHealDamage += OnHealDamage;
+        PlayerUnit.Instance.Damageable.OnTakeDamage += OnTakeDamage;
     }
 
     private void OnGameEnded() {
-        PlayerUnit.Instance.OnTakeDamage -= OnTakeDamage;
-        PlayerUnit.Instance.OnHealDamage -= OnHealDamage;
+        PlayerUnit.Instance.Damageable.OnTakeDamage -= OnTakeDamage;
     }
 
-    protected override void OnTakeDamage(int damage, DamageType damageType, Unit attacker) {
-        if(Health <= 0) {
-            return;
-        }
+    protected void OnTakeDamage(int damage, DamageType damageType, Unit attacker) {
         int totalDamage = damage;
-        // update health and states
-        Health -= totalDamage;
-        FireHealthChanged(-totalDamage);
-        if (Health <= 0) {
-            UnitDefeated();
-        }
     }
 }

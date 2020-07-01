@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class AIState_EngageHostile : AIState {
 
-    public override bool Execute() {
+    [SerializeField] private AIState _rangedAttackState;
+    [SerializeField] private AIState _meleeAttackState;
+    [SerializeField] private AIState _onDisarmedState;
+
+    public override void Execute() {
+        /*
         if (_controller.EquippedWeapon == null) {
             // set the controller to run away or find a new weapon
-            SetNextTransition(AIStateTransitionId.OnUnitDefeated);
-            return true;
+            SetReadyToTransition(_onDisarmedState);
+            return;
         }
         if (_controller.EquippedWeapon.Data.IsRanged) {
             // set ranged attack state
-            SetNextTransition(AIStateTransitionId.OnUnitRangedAttack);
+            SetReadyToTransition(_rangedAttackState);
         } else {
             // set melee attack state
-            SetNextTransition(AIStateTransitionId.OnUnitMeleeAttack);
+            SetReadyToTransition(_meleeAttackState);
         }
-        return base.Execute();
+        */
+        base.Execute();
     }
 }

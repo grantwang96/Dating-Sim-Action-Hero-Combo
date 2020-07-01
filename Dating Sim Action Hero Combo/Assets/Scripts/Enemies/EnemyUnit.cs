@@ -7,7 +7,6 @@ public class EnemyUnit : NPCUnit, PooledObject {
 
     public void Despawn() {
         gameObject.SetActive(false);
-        _moveController.ClearDestination();
         PooledObjectManager.Instance.ReturnPooledObject(this.name, this);
     }
 
