@@ -6,11 +6,12 @@ using UnityEngine;
 public class PlayerStateController {
 
     public static PlayerStateController Instance { get; private set; }
-
-    public Weapon EquippedWeapon { get; protected set; }
+    public Weapon EquippedWeapon { get; private set; }
     public int StartingAmmoClips => _config.TotalAmmoClips;
 
     private PlayerConfig _config;
+
+    public event Action<int> OnHealthChanged;
 
     public static void Create(PlayerConfig config) {
         PlayerStateController controller = new PlayerStateController(config);
@@ -33,14 +34,10 @@ public class PlayerStateController {
     }
 
     private void OnPlayerUnitSpawned() {
-        PlayerUnit.Instance.Damageable.OnTakeDamage += OnTakeDamage;
+        PlayerUnit.Instance.Initialize(PlayerConfig.PlayerUnitId, _config.UnitData);
     }
 
     private void OnGameEnded() {
-        PlayerUnit.Instance.Damageable.OnTakeDamage -= OnTakeDamage;
-    }
 
-    protected void OnTakeDamage(int damage, DamageType damageType, Unit attacker) {
-        int totalDamage = damage;
     }
 }

@@ -11,6 +11,7 @@ public class AIState_Scan : AIState {
         base.Execute();
         bool foundHostile = ScanAll();
         if (foundHostile) {
+            Debug.Log("FoundHostile");
             OnFoundHostile();
             return;
         }
@@ -22,11 +23,7 @@ public class AIState_Scan : AIState {
     }
 
     private bool ScanAll() {
-        if (_targetManager.GeneralScan()) {
-            // TODO: set target in target manager
-            return true;
-        }
-        return false;
+        return _targetManager.GeneralScan();
     }
 }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class WorldTile : MonoBehaviour
 {
     [SerializeField] private string _tileType;
-    [SerializeField] private Collider _collider;
+    [SerializeField] private Collider2D _collider;
 
     private IntVector3 _mapPosition;
 

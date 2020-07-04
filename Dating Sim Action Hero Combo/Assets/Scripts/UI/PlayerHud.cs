@@ -13,9 +13,9 @@ public class PlayerHud : UIObject
     [SerializeField] private int _fullClip;
 
     private void Start() {
-        // PlayerStateController.Instance.OnHealthChanged += OnHealthChanged;
-        // _currentHealth = PlayerStateController.Instance.Health;
-        // _maxHealth = PlayerStateController.Instance.Health;
+        PlayerUnit.Instance.Damageable.OnCurrentHealthChanged += OnHealthChanged;
+        _currentHealth = PlayerUnit.Instance.Damageable.Health;
+        _maxHealth = PlayerUnit.Instance.Damageable.MaxHealth;
         _healthBar.UpdateValue((float)_currentHealth / _maxHealth);
 
         _ammo = PlayerCombatController.Instance.EquippedWeapon.CurrentClip;
@@ -26,7 +26,7 @@ public class PlayerHud : UIObject
     }
 
     private void OnDestroy() {
-        // PlayerStateController.Instance.OnHealthChanged -= OnHealthChanged;
+        PlayerUnit.Instance.Damageable.OnCurrentHealthChanged -= OnHealthChanged;
         PlayerCombatController.Instance.OnAmmoUpdated -= OnAmmoUpdated;
         PlayerCombatController.Instance.OnReloadStarted -= OnReloadStarted;
         PlayerCombatController.Instance.OnReloadFinished -= OnReloadFinished;

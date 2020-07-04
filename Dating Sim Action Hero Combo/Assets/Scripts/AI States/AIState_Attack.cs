@@ -4,12 +4,11 @@ using UnityEngine;
 
 public abstract class AIState_Attack : AIState
 {
+    [SerializeField] protected NPCNavigator _navigator;
+    [SerializeField] protected NPCCombatController _combatController;
     [SerializeField] protected NPCMoveController _moveController;
     [SerializeField] protected NPCTargetManager _targetManager;
     [SerializeField] protected AIState _onLostTargetState;
-
-    protected Unit _target;
-    protected Weapon _equippedWeapon;
 
     public override void Enter(AIStateInitializationData initData = null) {
         // if there is not target present (ex. heard a noise)
@@ -17,19 +16,17 @@ public abstract class AIState_Attack : AIState
             OnLostTarget();
             return;
         }
-        _target = _targetManager.CurrentTarget;
-        // _equippedWeapon = _unit.UnitData;
-        _moveController.ClearDestination();
-        _moveController.SetLookTarget(_target.transform);
+        _navigator.ClearDestination();
+        _navigator.LookTarget = _targetManager.CurrentTarget.transform;
         base.Enter(initData);
     }
     
-    protected virtual bool CanAttack() {
+    public virtual bool CanAttack() {
         return true;
     }
 
     protected virtual void Attack() {
-        _equippedWeapon.Use(_equippedWeapon.Data.ActivateTime, _unit);
+        _combatController.EquippedWeapon.Use(_combatController.EquippedWeapon.Data.ActivateTime, _unit);
     }
 
     protected virtual void OnLostTarget() {

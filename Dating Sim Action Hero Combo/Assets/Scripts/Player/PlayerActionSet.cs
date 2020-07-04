@@ -71,6 +71,7 @@ public class PlayerActionController : IPlayerActionController {
     }
 
     private void OnUnitPositionUpdated(IntVector3 position) {
+        /*
         _currentInteractable = null;
         List<ITileInfo> tiles = LevelDataManager.Instance.GetTilesWithinRadius(position, 1);
         // TODO: sort this list by priority if multiple objects are interactable. For now, just use first object
@@ -80,6 +81,6 @@ public class PlayerActionController : IPlayerActionController {
                 _currentInteractable = interactable;
                 break;
             }
-        }
+        }*/
     }
 }

@@ -1,11 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
+public enum AnimationStatus {
+    Started,
+    InProgress,
+    Completed
+}
 
 public interface IAnimationController {
 
     void UpdateState(AnimationStateData data);
     void OverrideAnimationController(AnimatorOverrideController overrideController);
+
+    event Action<AnimationStatus> OnAnimationStatusUpdated;
 }
 
 [System.Serializable]
@@ -27,6 +36,8 @@ public class AnimationStateData {
 
 public class UnitAnimationController : MonoBehaviour, IAnimationController
 {
+    public event Action<AnimationStatus> OnAnimationStatusUpdated;
+
     [SerializeField] private Animator _animator;
 
     public void UpdateState(AnimationStateData data) {
@@ -53,5 +64,9 @@ public class UnitAnimationController : MonoBehaviour, IAnimationController
 
     public void OverrideAnimationController(AnimatorOverrideController overrideController) {
 
+    }
+
+    private void UpdateAnimationStatus(AnimationStatus status) {
+        OnAnimationStatusUpdated?.Invoke(status);
     }
 }

@@ -9,14 +9,13 @@ public class NPCUnit : Unit
 {
     [SerializeField] protected SpriteRenderer _spriteRenderer;
     [SerializeField] protected CircleCollider2D _collider;
+    [SerializeField] protected NPCCombatController _combatController;
 
-    public event Action OnUnitInitialized; // when a controller has taken control of this unit GO
+    public NPCCombatController CombatController => _combatController;
 
-    public void Initialize(RuntimeAnimatorController animController, float size) {
-        _animator.runtimeAnimatorController = animController;
-        _collider.radius = size;
-        OnUnitInitialized?.Invoke();
-
+    public override void Initialize(string unitId, UnitData data) {
+        _collider.radius = .5f; // replace with UnitData field
         MoveController.Initialize();
+        base.Initialize(unitId, data);
     }
 }

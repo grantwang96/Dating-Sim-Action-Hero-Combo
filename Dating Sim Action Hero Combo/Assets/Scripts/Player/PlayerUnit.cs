@@ -9,12 +9,14 @@ public class PlayerUnit : Unit, ITileOccupant {
 
     public static event Action OnPlayerUnitInstanceSet;
 
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
         Instance = this;
         OnPlayerUnitInstanceSet?.Invoke();
     }
 
-    private void Start() {
+    protected override void Start() {
+        base.Start();
         UnitsManager.Instance.RegisterUnit(this);
         // temp
         UIObject playerHud = UIManager.Instance.CreateNewUIObject("prefab.ui_PlayerHud", UILayerId.HUD);

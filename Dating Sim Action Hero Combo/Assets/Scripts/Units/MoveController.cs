@@ -8,8 +8,9 @@ public abstract class MoveController : MonoBehaviour {
     [SerializeField] protected Rigidbody2D _rigidbody;
     [SerializeField] protected Transform _body;
     [SerializeField] protected Transform _front;
+    [SerializeField] protected IntVector3 _mapPosition;
 
-    public IntVector3 MapPosition { get; protected set; }
+    public IntVector3 MapPosition => _mapPosition;
     public Transform Body => _body;
     public Transform Front => _front;
 
@@ -28,7 +29,7 @@ public abstract class MoveController : MonoBehaviour {
     }
 
     protected virtual void UpdateMapSpacePosition(IntVector3 position) {
-        MapPosition = position;
+        _mapPosition = position;
         OnMapPositionUpdated?.Invoke(MapPosition);
     }
 }

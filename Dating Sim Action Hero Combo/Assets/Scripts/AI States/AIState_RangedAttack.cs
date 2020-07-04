@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class AIState_RangedAttack : AIState_Attack
 {
-    [SerializeField] private NPCTargetManager _npcTargetManager;
-
     public override void Execute() {
         // fail if there is no move controller or target
-        if (_moveController == null || _target == null) {
+        if (_moveController == null || _targetManager.CurrentTarget == null) {
             OnLostTarget();
             return;
         }
@@ -22,11 +20,11 @@ public class AIState_RangedAttack : AIState_Attack
     }
 
     protected override void OnLostTarget() {
-        _moveController.SetLookTarget(null);
+        _navigator.LookTarget = null;
         base.OnLostTarget();
     }
 
-    protected override bool CanAttack() {
-        return _npcTargetManager.ScanForHostile(_npcTargetManager.CurrentTarget);
+    public override bool CanAttack() {
+        return _targetManager.ScanForHostile(_targetManager.CurrentTarget);
     }
 }

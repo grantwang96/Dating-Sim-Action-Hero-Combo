@@ -59,17 +59,23 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
         }
         // prep unit
         unit.transform.position = position;
+        unit.Initialize(overrideId, data);
+        unit.CombatController.SetWeapon(data.EquippedWeapon);
+        unit.OnUnitDefeated += OnUnitDefeated;
+        unit.Spawn();
 
         // add enemy controller to list and dictionary
         _enemyUnits.Add(unit);
     }
 
-    public void DespawnEnemy(EnemyUnit controller) {
+    public void DespawnEnemy(EnemyUnit unit) {
         // remove from all listings
-        _enemyUnits.Remove(controller);
+        _enemyUnits.Remove(unit);
+        unit.Despawn();
     }
 
     private void OnUnitDefeated(Unit unit) {
+        unit.OnUnitDefeated -= OnUnitDefeated;
         OnEnemyDefeated?.Invoke(unit);
     }
 }

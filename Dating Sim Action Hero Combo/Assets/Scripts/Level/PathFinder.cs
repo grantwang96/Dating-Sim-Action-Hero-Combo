@@ -20,10 +20,12 @@ public partial class MapService
     };
 
     public static PathStatus GetPathToDestination(IntVector3 startPosition, IntVector3 targetDestination, List<IntVector3> path) {
+        // setup for path finding
         path?.Clear();
         List<TileNode> toBeVisited = new List<TileNode>();
         List<IntVector3> alreadyVisited = new List<IntVector3>();
 
+        // validate the given destination first
         if (!LevelDataManager.Instance.IsWithinMap(targetDestination)) {
             CustomLogger.Warn(nameof(MapService), $"Target Destination {targetDestination} is out of bounds!");
             return PathStatus.Invalid;
@@ -41,6 +43,7 @@ public partial class MapService
         toBeVisited.Clear();
         alreadyVisited.Clear();
 
+        // this current node will be the first node that we check
         TileNode current = new TileNode() {
             X = startX,
             Y = startY,
@@ -78,7 +81,7 @@ public partial class MapService
                     continue;
                 }
                 ITileInfo tileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = tileInfo != null && tileInfo.Occupant == null;
+                bool _canTraverse = tileInfo != null && tileInfo.Occupant == null && !info.Data.IsSolid;
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -87,8 +90,8 @@ public partial class MapService
                     ITileInfo neighborTileX = LevelDataManager.Instance.GetTileAt(current.X + dirX, current.Y);
                     ITileInfo neighborTileY = LevelDataManager.Instance.GetTileAt(current.X, current.Y + dirY);
                     // check if both tiles are available
-                    _canTraverse &= neighborTileX.Occupant == null;
-                    _canTraverse &= neighborTileY.Occupant == null;
+                    _canTraverse &= neighborTileX.Occupant == null && !neighborTileX.Data.IsSolid;
+                    _canTraverse &= neighborTileY.Occupant == null && !neighborTileY.Data.IsSolid;
                 }
 
                 int distanceFromStart = DistanceFromStart(startX, startY, neighborX, neighborY);

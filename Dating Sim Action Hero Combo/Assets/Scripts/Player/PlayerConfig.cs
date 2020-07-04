@@ -17,4 +17,6 @@ public class PlayerConfig : ScriptableObject
     public int TotalAmmoClips => _totalAmmoClips;
     [SerializeField] private WeaponData _currentLoadout;
     public WeaponData CurrentLoadout => _currentLoadout;
+    [SerializeField] private UnitData _playerUnitData;
+    public UnitData UnitData => _playerUnitData;
 }

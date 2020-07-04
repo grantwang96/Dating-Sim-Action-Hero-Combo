@@ -21,10 +21,9 @@ public class EliminateTargetQuest : Quest
     }
 
     private void OnEnemyDefeated(Unit unit) {
-        /*
         if (!unit.UnitId.Equals(_unitId)) {
             return;
-        }*/
+        }
         EnemyManager.Instance.OnEnemyDefeated -= OnEnemyDefeated;
         FireOnComplete();
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public partial class MapService
 {
-    public const int NumTriesAbort = 100;
+    public const int NumTriesAbort = 200;
 
     public static IntVector3[] Directions = {
         new IntVector3(1, 0),
@@ -17,6 +17,7 @@ public partial class MapService
     };
 
     public static List<IntVector3> GetPositionsWithinRadius(int minDistance, IntVector3 start, int radius) {
+        // setup for checks
         List<TileNode> toBeVisited = new List<TileNode>();
         List<IntVector3> alreadyVisited = new List<IntVector3>();
 
@@ -42,6 +43,7 @@ public partial class MapService
             toBeVisited.RemoveAt(0);
             alreadyVisited.Add(new IntVector3(current.X, current.Y));
 
+            // check all directions
             for (int i = 0; i < Directions.Length; i++) {
                 int dirX = Directions[i].x;
                 int dirY = Directions[i].y;
@@ -55,17 +57,19 @@ public partial class MapService
                 if(!LevelDataManager.Instance.IsWithinMap(neighbor)) {
                     continue;
                 } // don't check outside of map
-                if (alreadyVisited.Contains(new IntVector3(neighborX, neighborY))) {
+                if (alreadyVisited.Exists(x => x == neighbor)) {
                     continue;
                 } // don't re-attempt tiles we've already checked
 
+                // ensure that this tile is traversable
                 ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = info != null && info.Occupant == null;
+                bool _canTraverse = info != null && info.Occupant == null && !info.Data.IsSolid;
 
                 if (!_canTraverse || ContainsNode(neighborX, neighborY, toBeVisited)) {
                     continue;
                 }
 
+                // add this tile as a place to check
                 TileNode newNode = new TileNode() {
                     X = neighborX,
                     Y = neighborY,
@@ -73,6 +77,8 @@ public partial class MapService
                 };
                 toBeVisited.Add(newNode);
             }
+
+            // failsafe in case we end up in an infinite loop
             if (count > NumTriesAbort) {
                 CustomLogger.Error(nameof(MapService), $"{nameof(GetTraversableTiles)} Aborting after {count} steps!");
                 break;
@@ -125,7 +131,7 @@ public partial class MapService
                 }
 
                 ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = info != null && info.Occupant == null;
+                bool _canTraverse = info != null && info.Occupant == null && !info.Data.IsSolid;
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -161,12 +167,9 @@ public partial class MapService
 
         return traversableTargets;
     }
-
-    public static void TryAddToList(int minDistance, List<IntVector3> list, TileNode node) {
-        if(minDistance <= 0) {
-            list.Add(new IntVector3(node.X, node.Y));
-            return;
-        }
+    
+    // add this to the list if at the proper distance
+    private static void TryAddToList(int minDistance, List<IntVector3> list, TileNode node) {
         if(node.DistanceFromStart >= minDistance) {
             list.Add(new IntVector3(node.X, node.Y));
         }
