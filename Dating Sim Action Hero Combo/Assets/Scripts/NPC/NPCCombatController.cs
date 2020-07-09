@@ -7,6 +7,10 @@ public class NPCCombatController : MonoBehaviour
     public Weapon EquippedWeapon { get; private set; }
 
     public void SetWeapon(WeaponData data) {
-        EquippedWeapon = new Weapon(data, data.DefaultStartAmount);
+        EquippedWeapon = new NPCWeaponSlot(data, data.DefaultStartAmount);
+    }
+
+    public void UseWeapon(ActivateTime activateTime, Unit unit) {
+        EquippedWeapon.Use(activateTime, unit);
     }
 }

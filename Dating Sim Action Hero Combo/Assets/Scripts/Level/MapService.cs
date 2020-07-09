@@ -3,7 +3,7 @@ using UnityEngine;
 
 public partial class MapService
 {
-    public const int NumTriesAbort = 200;
+    public const int NumTriesAbort = 500;
 
     public static IntVector3[] Directions = {
         new IntVector3(1, 0),
@@ -62,8 +62,8 @@ public partial class MapService
                 } // don't re-attempt tiles we've already checked
 
                 // ensure that this tile is traversable
-                ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = info != null && info.Occupant == null && !info.Data.IsSolid;
+                ITileInfo neighborTileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
+                bool _canTraverse = neighborTileInfo != null && neighborTileInfo.Occupant == null && !neighborTileInfo.Data.IsSolid;
 
                 if (!_canTraverse || ContainsNode(neighborX, neighborY, toBeVisited)) {
                     continue;
@@ -130,8 +130,8 @@ public partial class MapService
                     continue;
                 }
 
-                ITileInfo info = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = info != null && info.Occupant == null && !info.Data.IsSolid;
+                ITileInfo neighborTileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
+                bool _canTraverse = IsTileTraversable(neighborTileInfo);
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -140,12 +140,8 @@ public partial class MapService
                     ITileInfo neighborTileX = LevelDataManager.Instance.GetTileAt(current.X + dirX, current.Y);
                     ITileInfo neighborTileY = LevelDataManager.Instance.GetTileAt(current.X, current.Y + dirY);
                     // check if both tiles are available
-                    if (neighborTileX != null) {
-                        _canTraverse &= neighborTileX.Occupant == null;
-                    }
-                    if(neighborTileY != null) {
-                        _canTraverse &= neighborTileY.Occupant == null;
-                    }
+                    _canTraverse &= IsTileTraversable(neighborTileX);
+                    _canTraverse &= IsTileTraversable(neighborTileY);
                 }
 
                 if (ContainsNode(neighborX, neighborY, toBeVisited)) {

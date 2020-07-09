@@ -1,9 +1,11 @@
-﻿using UnityEngine;
 using System;
+using UnityEngine;
 
-public interface ISoundListener
-{
-    event Action<IntVector3, Unit> OnCombatSoundHeard;
+public class UnitSoundListener : MonoBehaviour {
 
-    void OnSoundHeard(IntVector3 origin, Unit source = null);
+    public event Action<IntVector3, Unit> OnCombatNoiseHeard;
+
+    public virtual void OnSoundHeard(IntVector3 position, Unit source) {
+        OnCombatNoiseHeard?.Invoke(position, source);
+    }
 }

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIState_Scan : AIState {
-
+public class AIState_ScanForTarget : AIState
+{
     [SerializeField] private NPCTargetManager _targetManager;
-    [SerializeField] private AIState _onHostileFoundState;
-    
+    [SerializeField] private AIState _onTargetFound;
+
     public override void Execute() {
         base.Execute();
-        bool foundHostile = ScanAll();
+        bool foundHostile = ScanForTarget();
         if (foundHostile) {
             OnFoundHostile();
             return;
@@ -18,10 +18,10 @@ public class AIState_Scan : AIState {
     }
 
     private void OnFoundHostile() {
-        SetReadyToTransition(_onHostileFoundState);
+        SetReadyToTransition(_onTargetFound);
     }
 
-    private bool ScanAll() {
-        return _targetManager.GeneralScan();
+    private bool ScanForTarget() {
+        return _targetManager.ScanForTarget(_targetManager.CurrentTarget);
     }
 }

@@ -32,8 +32,8 @@ public class PlayerHud : UIObject
         PlayerCombatController.Instance.OnReloadFinished -= OnReloadFinished;
     }
 
-    private void OnHealthChanged(int change) {
-        _currentHealth += change;
+    private void OnHealthChanged(int newHealth) {
+        _currentHealth = newHealth;
         _healthBar.UpdateValue((float)_currentHealth / _maxHealth);
     }
 

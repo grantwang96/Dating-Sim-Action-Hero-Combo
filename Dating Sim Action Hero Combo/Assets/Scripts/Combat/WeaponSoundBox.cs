@@ -40,7 +40,7 @@ public class WeaponSoundBox : MonoBehaviour, PooledObject
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        ISoundListener soundListener = collision.GetComponent<ISoundListener>();
+        UnitSoundListener soundListener = collision.GetComponent<UnitSoundListener>();
         if(soundListener != null) {
             soundListener.OnSoundHeard(LevelDataManager.Instance.WorldToArraySpace(transform.position), _source);
         }

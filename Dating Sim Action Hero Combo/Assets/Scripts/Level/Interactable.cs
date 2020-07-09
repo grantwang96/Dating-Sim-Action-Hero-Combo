@@ -6,5 +6,7 @@ public interface IInteractable : ITileOccupant
 {
     bool Interactable { get; }
 
-    void Interact();
+    void InteractStart();
+    void InteractHold();
+    void InteractEnd();
 }

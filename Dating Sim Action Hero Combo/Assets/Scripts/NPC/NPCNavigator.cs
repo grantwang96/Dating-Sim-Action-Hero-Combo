@@ -88,7 +88,6 @@ public class NPCNavigator : MonoBehaviour
             return;
         }
         if(newPosition == _currentDestination) {
-            Debug.Log("Next");
             UpdateCurrentDestination();
         }
     }

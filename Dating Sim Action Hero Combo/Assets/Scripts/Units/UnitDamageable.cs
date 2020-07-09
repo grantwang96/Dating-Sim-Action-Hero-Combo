@@ -16,19 +16,19 @@ public class UnitDamageable : MonoBehaviour, IDamageable {
     public event Action<int> OnMaxHealthChanged;
     public event Action OnDefeated;
 
-    public void Initialize() {
+    public virtual void Initialize() {
         Health = _unit.UnitData.MaxHealth;
         MaxHealth = Health;
         OnCurrentHealthChanged?.Invoke(Health);
         OnMaxHealthChanged?.Invoke(MaxHealth);
     }
 
-    public void Heal(int damage) {
+    public virtual void Heal(int damage) {
         Health += damage;
         OnHealDamage?.Invoke(damage);
     }
 
-    public void TakeDamage(int damage, DamageType damageType, Unit attacker) {
+    public virtual void TakeDamage(int damage, DamageType damageType, Unit attacker) {
         Health -= damage;
         OnCurrentHealthChanged?.Invoke(Health);
         if(Health <= 0) {

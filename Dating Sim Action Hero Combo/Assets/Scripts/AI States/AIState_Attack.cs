@@ -26,7 +26,7 @@ public abstract class AIState_Attack : AIState
     }
 
     protected virtual void Attack() {
-        _combatController.EquippedWeapon.Use(_combatController.EquippedWeapon.Data.ActivateTime, _unit);
+        _combatController.UseWeapon(_combatController.EquippedWeapon.Data.ActivateTime, _unit);
     }
 
     protected virtual void OnLostTarget() {

@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 5877053418862834155}
   - component: {fileID: 4753258251025489057}
   - component: {fileID: 9039390534891533461}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: prefab.Units_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,6 +287,10 @@ MonoBehaviour:
   _rigidbody: {fileID: 8202479465019601315}
   _body: {fileID: 8202479465019601313}
   _front: {fileID: 8202479464982852657}
+  _mapPosition:
+    x: 0
+    y: 0
+    z: 0
   _speed: 5
 --- !u!114 &5877053418862834155
 MonoBehaviour:

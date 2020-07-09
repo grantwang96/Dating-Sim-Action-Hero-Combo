@@ -52,9 +52,12 @@ public abstract class AIState : MonoBehaviour {
     // enter state behaviour
     public virtual void Enter(AIStateInitializationData initData = null) {
         // if has parent and parent is not active, enter parent state
-        if(ParentState != null && !ParentState.Active) {
-            ParentState.Enter(initData);
+        if (_active) {
+            return;
+        }
+        if(ParentState != null) {
             ParentState.OnReadyToTransitionState += SetReadyToTransition;
+            ParentState.Enter(initData);
         }
         _active = true;
     }

@@ -37,33 +37,38 @@ public class NPCTargetManager : MonoBehaviour
         return false;
     }
 
-    public bool ScanForHostile(Unit target) {
+    // this function searches for a specific target
+    public bool ScanForTarget(Unit target) {
         return Scan(target, _unit.MoveController.Body.transform, _visionRange, _visionLayers, _visionAngle);
     }
 
+    // overrides the current target without scanning
     public void OverrideCurrentTarget(Unit newTarget) {
         CurrentTarget = newTarget;
     }
 
-    public static bool Scan(Unit target, Transform unitTransform, float visionRange, LayerMask visionLayers, float visionAngle = 360f) {
+    // this performs the actual checks and raycast towards a given target
+    private static bool Scan(Unit target, Transform unitTransform, float visionRange, LayerMask visionLayers, float visionAngle = 360f) {
         bool found = false;
         Vector2 unitPosition = unitTransform.position;
         Vector2 otherPosition = target.transform.position;
+        // ensure the target distance is within range
         float distance = Vector2.Distance(unitPosition, otherPosition);
         if (distance > visionRange) {
             return found;
         }
+        // ensure the target's direction is within the view cone
         Vector2 direction = otherPosition - unitPosition;
         float angle = Vector2.Angle(unitTransform.transform.up, direction);
         if (angle > visionAngle) {
             return found;
         }
-        // hostile within range, make a raycast
+        // target within range, make a raycast
         RaycastHit2D[] hit = new RaycastHit2D[1];
         ContactFilter2D filter = new ContactFilter2D();
         filter.SetLayerMask(visionLayers);
         if (Physics2D.Raycast(unitPosition, direction.normalized, filter, hit, distance) > 0) {
-            // if this is the hostile set found to true
+            // if this is the hostile, set found to true
             if (hit[0].transform == target.transform) {
                 found = true;
             }

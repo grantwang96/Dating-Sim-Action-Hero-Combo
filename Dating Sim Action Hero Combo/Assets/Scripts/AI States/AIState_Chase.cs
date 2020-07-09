@@ -19,10 +19,16 @@ public class AIState_Chase : AIState
             SetReadyToTransition(_onFailedToPath);
             return;
         }
+        _navigator.LookTarget = null;
         float speed = _fullSpeed ? _unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
         _moveController.SetSpeed(speed);
         _navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
         _navigator.SetDestination(_moveController.MapPosition, _navigator.TargetPosition);
+    }
+
+    public override void Exit(AIState nextState) {
+        base.Exit(nextState);
+        _navigator.ClearDestination();
     }
 
     private void OnArrivedFinalDestination() {

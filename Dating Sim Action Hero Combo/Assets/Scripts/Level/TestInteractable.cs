@@ -11,7 +11,15 @@ public class TestInteractable : MonoBehaviour, IInteractable
         LevelDataManager.Instance.SetOccupant(LevelDataManager.Instance.WorldToArraySpace(transform.position), this);
     }
 
-    public void Interact() {
-        CustomLogger.Log(nameof(TestInteractable), "Interacted with this object!");
+    public void InteractStart() {
+        CustomLogger.Log(nameof(TestInteractable), "Started interacting with this object...");
+    }
+
+    public void InteractHold() {
+        CustomLogger.Log(nameof(TestInteractable), "Continued interacting with this object...");
+    }
+
+    public void InteractEnd() {
+        CustomLogger.Log(nameof(TestInteractable), "Finished interacting with this object...");
     }
 }

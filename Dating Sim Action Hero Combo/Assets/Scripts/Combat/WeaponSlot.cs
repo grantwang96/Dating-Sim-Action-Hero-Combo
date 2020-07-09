@@ -5,11 +5,11 @@ using System;
 
 public class Weapon
 {
-    public WeaponData Data { get; private set; }
-    public int CurrentClip { get; private set; }
-    public int TotalAmmo { get; private set; }
+    public WeaponData Data { get; protected set; }
+    public int CurrentClip { get; protected set; }
+    public int TotalAmmo { get; protected set; }
 
-    private ActiveWeaponState _weaponState;
+    protected ActiveWeaponState _weaponState;
     private bool _isReloading;
     private float _startReloadTime;
 
@@ -23,7 +23,7 @@ public class Weapon
         _weaponState = new ActiveWeaponState();
     }
 
-    public void Use(ActivateTime time, Unit unit) {
+    public virtual void Use(ActivateTime time, Unit unit) {
         // if we're out of ammo, give up
         if(TotalAmmo == 0 && CurrentClip == 0) {
             return;
@@ -58,7 +58,6 @@ public class Weapon
     private void OnUpdate() {
         if (IsReloadingComplete()) {
             ReloadFinished();
-            MonoBehaviourMaster.Instance.OnUpdate -= OnUpdate;
         }
     }
 
@@ -66,6 +65,7 @@ public class Weapon
         _isReloading = false;
         CurrentClip = TotalAmmo > Data.ClipSize ? Data.ClipSize : TotalAmmo;
         TotalAmmo -= CurrentClip;
+        MonoBehaviourMaster.Instance.OnUpdate -= OnUpdate;
         OnReloadFinish?.Invoke();
     }
 
