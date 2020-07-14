@@ -6,7 +6,6 @@ public class AIState_ListenForCombatNoise : AIState
 {
     [SerializeField] private AIState _onCombatNoiseHeard;
     [SerializeField] private UnitSoundListener _unitSoundListener;
-    [SerializeField] private NPCTargetManager _npcTargetManager;
 
     public override void Enter(AIStateInitializationData initData = null) {
         base.Enter(initData);
@@ -19,7 +18,7 @@ public class AIState_ListenForCombatNoise : AIState
     }
 
     private void OnCombatNoiseHeard(IntVector3 position, Unit unit) {
-        _npcTargetManager.OverrideCurrentTarget(unit);
+        _unit.TargetManager.OverrideCurrentTarget(unit);
         SetReadyToTransition(_onCombatNoiseHeard);
     }
 }

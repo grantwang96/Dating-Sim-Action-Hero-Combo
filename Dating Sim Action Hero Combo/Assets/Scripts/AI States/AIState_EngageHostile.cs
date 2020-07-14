@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIState_EngageHostile : AIState {
+public class AIState_EngageHostile : AIState
+{
 
-    [SerializeField] private NPCNavigator _navigator;
-    [SerializeField] private NPCTargetManager _targetManager;
     [SerializeField] private AIState_Attack _attackState;
     [SerializeField] private AIState _onTargetOutOfRangeState;
     [SerializeField] private AIState _onDisarmedState;
 
     public override void Execute() {
-        Unit target = _targetManager.CurrentTarget;
-        _navigator.LookTarget = target.transform;
+        Unit target = _unit.TargetManager.CurrentTarget;
+        _unit.Navigator.LookTarget = target.transform;
         if (_unit.CombatController.EquippedWeapon == null) {
             // set the controller to run away or find a new weapon
             SetReadyToTransition(_onDisarmedState);
@@ -25,5 +24,12 @@ public class AIState_EngageHostile : AIState {
             SetReadyToTransition(_onTargetOutOfRangeState);
         }
         base.Execute();
+    }
+}
+
+public class AIStateEngageHostileInitData : AIStateInitializationData {
+
+    public AIStateEngageHostileInitData(NPCUnit unit) {
+
     }
 }

@@ -6,7 +6,7 @@ public class AIState_RangedAttack : AIState_Attack
 {
     public override void Execute() {
         // fail if there is no move controller or target
-        if (_moveController == null || _targetManager.CurrentTarget == null) {
+        if (_unit.MoveController == null || _unit.TargetManager.CurrentTarget == null) {
             OnLostTarget();
             return;
         }
@@ -20,11 +20,11 @@ public class AIState_RangedAttack : AIState_Attack
     }
 
     protected override void OnLostTarget() {
-        _navigator.LookTarget = null;
+        _unit.Navigator.LookTarget = null;
         base.OnLostTarget();
     }
 
     public override bool CanAttack() {
-        return _targetManager.ScanForTarget(_targetManager.CurrentTarget);
+        return _unit.TargetManager.ScanForTarget(_unit.TargetManager.CurrentTarget);
     }
 }

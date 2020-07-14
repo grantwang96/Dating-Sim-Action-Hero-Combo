@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AIState_ScanForTarget : AIState
 {
-    [SerializeField] private NPCTargetManager _targetManager;
     [SerializeField] private AIState _onTargetFound;
 
     public override void Execute() {
@@ -22,6 +21,6 @@ public class AIState_ScanForTarget : AIState
     }
 
     private bool ScanForTarget() {
-        return _targetManager.ScanForTarget(_targetManager.CurrentTarget);
+        return _unit.TargetManager.ScanForTarget(_unit.TargetManager.CurrentTarget);
     }
 }

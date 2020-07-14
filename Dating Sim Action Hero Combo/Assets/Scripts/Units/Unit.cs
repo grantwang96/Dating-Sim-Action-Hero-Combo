@@ -48,11 +48,11 @@ public class Unit : MonoBehaviour
         UnsubscribeToEvents();
     }
 
-    private void SubscribeToEvents() {
+    protected virtual void SubscribeToEvents() {
         _damageable.OnDefeated += OnDefeated;
     }
 
-    private void UnsubscribeToEvents() {
+    protected virtual void UnsubscribeToEvents() {
         _damageable.OnDefeated -= OnDefeated;
     }
 

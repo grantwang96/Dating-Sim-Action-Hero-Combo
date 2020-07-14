@@ -5,7 +5,6 @@ using UnityEngine;
 public class AIState_Move : AIState
 {
     [SerializeField] private bool _fullSpeed;
-    [SerializeField] private NPCNavigator _navigator;
     [SerializeField] private NPCMoveController _moveController;
 
     [SerializeField] private AIState _onArrivedDestination;
@@ -17,13 +16,13 @@ public class AIState_Move : AIState
             return;
         }
         _moveController.SetSpeed(speed);
-        _navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
-        _navigator.SetDestination(_moveController.MapPosition, _navigator.TargetPosition);
+        _unit.Navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
+        _unit.Navigator.SetDestination(_moveController.MapPosition, _unit.Navigator.TargetPosition);
         base.Enter(initData);
     }
     
     private void OnArrivedFinalDestination() {
-        _navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
+        _unit.Navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
         SetReadyToTransition(_onArrivedDestination);
     }
 }

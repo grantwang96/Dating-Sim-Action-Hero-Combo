@@ -4,20 +4,16 @@ using UnityEngine;
 
 public abstract class AIState_Attack : AIState
 {
-    [SerializeField] protected NPCNavigator _navigator;
-    [SerializeField] protected NPCCombatController _combatController;
-    [SerializeField] protected NPCMoveController _moveController;
-    [SerializeField] protected NPCTargetManager _targetManager;
     [SerializeField] protected AIState _onLostTargetState;
 
     public override void Enter(AIStateInitializationData initData = null) {
         // if there is not target present (ex. heard a noise)
-        if(_targetManager.CurrentTarget == null) {
+        if(_unit.TargetManager.CurrentTarget == null) {
             OnLostTarget();
             return;
         }
-        _navigator.ClearDestination();
-        _navigator.LookTarget = _targetManager.CurrentTarget.transform;
+        _unit.Navigator.ClearDestination();
+        _unit.Navigator.LookTarget = _unit.TargetManager.CurrentTarget.transform;
         base.Enter(initData);
     }
     
@@ -26,7 +22,7 @@ public abstract class AIState_Attack : AIState
     }
 
     protected virtual void Attack() {
-        _combatController.UseWeapon(_combatController.EquippedWeapon.Data.ActivateTime, _unit);
+        _unit.CombatController.UseWeapon(_unit.CombatController.EquippedWeapon.Data.ActivateTime, _unit);
     }
 
     protected virtual void OnLostTarget() {

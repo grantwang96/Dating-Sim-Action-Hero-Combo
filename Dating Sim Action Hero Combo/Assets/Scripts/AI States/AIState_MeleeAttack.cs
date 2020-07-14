@@ -8,7 +8,7 @@ public class AIState_MeleeAttack : AIState_Attack {
 
     public override void Execute() {
         // fail if there is no move controller or target
-        if (_moveController == null || _targetManager.CurrentTarget == null) {
+        if (_unit.MoveController == null || _unit.TargetManager.CurrentTarget == null) {
             OnLostTarget();
             return;
         }
@@ -21,7 +21,7 @@ public class AIState_MeleeAttack : AIState_Attack {
     }
 
     public override bool CanAttack() {
-        IntVector3 distance = _targetManager.CurrentTarget.MoveController.MapPosition - _unit.MoveController.MapPosition;
+        IntVector3 distance = _unit.TargetManager.CurrentTarget.MoveController.MapPosition - _unit.MoveController.MapPosition;
         return Mathf.Abs(distance.x) <= 1 && Mathf.Abs(distance.y) <= 1;
     }
 }

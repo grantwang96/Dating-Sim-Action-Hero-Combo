@@ -83,6 +83,7 @@ public abstract class AIState : MonoBehaviour {
         _active = false;
     }
 
+    // fires ready to transition event for AI State Machine listener
     protected void SetReadyToTransition(AIState state, AIStateInitializationData initData = null) {
         OnReadyToTransitionState?.Invoke(state, initData);
     }
@@ -92,4 +93,13 @@ public abstract class AIState : MonoBehaviour {
 [System.Serializable]
 public class AIStateInitializationData {
 
+    // do AI State initialization here
+    public virtual void PerformInitialization() {
+
+    }
+}
+
+public enum AIStateInitializationDataType {
+    EngageHostile,
+    Chase
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AIState_ListenForDamage : AIState
 {
-    [SerializeField] private NPCTargetManager _npcTargetManager;
     [SerializeField] private AIState _onTakeDamage;
 
     public override void Enter(AIStateInitializationData initData = null) {
@@ -18,7 +17,7 @@ public class AIState_ListenForDamage : AIState
     }
 
     private void OnTakeDamage(int damage, DamageType damageType, Unit attacker) {
-        _npcTargetManager.OverrideCurrentTarget(attacker);
+        _unit.TargetManager.OverrideCurrentTarget(attacker);
         SetReadyToTransition(_onTakeDamage);
     }
 }

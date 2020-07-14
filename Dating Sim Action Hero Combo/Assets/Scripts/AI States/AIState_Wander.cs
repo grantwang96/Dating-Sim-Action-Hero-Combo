@@ -5,7 +5,6 @@ using UnityEngine;
 public class AIState_Wander : AIState
 {
     [SerializeField] private bool _fullSpeed;
-    [SerializeField] private NPCNavigator _navigator;
     [SerializeField] private NPCMoveController _moveController;
     [SerializeField] private int _wanderRangeMin;
     [SerializeField] private int _wanderRangeMax;
@@ -27,19 +26,19 @@ public class AIState_Wander : AIState
             OnArrivedFinalDestination();
             return;
         }
-        _navigator.SetDestination(_moveController.MapPosition, positions[Random.Range(0, positions.Count)]);
-        _navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
+        _unit.Navigator.SetDestination(_moveController.MapPosition, positions[Random.Range(0, positions.Count)]);
+        _unit.Navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
         float speed = _fullSpeed ? _unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
         _moveController.SetSpeed(speed);
     }
 
     public override void Exit(AIState nextState) {
-        _navigator.ClearDestination();
+        _unit.Navigator.ClearDestination();
         base.Exit(nextState);
     }
 
     private void OnArrivedFinalDestination() {
-        _navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
+        _unit.Navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
         SetReadyToTransition(_onArrivedDestination);
     }
 }

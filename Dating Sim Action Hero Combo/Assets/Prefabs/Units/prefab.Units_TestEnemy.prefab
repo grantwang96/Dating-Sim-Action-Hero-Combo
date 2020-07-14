@@ -85,7 +85,6 @@ MonoBehaviour:
   _stateMachine: {fileID: 2179785060402409991}
   _onCombatNoiseHeard: {fileID: 534584363850015340}
   _unitSoundListener: {fileID: 2865325561480287269}
-  _npcTargetManager: {fileID: 3159067064120213722}
 --- !u!1 &437165490437721180
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +363,8 @@ MonoBehaviour:
   _animationController: {fileID: 1441907153915782317}
   _spriteRenderer: {fileID: 437165490437721182}
   _collider: {fileID: 437165491455309682}
+  _targetManager: {fileID: 3159067064120213722}
+  _navigator: {fileID: 8757977236862389393}
   _combatController: {fileID: 402224448121745103}
 --- !u!114 &2059632087369443480
 MonoBehaviour:
@@ -525,8 +526,6 @@ MonoBehaviour:
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
   _fullSpeed: 1
-  _targetManager: {fileID: 3159067064120213722}
-  _navigator: {fileID: 8757977236862389393}
   _moveController: {fileID: 2059632087369443480}
   _onArrivedDestination: {fileID: 8572021680481341551}
   _onFailedToPath: {fileID: 8572021680481341551}
@@ -576,10 +575,6 @@ MonoBehaviour:
   _active: 0
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
-  _navigator: {fileID: 8757977236862389393}
-  _combatController: {fileID: 402224448121745103}
-  _moveController: {fileID: 2059632087369443480}
-  _targetManager: {fileID: 3159067064120213722}
   _onLostTargetState: {fileID: 5557028485210670556}
 --- !u!1 &2128743673157051602
 GameObject:
@@ -627,8 +622,6 @@ MonoBehaviour:
   _active: 0
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
-  _navigator: {fileID: 8757977236862389393}
-  _targetManager: {fileID: 3159067064120213722}
   _attackState: {fileID: 9218523668349529241}
   _onTargetOutOfRangeState: {fileID: 5557028485210670556}
   _onDisarmedState: {fileID: 8572021680481341551}
@@ -678,10 +671,6 @@ MonoBehaviour:
   _active: 0
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
-  _navigator: {fileID: 8757977236862389393}
-  _combatController: {fileID: 402224448121745103}
-  _moveController: {fileID: 2059632087369443480}
-  _targetManager: {fileID: 3159067064120213722}
   _onLostTargetState: {fileID: 5557028485210670556}
 --- !u!1 &2249416537856958126
 GameObject:
@@ -784,7 +773,6 @@ MonoBehaviour:
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
   _fullSpeed: 0
-  _navigator: {fileID: 8757977236862389393}
   _moveController: {fileID: 2059632087369443480}
   _wanderRangeMin: 3
   _wanderRangeMax: 6
@@ -836,6 +824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unit: {fileID: 437165491455309683}
   _startingState: {fileID: 8572021680481341551}
+  _unitMessageAIStateOverrides: []
 --- !u!1 &2849777776787744821
 GameObject:
   m_ObjectHideFlags: 0
@@ -933,7 +922,6 @@ MonoBehaviour:
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
   _fullSpeed: 1
-  _navigator: {fileID: 8757977236862389393}
   _moveController: {fileID: 2059632087369443480}
   _onArrivedDestination: {fileID: 9218523668349529241}
 --- !u!1 &4442093684451906760
@@ -984,7 +972,6 @@ MonoBehaviour:
   _active: 0
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
-  _targetManager: {fileID: 3159067064120213722}
   _onHostileFoundState: {fileID: 534584363850015340}
 --- !u!1 &6371930903067841380
 GameObject:
@@ -1033,7 +1020,6 @@ MonoBehaviour:
   _active: 0
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
-  _npcTargetManager: {fileID: 3159067064120213722}
   _onTakeDamage: {fileID: 534584363850015340}
 --- !u!1 &8145732519204881098
 GameObject:
@@ -1081,10 +1067,6 @@ MonoBehaviour:
   _active: 0
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
-  _navigator: {fileID: 8757977236862389393}
-  _combatController: {fileID: 402224448121745103}
-  _moveController: {fileID: 2059632087369443480}
-  _targetManager: {fileID: 3159067064120213722}
   _onLostTargetState: {fileID: 8572021680481341551}
   _onTargetOutOfRange: {fileID: 5557028485210670556}
 --- !u!1 &8812518375674859900
@@ -1134,5 +1116,4 @@ MonoBehaviour:
   _active: 0
   _unit: {fileID: 437165491455309683}
   _stateMachine: {fileID: 2179785060402409991}
-  _targetManager: {fileID: 3159067064120213722}
   _onTargetFound: {fileID: 1237924413255895954}
