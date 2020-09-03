@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestEnemyData
   m_EditorClassIdentifier: 
   _unitPrefabId: prefab.Units_TestEnemy
-  _maxHealth: 300
+  _maxHealth: 60
   _resistances: 0
   _runSpeed: 5
   _walkSpeed: 2
@@ -26,5 +26,4 @@ MonoBehaviour:
   _wanderRadiusMax: 6
   _hostileTags: 5
   _animatorController: {fileID: 9100000, guid: abfa567898217f847af825fedb5e6ea0, type: 2}
-  _aiStateMachine: []
   _equippedWeapon: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}

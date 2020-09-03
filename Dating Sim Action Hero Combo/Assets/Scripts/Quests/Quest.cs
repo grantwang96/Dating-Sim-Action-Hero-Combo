@@ -5,7 +5,6 @@ using System;
 
 public class Quest : ScriptableObject
 {
-
     public enum QuestStatus {
         NotStarted, Ongoing, Completed, Failed, Aborted
     }

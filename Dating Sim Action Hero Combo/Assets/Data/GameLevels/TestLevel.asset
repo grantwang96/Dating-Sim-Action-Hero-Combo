@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcb4eef37578c4c48b0128df4239637d, type: 3}
+  m_Name: TestLevel
+  m_EditorClassIdentifier: 
+  _mapData: {fileID: 11400000, guid: cd712f0ef69271749b9ace8cdecd38ea, type: 2}
+  _questDatas:
+  - {fileID: 11400000, guid: b2c7ea6daded90f4aa2f69eaad85243c, type: 2}
+  _enemyDatas:
+  - {fileID: 11400000, guid: bc1335ad02027ff4aa482d81f6c447b5, type: 2}

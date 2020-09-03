@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class QuestManager : MonoBehaviour
+public class QuestManager : IInitializableManager
 {
     public static QuestManager Instance { get; private set; }
 
@@ -12,22 +12,28 @@ public class QuestManager : MonoBehaviour
     public event Action<Quest> OnCurrentQuestCompleted;
     public event Action OnAllQuestsCompleted;
 
-    [SerializeField] private List<Quest> _questList = new List<Quest>();
+    private List<Quest> _questList = new List<Quest>();
     private int _currentQuestIndex;
 
-    private void Awake() {
+    public void Initialize(Action<bool> initializationCallback = null) {
         Instance = this;
+        GameManager.Instance.OnGameStarted += OnGameStart;
+        GameManager.Instance.OnGameEnded += OnGameEnd;
+        initializationCallback?.Invoke(true);
     }
 
-    // TODO: figure out when and how the game will start
-    // temp start the first quest immediately
-    private void Start() {
-        OnGameStart();
+    public void Dispose() {
+
     }
 
     private void OnGameStart() {
         _currentQuestIndex = 0;
         InitializeCurrentQuest();
+    }
+
+    private void OnGameEnd() {
+        GameManager.Instance.OnGameStarted -= OnGameStart;
+        GameManager.Instance.OnGameEnded -= OnGameEnd;
     }
 
     private void NextQuest() {

@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GameManager : MonoBehaviour
+public class GameManager : IInitializableManager
 {
     public static GameManager Instance { get; private set; }
 
     public event Action OnGameStarted;
     public event Action OnGameEnded;
 
-    private void Awake() {
+    public void Initialize(Action<bool> initializationCallback = null) {
         Instance = this;
+        initializationCallback?.Invoke(true);
+    }
+
+    public void Dispose() {
+
     }
 
     public void StartGame() {

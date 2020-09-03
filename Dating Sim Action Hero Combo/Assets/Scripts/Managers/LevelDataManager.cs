@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public interface ILevelDataManager {
+public interface ILevelDataManager : IInitializableManager {
 
     int MapBoundsX { get; }
     int MapBoundsY { get; }
@@ -27,41 +28,44 @@ public enum PathStatus {
     Complete
 }
 
-public class LevelDataManager : MonoBehaviour, ILevelDataManager {
+public class LevelDataManager : ILevelDataManager {
 
     public static ILevelDataManager Instance { get; private set; }
-
-    [SerializeField] private int _mapSizeX;
-    [SerializeField] private int _mapSizeY;
-    public int MapBoundsX => _mapSizeX;
-    public int MapBoundsY => _mapSizeY;
-
-    [SerializeField] private TileData _defaultTileData; // default tile (empty, probably)
-    [SerializeField] private TileData[] _tileDatas; // tile datas to preload
+    
+    public int MapBoundsX { get; private set; }
+    public int MapBoundsY { get; private set; }
 
     private Dictionary<string, EnemySpawn> _enemySpawnPoints = new Dictionary<string, EnemySpawn>();
 
     private ITileInfo[][] _tiles;
     private Dictionary<string, TileData> _tileConfig = new Dictionary<string, TileData>();
 
-    private void Awake() {
+    public void Initialize(Action<bool> initializationCallback = null) {
         Instance = this;
         LoadTileConfig();
         InitializeMap();
+        initializationCallback?.Invoke(true);
+    }
+
+    public void Dispose() {
+
     }
 
     private void LoadTileConfig() {
-        for(int i = 0; i < _tileDatas.Length; i++) {
-            _tileConfig.Add(_tileDatas[i].name, _tileDatas[i]);
+        GameLevelData gameLevel = GameLevelDataController.Instance.CurrentGameLevelData;
+        for(int i = 0; i < gameLevel.MapData.TileDatas.Count; i++) {
+            _tileConfig.Add(gameLevel.MapData.TileDatas[i].name, gameLevel.MapData.TileDatas[i]);
         }
     }
 
     private void InitializeMap() {
-        _tiles = new ITileInfo[_mapSizeX][];
+        MapBoundsX = GameLevelDataController.Instance.CurrentGameLevelData.MapData.MapSizeX;
+        MapBoundsY = GameLevelDataController.Instance.CurrentGameLevelData.MapData.MapSizeY;
+        _tiles = new ITileInfo[MapBoundsX][];
         for (int x = 0; x < _tiles.Length; x++) {
-            _tiles[x] = new ITileInfo[_mapSizeY];
+            _tiles[x] = new ITileInfo[MapBoundsY];
             for (int y = 0; y < _tiles[x].Length; y++) {
-                _tiles[x][y] = new TileInfo(x, y, _defaultTileData);
+                _tiles[x][y] = new TileInfo(x, y, GameLevelDataController.Instance.CurrentGameLevelData.MapData.DefaultTileData);
             }
         }
     }
@@ -69,7 +73,7 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
     public void UpdateTile(int x, int y, string tileType = "") {
         TileData data;
         if (string.IsNullOrEmpty(tileType)) {
-            data = _defaultTileData;
+            data = GameLevelDataController.Instance.CurrentGameLevelData.MapData.DefaultTileData;
         } else if(!_tileConfig.TryGetValue(tileType, out data)) {
             return;
         }
@@ -99,7 +103,7 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
     }
 
     public bool IsWithinMap(IntVector3 position) {
-        return position.x >= 0 && position.x < _mapSizeX && position.y >= 0 && position.y < _mapSizeY;
+        return position.x >= 0 && position.x < MapBoundsX && position.y >= 0 && position.y < MapBoundsY;
     }
 
     public void SetOccupant(IntVector3 position, ITileOccupant occupant) {
@@ -112,15 +116,15 @@ public class LevelDataManager : MonoBehaviour, ILevelDataManager {
 
     public IntVector3 WorldToArraySpace(Vector2 worldPos) {
         IntVector3 mapPosition = new IntVector3();
-        mapPosition.x = Mathf.RoundToInt(worldPos.x + (_mapSizeX / 2f));
-        mapPosition.y = Mathf.RoundToInt(worldPos.y + (_mapSizeY / 2f));
+        mapPosition.x = Mathf.RoundToInt(worldPos.x + (MapBoundsX / 2f));
+        mapPosition.y = Mathf.RoundToInt(worldPos.y + (MapBoundsY / 2f));
         return mapPosition;
     }
 
     public Vector2 ArrayToWorldSpace(int x, int y) {
         Vector2 worldPosition = new Vector2();
-        worldPosition.x = x - (_mapSizeX / 2f);
-        worldPosition.y = y - (_mapSizeY / 2f);
+        worldPosition.x = x - (MapBoundsX / 2f);
+        worldPosition.y = y - (MapBoundsY / 2f);
         return worldPosition;
     }
 

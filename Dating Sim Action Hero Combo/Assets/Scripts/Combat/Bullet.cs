@@ -23,14 +23,18 @@ public class Bullet : MonoBehaviour, PooledObject
         _hitBox.OnHitBoxTriggered -= OnHitBoxTriggered;
     }
 
-    public void Setup(int power, float totalLifeTime, Vector2 newPosition, Vector2 velocity, Unit owner) {
-        _power = power;
-        _totalLifeTime = totalLifeTime;
-        transform.position = newPosition;
-        transform.up = velocity.normalized;
-        _initialVelocity = velocity;
-        _owner = owner;
-        _ownerDamageable = owner.GetComponent<IDamageable>();
+    public void Initialize(PooledObjectInitializationData initializationData) {
+        BulletInitializationData initData = initializationData as BulletInitializationData;
+        if(initData == null) {
+            return;
+        }
+        _power = initData.Power;
+        _totalLifeTime = initData.TotalLifeTime;
+        transform.position = initData.Position;
+        transform.up = initData.Velocity.normalized;
+        _initialVelocity = initData.Velocity;
+        _owner = initData.Owner;
+        _ownerDamageable = initData.Owner.GetComponent<IDamageable>();
     }
 
     public void Spawn() {
@@ -65,4 +69,12 @@ public class Bullet : MonoBehaviour, PooledObject
         gameObject.SetActive(false);
         PooledObjectManager.Instance.ReturnPooledObject(this.name, this);
     }
+}
+
+public class BulletInitializationData : PooledObjectInitializationData {
+    public int Power;
+    public float TotalLifeTime;
+    public Vector2 Position;
+    public Vector2 Velocity;
+    public Unit Owner;
 }

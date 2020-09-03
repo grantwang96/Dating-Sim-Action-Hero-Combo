@@ -1,6 +1,6 @@
 ﻿using System;
 
-public interface IAllianceManager
+public interface IAllianceManager : IInitializableManager
 {
     event Action<NPCUnit, UnitMessage> OnAllianceMessageSent;
 }

@@ -17,10 +17,14 @@ public class WeaponSoundBox : MonoBehaviour, PooledObject
     [SerializeField] private CircleCollider2D _collider;
     [SerializeField] private SpriteRenderer _renderer;
 
-    public void Initialize(float targetSize, Vector3 startPosition, Unit source = null) {
-        _targetSize = targetSize;
-        _startPosition = startPosition;
-        _source = source;
+    public void Initialize(PooledObjectInitializationData initializationData) {
+        WeaponSoundBoxInitializationData initData = initializationData as WeaponSoundBoxInitializationData;
+        if(initData == null) {
+            return;
+        }
+        _targetSize = initData.TargetSize;
+        _startPosition = initData.StartPosition;
+        _source = initData.Source;
     }
     
     private void FixedUpdate() {
@@ -73,4 +77,10 @@ public class WeaponSoundBox : MonoBehaviour, PooledObject
         _collider.enabled = false;
         PooledObjectManager.Instance.ReturnPooledObject(this.name, this);
     }
+}
+
+public class WeaponSoundBoxInitializationData : PooledObjectInitializationData {
+    public float TargetSize;
+    public Vector3 StartPosition;
+    public Unit Source;
 }

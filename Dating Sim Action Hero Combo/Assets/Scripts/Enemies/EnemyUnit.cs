@@ -5,6 +5,10 @@ using System;
 
 public class EnemyUnit : NPCUnit, PooledObject {
 
+    public void Initialize(PooledObjectInitializationData initializationData) {
+        
+    }
+
     public void Despawn() {
         gameObject.SetActive(false);
         PooledObjectManager.Instance.ReturnPooledObject(this.name, this);

@@ -6,7 +6,7 @@ using System;
 
 public interface IPooledObjectManager {
 
-    void RegisterPooledObject(string poolId, int initialCount, Action<bool> OnRegisterComplete = null);
+    bool RegisterPooledObject(string poolId, int initialCount, Action<bool> OnRegisterComplete = null);
     void DeregisterPooledObject(string poolId);
 
     bool UsePooledObject(string poolId, out PooledObject obj);
@@ -19,7 +19,7 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
 
     public static IPooledObjectManager Instance { get; private set; }
 
-    [SerializeField] private global::PooledObjectEntry[] _objectsToPreload;
+    [SerializeField] private PooledObjectLoadEntry[] _objectsToPreload;
 
     private readonly Dictionary<string, PooledObjectEntry> _objectPool = new Dictionary<string, PooledObjectEntry>();
 
@@ -40,22 +40,22 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
         }
     }
 
-    public void RegisterPooledObject(string poolId, int count, Action<bool> OnRegisterComplete = null) {
+    public bool RegisterPooledObject(string poolId, int count, Action<bool> OnRegisterComplete = null) {
         PooledObjectEntry entry;
         if (_objectPool.TryGetValue(poolId, out entry)) {
             CloneToPool(poolId, entry.BaseResource, count);
-            return;
+            return true;
         }
         GameObject storedPrefab = AssetManager.Instance.GetAsset(poolId);
         if(storedPrefab == null) {
             CustomLogger.Error(nameof(PooledObjectManager), $"Failed to register object with id {poolId}");
-            return;
+            return false;
         }
 
         PooledObject pooledObject = storedPrefab.GetComponent<PooledObject>();
         if (pooledObject == null) {
             CustomLogger.Error(nameof(PooledObjectManager), $"Asset is not a pooled object!");
-            return;
+            return false;
         }
         PooledObjectEntry newEntry = new PooledObjectEntry() {
             BaseResource = storedPrefab,
@@ -64,6 +64,7 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
         };
         _objectPool.Add(storedPrefab.name, newEntry);
         CloneToPool(storedPrefab.name, newEntry.BaseResource, count);
+        return true;
     }
 
     private void CloneToPool(string poolId, GameObject resource, int count) {
@@ -134,7 +135,7 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
 }
 
 [System.Serializable]
-public class PooledObjectEntry {
+public class PooledObjectLoadEntry {
     public string PoolId;
     public int InitialCount;
 }

@@ -6,34 +6,41 @@ public interface IEnemyManager : IAllianceManager {
 
     IReadOnlyList<EnemyUnit> AllEnemies { get; }
 
+    event Action<Unit> OnEnemySpawned;
     event Action<Unit> OnEnemyDefeated;
 
     void SpawnEnemy(Vector2 position, string enemyType, string overrideId);
     void DespawnEnemy(EnemyUnit controller);
 }
 
-public class EnemyManager : MonoBehaviour, IEnemyManager
+public class EnemyManager : IEnemyManager
 {
     public static IEnemyManager Instance { get; private set; }
-    [SerializeField] private List<EnemyData> _allEnemyTypes = new List<EnemyData>();
 
     private Dictionary<string, EnemyData> _enemyDataConfig = new Dictionary<string, EnemyData>();
     private List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
     // dictionary of enemies by job <Job, List<EnemyController>;
 
     public IReadOnlyList<EnemyUnit> AllEnemies => _enemyUnits;
+    public event Action<Unit> OnEnemySpawned;
     public event Action<Unit> OnEnemyDefeated;
     public event Action<NPCUnit, UnitMessage> OnAllianceMessageSent;
 
     #region INITIALIZATION
-    private void Awake() {
+    public void Initialize(Action<bool> initializationCallback = null) {
         Instance = this;
         LoadEnemyConfig();
+        initializationCallback?.Invoke(true);
+    }
+
+    public void Dispose() {
+
     }
 
     private void LoadEnemyConfig() {
-        for(int i = 0; i < _allEnemyTypes.Count; i++) {
-            _enemyDataConfig.Add(_allEnemyTypes[i].name, _allEnemyTypes[i]);
+        GameLevelData currentGameLevel = GameLevelDataController.Instance.CurrentGameLevelData;
+        for(int i = 0; i < currentGameLevel.EnemyDatas.Count; i++) {
+            _enemyDataConfig.Add(currentGameLevel.EnemyDatas[i].name, currentGameLevel.EnemyDatas[i]);
         }
     }
     #endregion
@@ -67,6 +74,7 @@ public class EnemyManager : MonoBehaviour, IEnemyManager
 
         // add enemy controller to list and dictionary
         _enemyUnits.Add(unit);
+        OnEnemySpawned?.Invoke(unit);
     }
 
     public void DespawnEnemy(EnemyUnit unit) {

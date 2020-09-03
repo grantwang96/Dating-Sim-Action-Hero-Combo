@@ -24,6 +24,6 @@ MonoBehaviour:
   _pooledWeaponSoundBoxId: prefab.Combat_WeaponSoundBox
   _bulletPrefabId: prefab.Combat_Bullet
   _power: 5
-  _bulletSpeed: 40
+  _bulletSpeed: 80
   _bulletLifeTime: 5
   _soundBoxSize: 20

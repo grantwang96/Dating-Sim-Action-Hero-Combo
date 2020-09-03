@@ -47,7 +47,14 @@ public class GunData : WeaponData {
     protected virtual void FireShot(Unit unit, Bullet bullet) {
         // calculate direction to fire and add force
         Vector2 velocity = unit.MoveController.Front.up * _bulletSpeed;
-        bullet.Setup(_power, _bulletLifeTime, unit.MoveController.Front.position, velocity, unit);
+        BulletInitializationData initData = new BulletInitializationData() {
+            Power = _power,
+            TotalLifeTime = _bulletLifeTime,
+            Position = unit.MoveController.Front.position,
+            Velocity = velocity,
+            Owner = unit
+        };
+        bullet.Initialize(initData);
         bullet.Spawn();
         GenerateSoundBox(unit);
     }
@@ -63,7 +70,12 @@ public class GunData : WeaponData {
             CustomLogger.Error(this.name, $"Object {weaponSoundBoxPO} was not of type {nameof(WeaponSoundBox)}");
             return;
         }
-        soundBox.Initialize(_soundBoxSize, unit.MoveController.Front.position, unit);
+        WeaponSoundBoxInitializationData initData = new WeaponSoundBoxInitializationData() {
+            TargetSize = _soundBoxSize,
+            StartPosition = unit.MoveController.Front.position,
+            Source = unit
+        };
+        soundBox.Initialize(initData);
         soundBox.Spawn();
     }
 }

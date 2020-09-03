@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05e55438e74a864fa0fc32984414827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _growSpeed: 5
+  _growSpeed: 10
   _fadeTime: 0.33
   _maxOpacity: 0.5
   _collider: {fileID: 8431842786976931748}
