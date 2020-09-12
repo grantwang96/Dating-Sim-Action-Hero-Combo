@@ -13,8 +13,8 @@ public class GameStateManager : MonoBehaviour {
 
     [SerializeField] private GameState _bootState;
 
-    public event Action OnStateEntered;
-    public event Action OnStateExited;
+    public event Action<GameState> OnStateEntered;
+    public event Action<GameState> OnStateExited;
 
     private void Awake() {
         if (_initialized) { return; }
@@ -55,10 +55,22 @@ public class GameStateManager : MonoBehaviour {
         if(CurrentState != null) {
             PreviousState = CurrentState;
             CurrentState.Exit(newState);
-            OnStateExited?.Invoke();
+            OnStateExited?.Invoke(PreviousState);
         }
         CurrentState = newState;
+        CurrentState.OnGameStateEnter += OnGameStateEntered;
+        CurrentState.OnGameStateEnterFailed += OnFailToEnterGameState;
         CurrentState.Enter();
-        OnStateEntered?.Invoke();
+    }
+
+    private void OnGameStateEntered() {
+        CurrentState.OnGameStateEnter -= OnGameStateEntered;
+        CurrentState.OnGameStateEnterFailed -= OnFailToEnterGameState;
+        OnStateEntered?.Invoke(CurrentState);
+    }
+
+    private void OnFailToEnterGameState() {
+        CurrentState.OnGameStateEnter -= OnGameStateEntered;
+        CurrentState.OnGameStateEnterFailed -= OnFailToEnterGameState;
     }
 }

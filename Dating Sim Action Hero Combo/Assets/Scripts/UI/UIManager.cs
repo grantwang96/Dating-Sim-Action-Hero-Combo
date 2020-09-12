@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // access a specific UI Object by prefab Id
     public UIObject GetUIObject(string uiPrefabId) {
         if(_activeUI.TryGetValue(uiPrefabId, out UIObjectEntry entry)) {
             return entry.UIObject;
@@ -32,6 +33,7 @@ public class UIManager : MonoBehaviour
         return null;
     }
 
+    // instantiate a new UI object with a given prefab id, onto a specified layer
     public UIObject CreateNewUIObject(string uiPrefabId, UILayerId layerId) {
         if (_activeUI.ContainsKey(uiPrefabId)) {
             CustomLogger.Error(nameof(UIManager), $"Already contains active UI with prefab Id {uiPrefabId}!");
@@ -53,24 +55,37 @@ public class UIManager : MonoBehaviour
         }
         UILayer parent = _uiLayers[layerId];
         UIObject instancedUIObject = Instantiate(uiObject, _uiLayers[layerId].transform);
-        UIObjectEntry newEntry = new UIObjectEntry(layerId, uiObject);
+        UIObjectEntry newEntry = new UIObjectEntry(layerId, instancedUIObject);
         _activeUI.Add(uiPrefabId, newEntry);
-        return uiObject;
+        return instancedUIObject;
     }
 
+    // destroy a given UI object with a given prefab id
     public void RemoveUIObject(string uiPrefabId) {
-        if (!_activeUI.ContainsKey(uiPrefabId)) {
-
+        if (!_activeUI.TryGetValue(uiPrefabId, out UIObjectEntry entry)) {
+            CustomLogger.Error(nameof(UIManager), $"Could not find UI Prefab with id {uiPrefabId}");
+            return;
         }
+        Destroy(entry.UIObject.gameObject);
+        _activeUI.Remove(uiPrefabId);
     }
 }
 
 public class UIObjectEntry {
-    public readonly UILayerId LayerId;
-    public readonly UIObject UIObject;
+    public UILayerId LayerId;
+    public UIObject UIObject;
 
     public UIObjectEntry(UILayerId layerId, UIObject uiObject) {
         LayerId = layerId;
         UIObject = uiObject;
     }
+}
+
+[System.Serializable]
+public class UIPrefabEntry {
+    [SerializeField] private string _uiPrefabId;
+    [SerializeField] private UILayerId _layerId;
+
+    public string UIPrefabId => _uiPrefabId;
+    public UILayerId LayerID => _layerId;
 }

@@ -19,10 +19,12 @@ public class GameManager : IInitializableManager
 
     }
 
+    // game begins, player is given control, the first quest appears, etc.
     public void StartGame() {
         OnGameStarted?.Invoke();
     }
 
+    // called by completing all quests, losing the game, exiting the game
     public void EndGame() {
         OnGameEnded?.Invoke();
     }

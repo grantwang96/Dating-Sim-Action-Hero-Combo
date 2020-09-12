@@ -38,6 +38,7 @@ public class EnemyManager : IEnemyManager
     }
 
     private void LoadEnemyConfig() {
+        _enemyDataConfig.Clear();
         GameLevelData currentGameLevel = GameLevelDataController.Instance.CurrentGameLevelData;
         for(int i = 0; i < currentGameLevel.EnemyDatas.Count; i++) {
             _enemyDataConfig.Add(currentGameLevel.EnemyDatas[i].name, currentGameLevel.EnemyDatas[i]);

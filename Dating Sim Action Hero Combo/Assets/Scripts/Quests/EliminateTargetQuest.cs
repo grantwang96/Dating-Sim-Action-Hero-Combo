@@ -9,19 +9,33 @@ public class EliminateTargetQuest : Quest
     [SerializeField] private string _unitType;
     [SerializeField] private string _spawnId;
 
-    public override void Begin() {
-        base.Begin();
-        if(!LevelDataManager.Instance.TryGetEnemySpawn(_spawnId, out EnemySpawn spawn)) {
+    public string UnitId => _unitId;
+    public string UnitType => _unitType;
+    public string SpawnId => _spawnId;
+
+    public override QuestState Begin() {
+        if (!LevelDataManager.Instance.TryGetEnemySpawn(_spawnId, out EnemySpawn spawn)) {
             CustomLogger.Error(nameof(EliminateTargetQuest), $"Could not retrieve enemy spawn point with id {_spawnId}!");
-            FireOnAbort();
-            return;
+            return null;
         }
-        spawn.Spawn(_unitType, _unitId);
+        return new EliminateTargetQuestState(this, spawn);
+    }
+}
+
+public class EliminateTargetQuestState : QuestState {
+
+    public override string QuestDescription => $"Eliminate {_targetUnitId}";
+
+    private string _targetUnitId;
+
+    public EliminateTargetQuestState(EliminateTargetQuest questData, EnemySpawn spawn) : base(questData) {
+        _targetUnitId = questData.UnitId;
+        spawn.Spawn(questData.UnitType, _targetUnitId);
         EnemyManager.Instance.OnEnemyDefeated += OnEnemyDefeated;
     }
 
     private void OnEnemyDefeated(Unit unit) {
-        if (!unit.UnitId.Equals(_unitId)) {
+        if (!unit.UnitId.Equals(_targetUnitId)) {
             return;
         }
         EnemyManager.Instance.OnEnemyDefeated -= OnEnemyDefeated;

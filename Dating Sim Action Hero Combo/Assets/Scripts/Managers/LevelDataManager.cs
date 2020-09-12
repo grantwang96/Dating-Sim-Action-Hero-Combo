@@ -52,6 +52,7 @@ public class LevelDataManager : ILevelDataManager {
     }
 
     private void LoadTileConfig() {
+        _tileConfig.Clear();
         GameLevelData gameLevel = GameLevelDataController.Instance.CurrentGameLevelData;
         for(int i = 0; i < gameLevel.MapData.TileDatas.Count; i++) {
             _tileConfig.Add(gameLevel.MapData.TileDatas[i].name, gameLevel.MapData.TileDatas[i]);

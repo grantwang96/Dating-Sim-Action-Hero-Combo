@@ -11,6 +11,7 @@ public class PlayerCombatController : PlayerActionController
     public Weapon EquippedWeapon { get; private set; }
 
     public event Action<int> OnAmmoUpdated;
+    public event Action OnEquippedWeaponUpdated;
     public event Action OnReloadStarted;
     public event Action OnReloadFinished;
 
@@ -25,6 +26,7 @@ public class PlayerCombatController : PlayerActionController
             weapon.OnReloadFinish -= ReloadFinished;
         }
         EquippedWeapon = weapon;
+        OnEquippedWeaponUpdated?.Invoke();
         EquippedWeapon.OnReloadStart += ReloadStarted;
         EquippedWeapon.OnReloadFinish += ReloadFinished;
     }

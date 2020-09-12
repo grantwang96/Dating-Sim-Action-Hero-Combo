@@ -8,6 +8,8 @@ public interface IInputController {
     Vector2 MovementInput { get; }
     Vector2 MousePositionInput { get; }
 
+    bool IsActive { get; set; }
+
     event Action OutfitSwapBtnPressed;
     event Action OutfitSwapBtnHeld;
     event Action OutfitSwapBtnReleased;
@@ -30,8 +32,8 @@ public class InputController : MonoBehaviour, IInputController
     public static IInputController Instance { get; private set; }
 
     public Vector2 MovementInput { get; private set; }
-
     public Vector2 MousePositionInput { get; private set; }
+    public bool IsActive { get; set; } = true;
 
     public event Action OutfitSwapBtnPressed;
     public event Action OutfitSwapBtnHeld;
@@ -48,6 +50,10 @@ public class InputController : MonoBehaviour, IInputController
     public event Action OnReloadBtnPressed;
     public event Action OnReloadBtnHeld;
     public event Action OnReloadBtnReleased;
+
+    public event Action OnEscBtnPressed;
+    public event Action OnEscBtnHeld;
+    public event Action OnEscBtnReleased;
 
     private void Awake() {
         // internal class dependencies here

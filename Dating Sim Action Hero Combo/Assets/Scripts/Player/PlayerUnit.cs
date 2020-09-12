@@ -5,6 +5,8 @@ using System;
 
 public class PlayerUnit : Unit, ITileOccupant {
 
+    private const string PlayerHudId = "PlayerHud";
+
     public static PlayerUnit Instance { get; private set; }
 
     public static event Action OnPlayerUnitInstanceSet;
@@ -19,7 +21,8 @@ public class PlayerUnit : Unit, ITileOccupant {
         base.Start();
         UnitsManager.Instance.RegisterUnit(this);
         // temp
-        UIObject playerHud = UIManager.Instance.CreateNewUIObject("prefab.ui_PlayerHud", UILayerId.HUD);
+        UIObject playerHud = UIManager.Instance.CreateNewUIObject(PlayerHudId, UILayerId.HUD);
+        playerHud.Initialize();
         playerHud.Display();
     }
 }

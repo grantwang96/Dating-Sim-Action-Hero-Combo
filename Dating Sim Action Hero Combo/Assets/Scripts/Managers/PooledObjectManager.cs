@@ -62,8 +62,8 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
             AvailableObjects = new List<PooledObject>(),
             InUseObjects = new List<PooledObject>()
         };
-        _objectPool.Add(storedPrefab.name, newEntry);
-        CloneToPool(storedPrefab.name, newEntry.BaseResource, count);
+        _objectPool.Add(poolId, newEntry);
+        CloneToPool(poolId, newEntry.BaseResource, count);
         return true;
     }
 

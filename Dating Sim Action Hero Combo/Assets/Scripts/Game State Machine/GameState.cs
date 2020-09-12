@@ -11,12 +11,15 @@ public class GameState : MonoBehaviour {
     [SerializeField] private List<GameStateTransition> _transitions = new List<GameStateTransition>(); // list of transitions this can go to
     public IReadOnlyList<GameStateTransition> Transitions => _transitions;
     [SerializeField] private string _sceneName;
+    [SerializeField] private bool _requiresLoadingScreen;
 
     // lists of asset names required for this state
     [SerializeField] private List<PooledObjectLoadEntry> _pooledObjectPrefabAssets = new List<PooledObjectLoadEntry>();
-    [SerializeField] private List<string> _uiPrefabAssets = new List<string>();
+    [SerializeField] private List<UIPrefabEntry> _uiPrefabs = new List<UIPrefabEntry>();
 
     private bool _initialized = false;
+    protected int _currentManagerIndex;
+    protected virtual IInitializableManager[] _initializableManagers { get; }
 
     public bool IsLoading { get; protected set; }
     public bool IsActive { get; protected set; }
@@ -115,7 +118,7 @@ public class GameState : MonoBehaviour {
     }
 
     private void TryToLoadScene() {
-        bool success = SceneController.Instance.TransitionToScene(_sceneName);
+        bool success = SceneController.Instance.TransitionToScene(_sceneName, _requiresLoadingScreen);
         if (!success) {
             CustomLogger.Error($"[{this.name}]", $"[{nameof(GameState)}] Failed to find and load scene!");
             OnStateEnterFailed();
@@ -141,7 +144,23 @@ public class GameState : MonoBehaviour {
     }
 
     protected virtual void InitializeManagers() {
-        OnManagersInitializationComplete();
+        if (_initializableManagers == null) {
+            return;
+        }
+        _currentManagerIndex = 0;
+        _initializableManagers[_currentManagerIndex].Initialize(ManagerInitializationCallback);
+    }
+
+    protected void ManagerInitializationCallback(bool success) {
+        if (!success) {
+            CustomLogger.Error(name, $"Failed to initialize manager at index {_currentManagerIndex}!");
+        }
+        _currentManagerIndex++;
+        if (_currentManagerIndex >= _initializableManagers.Length) {
+            OnManagersInitializationComplete();
+            return;
+        }
+        _initializableManagers[_currentManagerIndex].Initialize(ManagerInitializationCallback);
     }
 
     protected void OnManagersInitializationComplete() {
@@ -152,8 +171,13 @@ public class GameState : MonoBehaviour {
         OnGameStateEnter?.Invoke();
     }
 
-    protected virtual void DisposeManagers() {
-        
+    protected void DisposeManagers() {
+        if(_initializableManagers == null) {
+            return;
+        }
+        for (int i = 0; i < _initializableManagers.Length; i++) {
+            _initializableManagers[i].Dispose();
+        }
     }
 
     private void RegisterPrefabs() {
@@ -162,9 +186,33 @@ public class GameState : MonoBehaviour {
         }
     }
 
+    private void RegisterUIPrefabs() {
+        for(int i = 0; i < _uiPrefabs.Count; i++) {
+            UIObject uiObject = UIManager.Instance.CreateNewUIObject(_uiPrefabs[i].UIPrefabId, _uiPrefabs[i].LayerID);
+            if (uiObject == null) {
+                CustomLogger.Error(this.name, $"Could not retrieve ui objet with id {_uiPrefabs[i].UIPrefabId}");
+                continue;
+            }
+            uiObject.Initialize();
+            uiObject.Display();
+        }
+    }
+
     private void DeregisterPrefabs() {
         for (int i = 0; i < _pooledObjectPrefabAssets.Count; i++) {
             PooledObjectManager.Instance.DeregisterPooledObject(_pooledObjectPrefabAssets[i].PoolId);
+        }
+    }
+
+    private void DeregisterUIPrefabs() {
+        for (int i = 0; i < _uiPrefabs.Count; i++) {
+            UIObject uiObject = UIManager.Instance.GetUIObject(_uiPrefabs[i].UIPrefabId);
+            if(uiObject == null) {
+                CustomLogger.Error(this.name, $"Could not retrieve ui objet with id {_uiPrefabs[i].UIPrefabId}");
+                continue;
+            }
+            uiObject.Hide();
+            UIManager.Instance.RemoveUIObject(_uiPrefabs[i].UIPrefabId);
         }
     }
 

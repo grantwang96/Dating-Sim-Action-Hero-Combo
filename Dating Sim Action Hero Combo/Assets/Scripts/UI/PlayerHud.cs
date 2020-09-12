@@ -11,27 +11,17 @@ public class PlayerHud : UIObject
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _ammo;
     [SerializeField] private int _fullClip;
-
-    private void Start() {
-        PlayerUnit.Instance.Damageable.OnCurrentHealthChanged += OnHealthChanged;
+    
+    public override bool Initialize() {
         _currentHealth = PlayerUnit.Instance.Damageable.Health;
         _maxHealth = PlayerUnit.Instance.Damageable.MaxHealth;
         _healthBar.UpdateValue((float)_currentHealth / _maxHealth);
 
         _ammo = PlayerCombatController.Instance.EquippedWeapon.CurrentClip;
         _fullClip = PlayerCombatController.Instance.EquippedWeapon.Data.ClipSize;
-        PlayerCombatController.Instance.OnAmmoUpdated += OnAmmoUpdated;
-        PlayerCombatController.Instance.OnReloadStarted += OnReloadStarted;
-        PlayerCombatController.Instance.OnReloadFinished += OnReloadFinished;
+        return base.Initialize();
     }
-
-    private void OnDestroy() {
-        PlayerUnit.Instance.Damageable.OnCurrentHealthChanged -= OnHealthChanged;
-        PlayerCombatController.Instance.OnAmmoUpdated -= OnAmmoUpdated;
-        PlayerCombatController.Instance.OnReloadStarted -= OnReloadStarted;
-        PlayerCombatController.Instance.OnReloadFinished -= OnReloadFinished;
-    }
-
+    
     private void OnHealthChanged(int newHealth) {
         _currentHealth = newHealth;
         _healthBar.UpdateValue((float)_currentHealth / _maxHealth);
@@ -53,11 +43,21 @@ public class PlayerHud : UIObject
 
     public override void Display() {
         base.Display();
+        PlayerUnit.Instance.Damageable.OnCurrentHealthChanged += OnHealthChanged;
+        PlayerCombatController.Instance.OnAmmoUpdated += OnAmmoUpdated;
+        PlayerCombatController.Instance.OnReloadStarted += OnReloadStarted;
+        PlayerCombatController.Instance.OnReloadFinished += OnReloadFinished;
+        OnHealthChanged(PlayerUnit.Instance.Damageable.Health);
+        OnAmmoUpdated(PlayerCombatController.Instance.EquippedWeapon.CurrentClip);
         gameObject.SetActive(true);
     }
 
     public override void Hide() {
         base.Hide();
+        PlayerUnit.Instance.Damageable.OnCurrentHealthChanged -= OnHealthChanged;
+        PlayerCombatController.Instance.OnAmmoUpdated -= OnAmmoUpdated;
+        PlayerCombatController.Instance.OnReloadStarted -= OnReloadStarted;
+        PlayerCombatController.Instance.OnReloadFinished -= OnReloadFinished;
         gameObject.SetActive(false);
     }
 }

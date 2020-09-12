@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5be620fef602d040aaac7f16430710f, type: 3}
   m_Name: TestEnemyData
   m_EditorClassIdentifier: 
-  _unitPrefabId: prefab.Units_TestEnemy
+  _unitPrefabId: TestEnemy
   _maxHealth: 60
   _resistances: 0
   _runSpeed: 5

@@ -12,7 +12,7 @@ public class BootState : GameState
         GameStateManager.Instance.HandleTransition(Transitions[0].TransitionName);
     }
 
-    private void InitializeManagers() {
+    protected override void InitializeManagers() {
         PlayerStateController.Create(_playerConfig);
     }
 }

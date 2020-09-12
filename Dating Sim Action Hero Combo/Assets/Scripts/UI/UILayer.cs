@@ -5,7 +5,8 @@ using UnityEngine;
 public enum UILayerId {
     HUD,
     Panels,
-    Notifications
+    Notifications,
+    Overlay
 }
 
 public class UILayer : MonoBehaviour

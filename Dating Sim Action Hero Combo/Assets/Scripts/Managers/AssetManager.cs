@@ -15,9 +15,9 @@ public class AssetManager : MonoBehaviour, IAssetManager {
 
     private Dictionary<string, AssetBundleRequest> _assetBundleRequest = new Dictionary<string, AssetBundleRequest>();
 
-    [SerializeField] private List<GameObject> _combatPrefabs = new List<GameObject>();
-    [SerializeField] private List<GameObject> _unitPrefabs = new List<GameObject>();
-    [SerializeField] private List<GameObject> _uiPrefabs = new List<GameObject>();
+    [SerializeField] private List<AssetEntry> _combatPrefabs = new List<AssetEntry>();
+    [SerializeField] private List<AssetEntry> _unitPrefabs = new List<AssetEntry>();
+    [SerializeField] private List<AssetEntry> _uiPrefabs = new List<AssetEntry>();
 
     [SerializeField] private Dictionary<string, GameObject> _prefabRegistry = new Dictionary<string, GameObject>();
 
@@ -32,9 +32,9 @@ public class AssetManager : MonoBehaviour, IAssetManager {
         LoadPrefabs(_uiPrefabs);
     }
 
-    private void LoadPrefabs(List<GameObject> prefabs) {
-        for(int i = 0; i < prefabs.Count; i++) {
-            _prefabRegistry.Add(prefabs[i].name, prefabs[i]);
+    private void LoadPrefabs(List<AssetEntry> assetEntries) {
+        for(int i = 0; i < assetEntries.Count; i++) {
+            _prefabRegistry.Add(assetEntries[i].AssetId, assetEntries[i].Prefab);
         }
     }
 
@@ -45,4 +45,10 @@ public class AssetManager : MonoBehaviour, IAssetManager {
         }
         return go;
     }
+}
+
+[System.Serializable]
+public class AssetEntry {
+    public string AssetId;
+    public GameObject Prefab;
 }

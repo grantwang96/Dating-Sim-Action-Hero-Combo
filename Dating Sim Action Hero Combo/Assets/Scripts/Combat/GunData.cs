@@ -5,8 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Weapon Data/Gun")]
 public class GunData : WeaponData {
 
-    [SerializeField] private string _pooledWeaponSoundBoxId;
-    [SerializeField] private string _bulletPrefabId;
+    private const string BulletAssetId = "Bullet";
+    private const string WeaponSoundBoxId = "WeaponSoundBox";
+
     [SerializeField] private int _power;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _bulletLifeTime;
@@ -30,9 +31,9 @@ public class GunData : WeaponData {
 
         // create bullet here
         PooledObject obj;
-        if (!PooledObjectManager.Instance.UsePooledObject(_bulletPrefabId, out obj)) {
+        if (!PooledObjectManager.Instance.UsePooledObject(BulletAssetId, out obj)) {
             // register bullets if not already there
-            PooledObjectManager.Instance.RegisterPooledObject(_bulletPrefabId, 10);
+            PooledObjectManager.Instance.RegisterPooledObject(BulletAssetId, 10);
             InitiateShot(unit);
             return;
         }
@@ -61,8 +62,8 @@ public class GunData : WeaponData {
 
     protected virtual void GenerateSoundBox(Unit unit) {
         PooledObject weaponSoundBoxPO;
-        if (!PooledObjectManager.Instance.UsePooledObject(_pooledWeaponSoundBoxId, out weaponSoundBoxPO)) {
-            CustomLogger.Error(this.name, $"Could not retrieve weapon sound box pooled object with id: {_pooledWeaponSoundBoxId}");
+        if (!PooledObjectManager.Instance.UsePooledObject(WeaponSoundBoxId, out weaponSoundBoxPO)) {
+            CustomLogger.Error(this.name, $"Could not retrieve weapon sound box pooled object with id: {WeaponSoundBoxId}");
             return;
         }
         WeaponSoundBox soundBox = weaponSoundBoxPO as WeaponSoundBox;

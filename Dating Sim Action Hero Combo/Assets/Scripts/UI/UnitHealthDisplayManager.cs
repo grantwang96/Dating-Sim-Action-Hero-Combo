@@ -5,7 +5,7 @@ using System;
 
 public class NPCUIDisplayManager : IInitializableManager
 {
-    private const string NPCUIDisplayPrefabId = "prefab.ui_NPCDisplay";
+    private const string NPCUIDisplayPrefabId = "NPCDisplay";
     private Dictionary<Unit, NPCUIDisplay> _registeredUnits = new Dictionary<Unit, NPCUIDisplay>();
 
     public void Initialize(Action<bool> initializationCallback = null) {
@@ -16,6 +16,7 @@ public class NPCUIDisplayManager : IInitializableManager
     }
 
     public void Dispose() {
+        EnemyManager.Instance.OnEnemySpawned -= OnEnemySpawned;
         ClearAllDisplays();
     }
 

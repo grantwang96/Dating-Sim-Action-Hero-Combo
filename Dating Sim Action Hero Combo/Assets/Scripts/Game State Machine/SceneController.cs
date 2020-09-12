@@ -17,33 +17,32 @@ public class SceneController : MonoBehaviour {
     public event SceneUpdateDelegate OnSceneLoaded;
 
     private string _nextSceneName;
+    private bool _requiresLoadingScreen;
     private bool isLoadingScene;
 
     private void Awake() {
         Instance = this;
     }
 
-    public bool TransitionToScene(string sceneName) {
-        /*
-        if (CurrentSceneName.Equals(sceneName)) {
-            FinishLoadingScene();
-            return true;
-        }
-        */
+    public bool TransitionToScene(string sceneName, bool requiresLoadingScreen) {
         if (isLoadingScene) {
+            CustomLogger.Warn(nameof(SceneController), $"Already loading scene {_nextSceneName}!");
             return false;
         }
         _nextSceneName = sceneName;
-        // check to see if we're already in that scene or if we're currently loading
-        // play some transition animation
-        // temp: we're just gonna go straight in
-        OnEndSceneTransition();
+        _requiresLoadingScreen = requiresLoadingScreen;
+        if (_requiresLoadingScreen) {
+            LoadingScreenController.Instance.OnLoadingScreenShowComplete += OnEndSceneTransition;
+            LoadingScreenController.Instance.ShowLoadingScreen();
+        } else {
+            LoadSceneInstant(sceneName);
+        }
         return true;
     }
 
     // when transition animation ends -> should be in loading screen
     private void OnEndSceneTransition() {
-        LoadSceneInstant(LoadingScreenScene);
+        LoadingScreenController.Instance.OnLoadingScreenShowComplete -= OnEndSceneTransition;
         StartCoroutine(LoadSceneAsync());
     }
 
@@ -57,11 +56,19 @@ public class SceneController : MonoBehaviour {
     }
 
     private void FinishLoadingScene() {
+        LoadingScreenController.Instance.OnLoadingScreenHideComplete += OnLoadingScreenHideComplete;
+        LoadingScreenController.Instance.HideLoadingScreen();
+    }
+
+    private void OnLoadingScreenHideComplete() {
+        LoadingScreenController.Instance.OnLoadingScreenHideComplete -= OnLoadingScreenHideComplete;
         isLoadingScene = false;
         OnSceneLoaded?.Invoke(_nextSceneName);
     }
 
-    public bool LoadSceneInstant(string sceneName) {
-        return true;
+    private void LoadSceneInstant(string sceneName) {
+        SceneManager.LoadScene(sceneName);
+        isLoadingScene = false;
+        OnSceneLoaded?.Invoke(_nextSceneName);
     }
 }

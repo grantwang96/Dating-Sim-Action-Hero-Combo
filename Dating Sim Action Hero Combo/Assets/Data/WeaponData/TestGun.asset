@@ -21,8 +21,6 @@ MonoBehaviour:
   _reloadTime: 1.5
   _sprite: {fileID: 0}
   _icon: {fileID: 0}
-  _pooledWeaponSoundBoxId: prefab.Combat_WeaponSoundBox
-  _bulletPrefabId: prefab.Combat_Bullet
   _power: 5
   _bulletSpeed: 80
   _bulletLifeTime: 5
