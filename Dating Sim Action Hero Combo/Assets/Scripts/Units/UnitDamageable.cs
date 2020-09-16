@@ -23,6 +23,10 @@ public class UnitDamageable : MonoBehaviour, IDamageable {
         OnMaxHealthChanged?.Invoke(MaxHealth);
     }
 
+    public virtual void Dispose() {
+
+    }
+
     public virtual void Heal(int damage) {
         Health += damage;
         OnHealDamage?.Invoke(damage);

@@ -1,116 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System;
 
 public interface IInputController {
+    InputActionMap GameplayActionMap { get; }
+    InputActionMap UIActionMap { get; }
+}
 
-    Vector2 MovementInput { get; }
-    Vector2 MousePositionInput { get; }
-
-    bool IsActive { get; set; }
-
-    event Action OutfitSwapBtnPressed;
-    event Action OutfitSwapBtnHeld;
-    event Action OutfitSwapBtnReleased;
-
-    event Action InteractBtnPressed;
-    event Action InteractBtnHeld;
-    event Action InteractBtnReleased;
-
-    event Action ShootBtnPressed;
-    event Action ShootBtnHeld;
-    event Action ShootBtnReleased;
-
-    event Action OnReloadBtnPressed;
-    event Action OnReloadBtnHeld;
-    event Action OnReloadBtnReleased;
+public enum InputMapSet {
+    Gameplay,
+    UI
 }
 
 public class InputController : MonoBehaviour, IInputController
 {
+    public const string GameplayActionMapId = "Player";
+    public const string UIActionMapId = "UI";
+
     public static IInputController Instance { get; private set; }
+    
+    public InputActionMap GameplayActionMap { get; private set; }
+    public InputActionMap UIActionMap { get; private set; }
 
-    public Vector2 MovementInput { get; private set; }
-    public Vector2 MousePositionInput { get; private set; }
-    public bool IsActive { get; set; } = true;
-
-    public event Action OutfitSwapBtnPressed;
-    public event Action OutfitSwapBtnHeld;
-    public event Action OutfitSwapBtnReleased;
-
-    public event Action InteractBtnPressed;
-    public event Action InteractBtnHeld;
-    public event Action InteractBtnReleased;
-
-    public event Action ShootBtnPressed;
-    public event Action ShootBtnHeld;
-    public event Action ShootBtnReleased;
-
-    public event Action OnReloadBtnPressed;
-    public event Action OnReloadBtnHeld;
-    public event Action OnReloadBtnReleased;
-
-    public event Action OnEscBtnPressed;
-    public event Action OnEscBtnHeld;
-    public event Action OnEscBtnReleased;
+    [SerializeField] private InputActionAsset _gameplayInputAsset;
 
     private void Awake() {
         // internal class dependencies here
         Instance = this;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        // out of class dependencies here
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        ProcessInputs();
-    }
-
-    // TODO: split this into different control systems depending on last received input
-    private void ProcessInputs() {
-        KeyboardMouseInputs();
-        // ControllerInputs();
-        ButtonInputs();
-    }
-
-    private void KeyboardMouseInputs() {
-        // get axis inputs for movement
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-        MovementInput = new Vector2(moveHorizontal, moveVertical);
-
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        MousePositionInput = mousePosition;
-    }
-
-    private void ControllerInputs() {
-        // get axis inputs for rotation
-        float rotationHorizontal = Input.GetAxis("RotHorizontal");
-        float rotationVertical = Input.GetAxis("RotVertical");
-        MousePositionInput = new Vector2(rotationHorizontal, rotationVertical);
-    }
-
-    private void ButtonInputs() {
-        ButtonInput("Submit", InteractBtnPressed, InteractBtnHeld, InteractBtnReleased);
-        ButtonInput("Fire1", ShootBtnPressed, ShootBtnHeld, ShootBtnReleased);
-        ButtonInput("Interact", InteractBtnPressed, InteractBtnHeld, InteractBtnReleased);
-        ButtonInput("SwitchOutfit", OutfitSwapBtnPressed, OutfitSwapBtnHeld, OutfitSwapBtnReleased);
-        ButtonInput("Reload", OnReloadBtnPressed, OnReloadBtnHeld, OnReloadBtnReleased);
-    }
-
-    private void ButtonInput(string inputName, Action pressed, Action held, Action released) {
-        if (Input.GetButtonDown(inputName)) {
-            pressed?.Invoke();
-        } else if (Input.GetButton(inputName)) {
-            held?.Invoke();
-        } else if (Input.GetButtonUp(inputName)) {
-            released?.Invoke();
-        }
+        GameplayActionMap = _gameplayInputAsset.FindActionMap(GameplayActionMapId);
+        UIActionMap = _gameplayInputAsset.FindActionMap(UIActionMapId);
     }
 }

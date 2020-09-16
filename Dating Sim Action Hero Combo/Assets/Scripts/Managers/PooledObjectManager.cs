@@ -88,11 +88,17 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
             CustomLogger.Error(nameof(PooledObjectManager), $"Does not contain entry with id {objectId}!");
             return;
         }
-        foreach(PooledObject pooledObject in _objectPool[objectId].AvailableObjects) {
-            UnityEngine.Object obj = pooledObject as UnityEngine.Object;
-            Destroy(obj);
+        // despawn all currently spawned pooled objects
+        List<PooledObject> objsToDespawn = new List<PooledObject>();
+        for(int i = 0; i < _objectPool[objectId].InUseObjects.Count; i++) {
+            PooledObject pooledObject = _objectPool[objectId].InUseObjects[i];
+            objsToDespawn.Add(pooledObject);
         }
-        foreach(PooledObject pooledObject in _objectPool[objectId].InUseObjects) {
+        for(int i = 0; i < objsToDespawn.Count; i++) {
+            objsToDespawn[i].Despawn();
+        }
+        // remove all existing pooled objects
+        foreach (PooledObject pooledObject in _objectPool[objectId].AvailableObjects) {
             UnityEngine.Object obj = pooledObject as UnityEngine.Object;
             Destroy(obj);
         }

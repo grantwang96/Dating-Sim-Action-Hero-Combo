@@ -5,8 +5,18 @@ using System;
 
 public class NPCUIDisplayManager : IInitializableManager
 {
+    public static NPCUIDisplayManager Instance => GetOrSetInstance();
+    private static NPCUIDisplayManager _instance;
+
     private const string NPCUIDisplayPrefabId = "NPCDisplay";
     private Dictionary<Unit, NPCUIDisplay> _registeredUnits = new Dictionary<Unit, NPCUIDisplay>();
+
+    private static NPCUIDisplayManager GetOrSetInstance() {
+        if(_instance == null) {
+            _instance = new NPCUIDisplayManager();
+        }
+        return _instance;
+    }
 
     public void Initialize(Action<bool> initializationCallback = null) {
 

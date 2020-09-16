@@ -72,7 +72,7 @@ public abstract class AIState : MonoBehaviour {
     // exit state behaviour
     public virtual void Exit(AIState nextState) {
         // if this state is on the next state's path, ignore
-        if (nextState.IsOnMyPath(this)) {
+        if (nextState?.IsOnMyPath(this) ?? false) {
             return;
         }
         // Exit the parent state, if available

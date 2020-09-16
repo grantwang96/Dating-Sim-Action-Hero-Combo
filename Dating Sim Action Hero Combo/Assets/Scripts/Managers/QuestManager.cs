@@ -5,7 +5,8 @@ using System;
 
 public class QuestManager : IInitializableManager
 {
-    public static QuestManager Instance { get; private set; }
+    public static QuestManager Instance => GetOrSetInstance();
+    public static QuestManager _instance;
 
     public QuestState CurrentQuestState { get; private set; }
 
@@ -17,8 +18,14 @@ public class QuestManager : IInitializableManager
     public IReadOnlyList<Quest> QuestList => _questList;
     private int _currentQuestIndex;
 
+    private static QuestManager GetOrSetInstance() {
+        if(_instance == null) {
+            _instance = new QuestManager();
+        }
+        return _instance;
+    }
+
     public void Initialize(Action<bool> initializationCallback = null) {
-        Instance = this;
         InitializeQuestList();
         GameManager.Instance.OnGameStarted += OnGameStart;
         GameManager.Instance.OnGameEnded += OnGameEnd;
@@ -27,7 +34,6 @@ public class QuestManager : IInitializableManager
     }
 
     public void Dispose() {
-        Instance = null;
         GameManager.Instance.OnGameStarted -= OnGameStart;
         GameManager.Instance.OnGameEnded -= OnGameEnd;
     }

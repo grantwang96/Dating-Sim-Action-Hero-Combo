@@ -49,8 +49,10 @@ public enum ActivateTime {
 
 public class ActiveWeaponState {
     public float LastActivateTime;
+    public bool IsHolding;
 
     public virtual void Clear() {
         LastActivateTime = Time.time;
+        IsHolding = false;
     }
 }

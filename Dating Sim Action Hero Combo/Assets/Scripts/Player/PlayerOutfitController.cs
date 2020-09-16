@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
-public class PlayerOutfitController : MonoBehaviour
+public class PlayerOutfitController : MonoBehaviour, IUnitComponent
 {
+    private const string OutfitSwapInputId = "SwapOutfit";
     public static PlayerOutfitController Instance { get; private set; }
 
     [SerializeField] private PlayerUnit _unit;
@@ -15,27 +18,41 @@ public class PlayerOutfitController : MonoBehaviour
     private IPlayerActionController _currentSet;
 
     public bool AgentMode => _agentMode;
-
-    private void Awake() {
+    
+    public void Initialize() {
         Instance = this;
-    }
-
-    private void Start() {
         _civilianSet = new PlayerCivilianController(_unit);
         _combatSet = new PlayerCombatController(_unit);
         SetActionController(_agentMode);
         SubscribeToEvents();
+        GameEventsManager.Pause.Subscribe(OnGamePause);
     }
 
+    public void Dispose() {
+        _civilianSet.SetActive(false);
+        _combatSet.SetActive(false);
+        UnsubscribeToEvents();
+        GameEventsManager.Pause.Unsubscribe(OnGamePause);
+    }
+    
     private void SubscribeToEvents() {
-        InputController.Instance.OutfitSwapBtnPressed += BeginOutfitChange;
+        InputController.Instance.GameplayActionMap[OutfitSwapInputId].started += BeginOutfitChange;
     }
 
     private void UnsubscribeToEvents() {
-        InputController.Instance.OutfitSwapBtnPressed -= BeginOutfitChange;
+        InputController.Instance.GameplayActionMap[OutfitSwapInputId].started -= BeginOutfitChange;
     }
 
-    private void BeginOutfitChange() {
+    private void OnGamePause(bool paused) {
+        if (paused) {
+            UnsubscribeToEvents();
+        } else {
+            SubscribeToEvents();
+        }
+        _currentSet.SetActive(!paused);
+    }
+
+    private void BeginOutfitChange(InputAction.CallbackContext context) {
         if (_outfitChangeInProgress) {
             return;
         }

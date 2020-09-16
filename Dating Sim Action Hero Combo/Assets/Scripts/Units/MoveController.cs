@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class MoveController : MonoBehaviour {
+public abstract class MoveController : MonoBehaviour, IUnitComponent {
 
     [SerializeField] protected Rigidbody2D _rigidbody;
     [SerializeField] protected Transform _body;
@@ -14,6 +14,8 @@ public abstract class MoveController : MonoBehaviour {
     public Transform Body => _body;
     public Transform Front => _front;
 
+    protected bool _active = true;
+
     protected abstract void ProcessMovement();
     protected abstract void ProcessRotation();
 
@@ -21,9 +23,18 @@ public abstract class MoveController : MonoBehaviour {
 
     public virtual void Initialize() {
         UpdateMapSpacePosition(LevelDataManager.Instance.WorldToArraySpace(transform.position));
+        _active = true;
+        GameEventsManager.Pause.Subscribe(OnGamePause);
+    }
+
+    public virtual void Dispose() {
+        GameEventsManager.Pause.Unsubscribe(OnGamePause);
     }
 
     protected virtual void FixedUpdate() {
+        if (!_active) {
+            return;
+        }
         ProcessMovement();
         ProcessRotation();
     }
@@ -31,5 +42,9 @@ public abstract class MoveController : MonoBehaviour {
     protected virtual void UpdateMapSpacePosition(IntVector3 position) {
         _mapPosition = position;
         OnMapPositionUpdated?.Invoke(MapPosition);
+    }
+
+    private void OnGamePause(bool paused) {
+        _active = !paused;
     }
 }

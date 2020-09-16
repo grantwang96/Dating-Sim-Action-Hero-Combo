@@ -132,7 +132,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 885156445014017526}
-  - {fileID: 4973083737737340456}
+  - {fileID: 2914299018714999618}
   m_Father: {fileID: 4973083737845462315}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -152,63 +152,6 @@ MonoBehaviour:
   _sceneName: 
   _requiresLoadingScreen: 0
   _pooledObjectPrefabAssets: []
-  _uiPrefabs: []
-  Active: 0
---- !u!1 &4973083737737340471
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4973083737737340456}
-  - component: {fileID: 6516686386420363092}
-  m_Layer: 0
-  m_Name: Combat
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4973083737737340456
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4973083737737340471}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4973083737387095061}
-  - {fileID: 4973083739379078779}
-  m_Father: {fileID: 9074448711261048704}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6516686386420363092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4973083737737340471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8df162d9da20e534faba8ae82fb1d6ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _transitions: []
-  _sceneName: 
-  _requiresLoadingScreen: 0
-  _pooledObjectPrefabAssets:
-  - PoolId: Bullet
-    InitialCount: 20
-  - PoolId: WeaponSoundBox
-    InitialCount: 20
-  - PoolId: NPCDisplay
-    InitialCount: 20
   _uiPrefabs: []
   Active: 0
 --- !u!1 &4973083737845462314
@@ -281,11 +224,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4973083739379078778}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4973083737737340456}
+  m_Father: {fileID: 2914299018714999618}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4973083739379078780
@@ -306,17 +249,87 @@ MonoBehaviour:
   _pooledObjectPrefabAssets: []
   _uiPrefabs: []
   Active: 0
+--- !u!1 &8028764408580725524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2914299018714999618}
+  - component: {fileID: 7145200416924935910}
+  m_Layer: 0
+  m_Name: Gameplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2914299018714999618
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028764408580725524}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4973083737387095061}
+  - {fileID: 4973083739379078779}
+  m_Father: {fileID: 9074448711261048704}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7145200416924935910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028764408580725524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df162d9da20e534faba8ae82fb1d6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transitions: []
+  _sceneName: 
+  _requiresLoadingScreen: 0
+  _pooledObjectPrefabAssets:
+  - PoolId: WeaponSoundBox
+    InitialCount: 20
+  - PoolId: Bullet
+    InitialCount: 20
+  _uiPrefabs: []
+  Active: 0
 --- !u!1001 &5258079899110035727
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4973083737737340456}
+    m_TransformParent: {fileID: 2914299018714999618}
     m_Modifications:
-    - target: {fileID: 1007542431373690139, guid: 888a20dadba65fb44b2938b9ab178cb1,
+    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
-      propertyPath: m_Name
-      value: TestingCombat
+      propertyPath: _pooledObjectPrefabAssets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _sceneName
+      value: Experimental
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[0].PoolId
+      value: TestEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[0].InitialCount
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
@@ -373,22 +386,77 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
+    - target: {fileID: 1007542431373690139, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_Name
+      value: TestingCombat
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
       propertyPath: _pooledObjectPrefabAssets.Array.size
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
       propertyPath: _sceneName
       value: Experimental
       objectReference: {fileID: 0}
-    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _requiresLoadingScreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
       propertyPath: _pooledObjectPrefabAssets.Array.data[0].PoolId
       value: TestEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 1007542431373690137, guid: 888a20dadba65fb44b2938b9ab178cb1,
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[0].InitialCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].PoolId
+      value: WeaponSoundBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].InitialCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _transitions.Array.data[0]._gameState
+      value: 
+      objectReference: {fileID: 750352673871108065}
+    - target: {fileID: 5046883551229957879, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _transitions.Array.data[1]._gameState
+      value: 
+      objectReference: {fileID: 750352673871108065}
+    - target: {fileID: 5946570661098080074, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946570661098080074, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _sceneName
+      value: Experimental
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946570661098080074, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _requiresLoadingScreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946570661098080074, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[0].PoolId
+      value: TestEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946570661098080074, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
       propertyPath: _pooledObjectPrefabAssets.Array.data[0].InitialCount
       value: 5

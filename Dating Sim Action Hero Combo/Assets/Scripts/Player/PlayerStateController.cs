@@ -6,8 +6,9 @@ using UnityEngine;
 public class PlayerStateController {
 
     public static PlayerStateController Instance { get; private set; }
-    public Weapon EquippedWeapon { get; private set; }
+    public WeaponData EquippedWeapon => _config.CurrentLoadout;
     public int StartingAmmoClips => _config.TotalAmmoClips;
+    public int StartingAmmo => StartingAmmoClips * EquippedWeapon.ClipSize;
 
     private PlayerConfig _config;
 
@@ -24,13 +25,13 @@ public class PlayerStateController {
     }
 
     private PlayerStateController(PlayerConfig config) {
+        // TODO: create save system to persist/retrieve information about current loadout and state before entering a combat level
         _config = config;
         PlayerUnit.OnPlayerUnitInstanceSet += OnPlayerUnitSpawned;
     }
 
     private void ResetController() {
-        // temp until save system works
-        EquippedWeapon = new Weapon(_config.CurrentLoadout, _config.TotalAmmoClips * _config.CurrentLoadout.ClipSize);
+
     }
 
     private void OnPlayerUnitSpawned() {
@@ -38,6 +39,6 @@ public class PlayerStateController {
     }
 
     private void OnGameEnded() {
-
+        PlayerUnit.Instance.Dispose();
     }
 }

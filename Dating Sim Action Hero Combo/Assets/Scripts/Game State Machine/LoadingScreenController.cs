@@ -7,26 +7,37 @@ public class LoadingScreenController : IInitializableManager
 {
     private const string LoadingScreenPrefabId = "LoadingScreen";
 
-    public static LoadingScreenController Instance { get; private set; }
+    public static LoadingScreenController Instance => GetOrSetInstance();
+    private static LoadingScreenController _instance;
 
     public event Action OnLoadingScreenShowComplete;
     public event Action OnLoadingScreenHideComplete;
 
     private UILoadingScreen _loadingScreen;
 
-    public void Initialize(Action<bool> initializationCallback = null) {
-        Instance = this;
-        bool success = true;
-        UIObject uiObject = UIManager.Instance.CreateNewUIObject(LoadingScreenPrefabId, UILayerId.Overlay);
-        _loadingScreen = uiObject as UILoadingScreen;
-        if (_loadingScreen == null) {
-            CustomLogger.Error(nameof(LoadingScreenController), $"Could not retrieve loading screen prefab with id {LoadingScreenPrefabId}");
-            success = false;
-        } else {
-            _loadingScreen.OnShowComplete += ShowLoadingScreenComplete;
-            _loadingScreen.OnHideComplete += HideLoadingScreenComplete;
-            _loadingScreen.HideInstant();
+    private static LoadingScreenController GetOrSetInstance() {
+        if(_instance == null) {
+            _instance = new LoadingScreenController();
         }
+        return _instance;
+    }
+
+    public void Initialize(Action<bool> initializationCallback = null) {
+        bool success = true;
+        if(_loadingScreen == null) {
+            UIObject uiObject = UIManager.Instance.CreateNewUIObject(LoadingScreenPrefabId, UILayerId.Overlay);
+            _loadingScreen = uiObject as UILoadingScreen;
+            if (_loadingScreen == null) {
+                CustomLogger.Error(nameof(LoadingScreenController), $"Could not retrieve loading screen prefab with id {LoadingScreenPrefabId}");
+                success = false;
+            } else {
+                Debug.Log("Loading screen initialized!");
+                _loadingScreen.OnShowComplete += ShowLoadingScreenComplete;
+                _loadingScreen.OnHideComplete += HideLoadingScreenComplete;
+                _loadingScreen.HideInstant();
+            }
+        }
+        Debug.Log("Initialized loading screen controller!");
         initializationCallback?.Invoke(success);
     }
     
@@ -36,10 +47,12 @@ public class LoadingScreenController : IInitializableManager
     }
 
     public void ShowLoadingScreen() {
+        Debug.Log("Show loading screen");
         _loadingScreen?.Display();
     }
 
     public void HideLoadingScreen() {
+        Debug.Log("Hide loading screen");
         _loadingScreen?.Hide();
     }
     
@@ -48,7 +61,6 @@ public class LoadingScreenController : IInitializableManager
     }
 
     private void HideLoadingScreenComplete() {
-        _loadingScreen?.Hide();
         OnLoadingScreenHideComplete?.Invoke();
     }
 }

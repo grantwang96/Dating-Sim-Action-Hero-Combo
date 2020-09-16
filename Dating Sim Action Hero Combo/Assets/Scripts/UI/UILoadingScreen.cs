@@ -24,6 +24,7 @@ public class UILoadingScreen : UIObject
     public override void Hide() {
         base.Hide();
         StopAllCoroutines();
+        _background.color = _backgroundColor;
         StartCoroutine(FadeBackground(_fadeOutTime, _backgroundColor, Color.clear, OnHideFinish));
     }
 

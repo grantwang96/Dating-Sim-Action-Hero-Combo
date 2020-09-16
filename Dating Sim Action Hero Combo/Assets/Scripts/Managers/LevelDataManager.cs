@@ -30,7 +30,8 @@ public enum PathStatus {
 
 public class LevelDataManager : ILevelDataManager {
 
-    public static ILevelDataManager Instance { get; private set; }
+    public static ILevelDataManager Instance => GetOrSetInstance();
+    private static ILevelDataManager _instance;
     
     public int MapBoundsX { get; private set; }
     public int MapBoundsY { get; private set; }
@@ -40,15 +41,21 @@ public class LevelDataManager : ILevelDataManager {
     private ITileInfo[][] _tiles;
     private Dictionary<string, TileData> _tileConfig = new Dictionary<string, TileData>();
 
+    private static ILevelDataManager GetOrSetInstance() {
+        if(_instance == null) {
+            _instance = new LevelDataManager();
+        }
+        return _instance;
+    }
+
     public void Initialize(Action<bool> initializationCallback = null) {
-        Instance = this;
         LoadTileConfig();
         InitializeMap();
         initializationCallback?.Invoke(true);
     }
 
     public void Dispose() {
-
+        _enemySpawnPoints.Clear();
     }
 
     private void LoadTileConfig() {
@@ -69,6 +76,7 @@ public class LevelDataManager : ILevelDataManager {
                 _tiles[x][y] = new TileInfo(x, y, GameLevelDataController.Instance.CurrentGameLevelData.MapData.DefaultTileData);
             }
         }
+        _enemySpawnPoints.Clear();
     }
 
     public void UpdateTile(int x, int y, string tileType = "") {
@@ -138,6 +146,7 @@ public class LevelDataManager : ILevelDataManager {
             return;
         }
         _enemySpawnPoints.Add(id, spawn);
+        Debug.Log($"Registering enemy spawn {id}...");
     }
 
     public void DeregisterEnemySpawn(string id) {

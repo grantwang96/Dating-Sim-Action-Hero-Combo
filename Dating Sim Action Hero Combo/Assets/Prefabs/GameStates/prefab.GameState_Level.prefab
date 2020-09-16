@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1007542431373690138}
-  - component: {fileID: 1007542431373690137}
+  - component: {fileID: 3780461068881760412}
+  - component: {fileID: 376382298668549768}
   m_Layer: 0
   m_Name: prefab.GameState_Level
   m_TagString: Untagged
@@ -33,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1007542431373690137
+--- !u!114 &3780461068881760412
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,12 +46,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c974899130b92d41ae67ea37afe7771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _transitions: []
+  _transitions:
+  - _transitionName: game_ended
+    _gameState: {fileID: 0}
   _sceneName: 
-  _requiresLoadingScreen: 1
+  _requiresLoadingScreen: 0
   _pooledObjectPrefabAssets: []
   _uiPrefabs: []
   Active: 0
+--- !u!114 &376382298668549768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007542431373690139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 854ccca92ab9fb0409d8b60d5a2bef49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameState: {fileID: 3780461068881760412}
 --- !u!1 &2947386625161671406
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,6 +77,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1815186797830018971}
   - component: {fileID: 266837248563864133}
+  - component: {fileID: 2920390192416350281}
   m_Layer: 0
   m_Name: Default
   m_TagString: Untagged
@@ -96,12 +113,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _transitions:
   - _transitionName: pause_game
-    _gameState: {fileID: 7373463877078183143}
+    _gameState: {fileID: 5046883551229957879}
   _sceneName: 
   _requiresLoadingScreen: 0
   _pooledObjectPrefabAssets: []
   _uiPrefabs: []
   Active: 0
+--- !u!114 &2920390192416350281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947386625161671406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3923e9d454a3cd74696973d9f256628b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputId: Pause
+  _gameState: {fileID: 266837248563864133}
+  _inputMapSet: 0
+  _transitionId: pause_game
 --- !u!1 &8186513472718072404
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 996404756366664593}
-  - component: {fileID: 7373463877078183143}
+  - component: {fileID: 5046883551229957879}
   m_Layer: 0
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -133,7 +166,7 @@ Transform:
   m_Father: {fileID: 1007542431373690138}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7373463877078183143
+--- !u!114 &5046883551229957879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,7 +175,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8186513472718072404}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c974899130b92d41ae67ea37afe7771, type: 3}
+  m_Script: {fileID: 11500000, guid: 52a64dbfc65e6b048a7a1dcc35027771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _transitions:

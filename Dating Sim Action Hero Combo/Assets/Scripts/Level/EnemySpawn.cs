@@ -8,6 +8,10 @@ public class EnemySpawn : MonoBehaviour
     public string Id => _id;
 
     private void Awake() {
+        RegisterSpawnpoint();
+    }
+
+    private void RegisterSpawnpoint() {
         LevelDataManager.Instance.RegisterEnemySpawn(_id, this);
     }
 

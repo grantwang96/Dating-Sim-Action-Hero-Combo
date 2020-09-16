@@ -8,11 +8,16 @@ public class BootState : GameState
 
     protected override void OnStateEnterSuccess() {
         base.OnStateEnterSuccess();
-        InitializeManagers();
+    }
+
+    protected override void OnStateEnterComplete() {
+        base.OnStateEnterComplete();
         GameStateManager.Instance.HandleTransition(Transitions[0].TransitionName);
     }
 
     protected override void InitializeManagers() {
+        Debug.Log("Initializing boot state...");
         PlayerStateController.Create(_playerConfig);
+        OnManagersInitializationComplete();
     }
 }

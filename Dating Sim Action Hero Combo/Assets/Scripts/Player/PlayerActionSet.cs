@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.InputSystem;
 
 public interface IPlayerActionController
 {
@@ -8,6 +8,8 @@ public interface IPlayerActionController
 }
 
 public class PlayerActionController : IPlayerActionController {
+
+    private const string InteractInputId = "Interact";
 
     protected PlayerUnit _unit;
 
@@ -29,15 +31,15 @@ public class PlayerActionController : IPlayerActionController {
     }
 
     protected virtual void SubscribeToEvents() {
-        InputController.Instance.InteractBtnPressed += OnInteractPressed;
-        InputController.Instance.InteractBtnHeld += OnInteractHeld;
-        InputController.Instance.InteractBtnReleased += OnInteractReleased;
+        InputController.Instance.GameplayActionMap[InteractInputId].started += OnInteractPressed;
+        InputController.Instance.GameplayActionMap[InteractInputId].performed += OnInteractHeld;
+        InputController.Instance.GameplayActionMap[InteractInputId].canceled += OnInteractReleased;
     }
 
     protected virtual void UnsubscribeToEvents() {
-        InputController.Instance.InteractBtnPressed -= OnInteractPressed;
-        InputController.Instance.InteractBtnHeld -= OnInteractHeld;
-        InputController.Instance.InteractBtnReleased -= OnInteractReleased;
+        InputController.Instance.GameplayActionMap[InteractInputId].started -= OnInteractPressed;
+        InputController.Instance.GameplayActionMap[InteractInputId].performed -= OnInteractHeld;
+        InputController.Instance.GameplayActionMap[InteractInputId].canceled -= OnInteractReleased;
     }
 
     protected virtual bool CanInteract() {
@@ -48,7 +50,7 @@ public class PlayerActionController : IPlayerActionController {
         return true;
     }
 
-    private void OnInteractPressed() {
+    private void OnInteractPressed(InputAction.CallbackContext context) {
         if (!CanInteract()) {
             return;
         }
@@ -56,7 +58,7 @@ public class PlayerActionController : IPlayerActionController {
         _currentInteractable.InteractStart();
     }
 
-    private void OnInteractHeld() {
+    private void OnInteractHeld(InputAction.CallbackContext context) {
         if (!CanInteract()) {
             return;
         }
@@ -64,7 +66,7 @@ public class PlayerActionController : IPlayerActionController {
         _currentInteractable.InteractHold();
     }
 
-    private void OnInteractReleased() {
+    private void OnInteractReleased(InputAction.CallbackContext context) {
         if (!CanInteract()) {
             return;
         }

@@ -5,17 +5,29 @@ public class QuestInfoDisplayManager : IInitializableManager {
 
     private const string QuestInfoDisplayId = "QuestInfoDisplay";
 
+    public static QuestInfoDisplayManager Instance => GetOrSetInstance();
+    private static QuestInfoDisplayManager _instance;
+
     private QuestInfoDisplay _currentQuestInfoDisplay; // the current objective for the 
     private Queue<QuestState> _queuedQuestStates = new Queue<QuestState>(); // queue of quest states to display statuses for
 
+    private static QuestInfoDisplayManager GetOrSetInstance() {
+        if(_instance == null) {
+            _instance = new QuestInfoDisplayManager();
+        }
+        return _instance;
+    }
+
     public void Initialize(Action<bool> initializationCallback = null) {
-        // generate the current quest info display
-        UIObject uiObject = UIManager.Instance.CreateNewUIObject(QuestInfoDisplayId, UILayerId.Notifications);
-        _currentQuestInfoDisplay = uiObject as QuestInfoDisplay;
-        if (_currentQuestInfoDisplay == null) {
-            CustomLogger.Error(nameof(QuestInfoDisplayManager), $"Could not create current quest info display with id: {QuestInfoDisplayId}");
-            initializationCallback?.Invoke(false);
-            return;
+        if(_currentQuestInfoDisplay == null) {
+            // generate the current quest info display
+            UIObject uiObject = UIManager.Instance.CreateNewUIObject(QuestInfoDisplayId, UILayerId.Notifications);
+            _currentQuestInfoDisplay = uiObject as QuestInfoDisplay;
+            if (_currentQuestInfoDisplay == null) {
+                CustomLogger.Error(nameof(QuestInfoDisplayManager), $"Could not create current quest info display with id: {QuestInfoDisplayId}");
+                initializationCallback?.Invoke(false);
+                return;
+            }
         }
         _currentQuestInfoDisplay.Hide();
         // listen to quest info display events
@@ -65,7 +77,7 @@ public class QuestInfoDisplayManager : IInitializableManager {
     }
 
     private void OnAllQuestsCompleted() {
-
+        GameManager.Instance.EndGame();
     }
 
     public void Dispose() {

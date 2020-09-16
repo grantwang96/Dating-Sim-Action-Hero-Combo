@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IEnemyManager : IAllianceManager {
 
     IReadOnlyList<EnemyUnit> AllEnemies { get; }
-
+    
     event Action<Unit> OnEnemySpawned;
     event Action<Unit> OnEnemyDefeated;
 
@@ -15,7 +15,11 @@ public interface IEnemyManager : IAllianceManager {
 
 public class EnemyManager : IEnemyManager
 {
-    public static IEnemyManager Instance { get; private set; }
+    private const float DespawnTime = 3f;
+    private const string DespawnUnitId = "despawn_unit_{0}";
+
+    public static IEnemyManager Instance => GetOrSetInstance();
+    private static IEnemyManager _instance;
 
     private Dictionary<string, EnemyData> _enemyDataConfig = new Dictionary<string, EnemyData>();
     private List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
@@ -26,15 +30,26 @@ public class EnemyManager : IEnemyManager
     public event Action<Unit> OnEnemyDefeated;
     public event Action<NPCUnit, UnitMessage> OnAllianceMessageSent;
 
+    private static IEnemyManager GetOrSetInstance() {
+        if(_instance == null) {
+            _instance = new EnemyManager();
+        }
+        return _instance;
+    }
+
     #region INITIALIZATION
     public void Initialize(Action<bool> initializationCallback = null) {
-        Instance = this;
+        _enemyUnits.Clear();
         LoadEnemyConfig();
         initializationCallback?.Invoke(true);
     }
 
     public void Dispose() {
-
+        for(int i = 0; i < _enemyUnits.Count; i++) {
+            _enemyUnits[i].Despawn();
+        }
+        _enemyUnits.Clear();
+        _enemyDataConfig.Clear();
     }
 
     private void LoadEnemyConfig() {
@@ -45,7 +60,7 @@ public class EnemyManager : IEnemyManager
         }
     }
     #endregion
-
+    
     public void SpawnEnemy(Vector2 position, string enemyType, string overrideId) {
         EnemyData data;
         if (!_enemyDataConfig.TryGetValue(enemyType, out data)) {
@@ -72,6 +87,7 @@ public class EnemyManager : IEnemyManager
         unit.CombatController.SetWeapon(data.EquippedWeapon);
         AddUnitListeners(unit);
         unit.Spawn();
+        UnitsManager.Instance.RegisterUnit(unit);
 
         // add enemy controller to list and dictionary
         _enemyUnits.Add(unit);
@@ -82,6 +98,11 @@ public class EnemyManager : IEnemyManager
         // remove from all listings
         _enemyUnits.Remove(unit);
         unit.Despawn();
+        string timerId = string.Format(DespawnUnitId, unit.UnitId);
+        if(TimerManager.Instance.TryGetTimer(timerId, out TimerObject _)) {
+            TimerManager.Instance.RemoveTimer(timerId);
+        }
+        UnitsManager.Instance.DeregisterUnit(unit);
     }
 
     // listen for unit events like being defeated or sending messages
@@ -102,6 +123,8 @@ public class EnemyManager : IEnemyManager
             return;
         }
         RemoveUnitListeners(enemy);
+        string id = string.Format(DespawnUnitId, enemy.UnitId);
+        TimerManager.Instance.AddTimer(new DespawnEnemyTimer(enemy, id, DespawnTime));
         OnEnemyDefeated?.Invoke(unit);
     }
 
@@ -116,5 +139,19 @@ public class EnemyManager : IEnemyManager
             default:
                 break;
         }
+    }
+}
+
+public class DespawnEnemyTimer : TimerObject {
+
+    private EnemyUnit _unit;
+
+    public DespawnEnemyTimer(EnemyUnit unit, string id, float duration) : base(id, duration) {
+        _unit = unit;
+    }
+
+    protected override void DoTimerAction() {
+        _unit.Despawn();
+        base.DoTimerAction();
     }
 }

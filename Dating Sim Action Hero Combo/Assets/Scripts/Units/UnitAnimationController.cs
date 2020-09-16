@@ -34,11 +34,25 @@ public class AnimationStateData {
     public IReadOnlyList<StringFloatPair> Floats => _floats;
 }
 
-public class UnitAnimationController : MonoBehaviour, IAnimationController
+public class UnitAnimationController : MonoBehaviour, IAnimationController, IUnitComponent
 {
     public event Action<AnimationStatus> OnAnimationStatusUpdated;
 
     [SerializeField] private Animator _animator;
+
+    private bool _active = true;
+
+    public void Initialize() {
+        GameEventsManager.Pause.Subscribe(OnGamePaused);
+    }
+
+    public void Dispose() {
+        GameEventsManager.Pause.Unsubscribe(OnGamePaused);
+    }
+
+    private void OnGamePaused(bool paused) {
+        _active = !paused;
+    }
 
     public void UpdateState(AnimationStateData data) {
         if (!string.IsNullOrEmpty(data.AnimationName)) {

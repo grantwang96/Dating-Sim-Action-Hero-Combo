@@ -11,18 +11,33 @@ public class PlayerUnit : Unit, ITileOccupant {
 
     public static event Action OnPlayerUnitInstanceSet;
 
+    [SerializeField] private PlayerOutfitController _playerOutfitController;
+
+    private UIObject _playerHud;
+
     protected override void Awake() {
-        base.Awake();
         Instance = this;
         OnPlayerUnitInstanceSet?.Invoke();
     }
 
-    protected override void Start() {
-        base.Start();
+    public override void Initialize(string unitId, UnitData unitData) {
+        base.Initialize(unitId, unitData);
+        _playerOutfitController.Initialize();
         UnitsManager.Instance.RegisterUnit(this);
         // temp
-        UIObject playerHud = UIManager.Instance.CreateNewUIObject(PlayerHudId, UILayerId.HUD);
-        playerHud.Initialize();
-        playerHud.Display();
+        UIObject newPlayerHud = UIManager.Instance.CreateNewUIObject(PlayerHudId, UILayerId.HUD);
+        if(newPlayerHud == null) {
+            return;
+        }
+        _playerHud = newPlayerHud;
+        _playerHud.Initialize();
+        _playerHud.Display();
+    }
+
+    public override void Dispose() {
+        base.Dispose();
+        _playerHud.Hide();
+        UIManager.Instance.RemoveUIObject(PlayerHudId);
+        _playerOutfitController.Dispose();
     }
 }

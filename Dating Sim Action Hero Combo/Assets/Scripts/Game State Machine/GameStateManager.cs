@@ -28,7 +28,7 @@ public class GameStateManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         if (_initialized) { return; }
-        Debug.Log($"[{nameof(GameStateManager)}] {name} is loaded!");
+        Debug.Log($"[{nameof(GameStateManager)}] Initialized!");
         OnAppStart();
 	}
 

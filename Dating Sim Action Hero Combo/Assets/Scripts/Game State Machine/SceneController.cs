@@ -17,25 +17,25 @@ public class SceneController : MonoBehaviour {
     public event SceneUpdateDelegate OnSceneLoaded;
 
     private string _nextSceneName;
-    private bool _requiresLoadingScreen;
-    private bool isLoadingScene;
+    private bool _isLoadingScene;
 
     private void Awake() {
         Instance = this;
     }
 
     public bool TransitionToScene(string sceneName, bool requiresLoadingScreen) {
-        if (isLoadingScene) {
+        Debug.Log($"Loading scene {sceneName}...");
+        if (_isLoadingScene) {
             CustomLogger.Warn(nameof(SceneController), $"Already loading scene {_nextSceneName}!");
             return false;
         }
+        _isLoadingScene = true;
         _nextSceneName = sceneName;
-        _requiresLoadingScreen = requiresLoadingScreen;
-        if (_requiresLoadingScreen) {
+        if (requiresLoadingScreen) {
             LoadingScreenController.Instance.OnLoadingScreenShowComplete += OnEndSceneTransition;
             LoadingScreenController.Instance.ShowLoadingScreen();
         } else {
-            LoadSceneInstant(sceneName);
+            StartCoroutine(LoadSceneOneFrame());
         }
         return true;
     }
@@ -48,7 +48,6 @@ public class SceneController : MonoBehaviour {
 
     private IEnumerator LoadSceneAsync() {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_nextSceneName);
-        isLoadingScene = true;
         while (!asyncLoad.isDone) {
             yield return new WaitForEndOfFrame();
         }
@@ -62,13 +61,21 @@ public class SceneController : MonoBehaviour {
 
     private void OnLoadingScreenHideComplete() {
         LoadingScreenController.Instance.OnLoadingScreenHideComplete -= OnLoadingScreenHideComplete;
-        isLoadingScene = false;
+        _isLoadingScene = false;
+        Debug.Log("Scene load complete!");
         OnSceneLoaded?.Invoke(_nextSceneName);
     }
 
     private void LoadSceneInstant(string sceneName) {
+        _isLoadingScene = false;
         SceneManager.LoadScene(sceneName);
-        isLoadingScene = false;
+        Debug.Log("Scene load complete!");
         OnSceneLoaded?.Invoke(_nextSceneName);
+    }
+
+    private IEnumerator LoadSceneOneFrame() {
+        _isLoadingScene = true;
+        yield return new WaitForEndOfFrame();
+        LoadSceneInstant(_nextSceneName);
     }
 }

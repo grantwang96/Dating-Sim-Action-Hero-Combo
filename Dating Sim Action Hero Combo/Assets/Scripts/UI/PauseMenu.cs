@@ -17,6 +17,16 @@ public class PauseMenu : UIObject
         return base.Initialize();
     }
 
+    public override void Display() {
+        base.Display();
+        gameObject.SetActive(true);
+    }
+
+    public override void Hide() {
+        base.Hide();
+        gameObject.SetActive(false);
+    }
+
     public override void CleanUp() {
         base.CleanUp();
         _resumeButton.onClick.RemoveAllListeners();

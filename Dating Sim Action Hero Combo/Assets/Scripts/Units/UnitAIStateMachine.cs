@@ -6,6 +6,7 @@ public class UnitAIStateMachine : MonoBehaviour
 {
     [SerializeField] private NPCUnit _unit;
     [SerializeField] private AIState _startingState;
+    [SerializeField] private AIState _deathState;
     [SerializeField] private UnitMessageAIStateOverride[] _unitMessageAIStateOverrides;
 
     private AIState _currentState;
@@ -13,10 +14,11 @@ public class UnitAIStateMachine : MonoBehaviour
     private Dictionary<UnitMessage, AIState> _messageOverrideStates = new Dictionary<UnitMessage, AIState>();
     private Queue<AIStateDataEntry> _queuedStateList = new Queue<AIStateDataEntry>();
 
+    private bool _active = true;
+
     private void Awake() {
         _unit.OnUnitInitialized += OnUnitInitialized;
         _messageInterpeter = new NPCMessageInterpreter(_unit);
-        OnUnitInitialized(); // initialize may run before Awake() is called???
         InitializeMessageAIStateOverrides();
     }
 
@@ -26,27 +28,32 @@ public class UnitAIStateMachine : MonoBehaviour
             _messageOverrideStates.Add(_unitMessageAIStateOverrides[i].UnitMessage, _unitMessageAIStateOverrides[i].AIState);
         }
     }
-
-    // Start is called before the first frame update
-    private void Start() {
-        OnReadyToTransitionState(_startingState);
-    }
     
     private void Update() {
         // execute the current AI State
-        if(_currentState != null) {
+        if(_currentState != null && _active) {
             _currentState.Execute();
         }
     }
 
     private void OnUnitInitialized() {
+        Debug.Log("initialized");
+        _active = true;
+        GameEventsManager.Pause.Subscribe(OnGamePaused);
         _unit.OnUnitDefeated += OnUnitDefeated;
         _unit.OnUnitMessageReceived += OnAllianceMessageReceived;
+        OnReadyToTransitionState(_startingState);
     }
 
     private void OnUnitDefeated(Unit unit) {
+        GameEventsManager.Pause.Unsubscribe(OnGamePaused);
         _unit.OnUnitDefeated -= OnUnitDefeated;
-        _unit.OnUnitMessageReceived += OnAllianceMessageReceived;
+        _unit.OnUnitMessageReceived -= OnAllianceMessageReceived;
+        OnReadyToTransitionState(_deathState);
+    }
+
+    private void OnGamePaused(bool paused) {
+        _active = !paused;
     }
 
     private void OnAllianceMessageReceived(NPCUnit ally, UnitMessage message) {

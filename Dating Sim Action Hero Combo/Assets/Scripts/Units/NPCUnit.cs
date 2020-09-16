@@ -22,7 +22,6 @@ public abstract class NPCUnit : Unit
 
     public override void Initialize(string unitId, UnitData data) {
         _collider.radius = .5f; // replace with UnitData field
-        MoveController.Initialize();
         base.Initialize(unitId, data);
     }
 

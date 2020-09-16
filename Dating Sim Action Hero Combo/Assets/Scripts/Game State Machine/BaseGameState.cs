@@ -5,6 +5,6 @@ using UnityEngine;
 public class BaseGameState : GameState
 {
     protected override IInitializableManager[] _initializableManagers => new IInitializableManager[] {
-        new LoadingScreenController()
+        LoadingScreenController.Instance
     };
 }

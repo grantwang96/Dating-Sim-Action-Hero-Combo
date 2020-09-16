@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System;
 
 public class PlayerCombatController : PlayerActionController
 {
+    private const string ShootInputId = "Fire";
+    private const string ReloadInputId = "Reload";
+
     public static PlayerCombatController Instance { get; private set; }
 
     // store currently held weapon
@@ -17,57 +21,79 @@ public class PlayerCombatController : PlayerActionController
 
     public PlayerCombatController(PlayerUnit unit) : base(unit) {
         Instance = this;
-        UpdateEquippedWeapon(PlayerStateController.Instance.EquippedWeapon);
-    }
-
-    private void UpdateEquippedWeapon(Weapon weapon) {
-        if(EquippedWeapon != null) {
-            weapon.OnReloadStart -= ReloadStarted;
-            weapon.OnReloadFinish -= ReloadFinished;
-        }
+        PlayerWeapon weapon = new PlayerWeapon(unit, PlayerStateController.Instance.EquippedWeapon, PlayerStateController.Instance.StartingAmmo);
         EquippedWeapon = weapon;
         OnEquippedWeaponUpdated?.Invoke();
+    }
+
+    private void UpdateEquippedWeapon(PlayerWeapon weapon) {
+        if(EquippedWeapon != null) {
+            UnsubscribeToWeaponEvents();
+        }
+        EquippedWeapon = weapon;
+        SubscribeToWeaponEvents();
+        OnEquippedWeaponUpdated?.Invoke();
+    }
+
+    private void SubscribeToWeaponEvents() {
+        if (EquippedWeapon == null) {
+            return;
+        }
+        EquippedWeapon.OnCurrentClipUpdated += OnCurrentClipUpdated;
         EquippedWeapon.OnReloadStart += ReloadStarted;
         EquippedWeapon.OnReloadFinish += ReloadFinished;
+    }
+
+    private void UnsubscribeToWeaponEvents() {
+        if (EquippedWeapon == null) {
+            return;
+        }
+        EquippedWeapon.OnCurrentClipUpdated -= OnCurrentClipUpdated;
+        EquippedWeapon.OnReloadStart -= ReloadStarted;
+        EquippedWeapon.OnReloadFinish -= ReloadFinished;
     }
 
     protected override void SubscribeToEvents() {
         base.SubscribeToEvents();
 
-        InputController.Instance.ShootBtnPressed += OnShootBtnPressed;
-        InputController.Instance.ShootBtnHeld += OnShootBtnHeld;
-        InputController.Instance.ShootBtnReleased += OnShootBtnReleased;
+        InputController.Instance.GameplayActionMap[ShootInputId].started += OnShootBtnPressed;
+        InputController.Instance.GameplayActionMap[ShootInputId].performed += OnShootBtnHeld;
+        InputController.Instance.GameplayActionMap[ShootInputId].canceled += OnShootBtnReleased;
+        InputController.Instance.GameplayActionMap[ReloadInputId].started += OnReloadBtnPressed;
 
-        InputController.Instance.OnReloadBtnPressed += OnReloadBtnPressed;
+        SubscribeToWeaponEvents();
     }
 
     protected override void UnsubscribeToEvents() {
         base.UnsubscribeToEvents();
 
-        InputController.Instance.ShootBtnPressed -= OnShootBtnPressed;
-        InputController.Instance.ShootBtnHeld -= OnShootBtnHeld;
-        InputController.Instance.ShootBtnReleased -= OnShootBtnReleased;
+        InputController.Instance.GameplayActionMap[ShootInputId].started -= OnShootBtnPressed;
+        InputController.Instance.GameplayActionMap[ShootInputId].performed -= OnShootBtnHeld;
+        InputController.Instance.GameplayActionMap[ShootInputId].canceled -= OnShootBtnReleased;
 
-        InputController.Instance.OnReloadBtnPressed -= OnReloadBtnPressed;
+        InputController.Instance.GameplayActionMap[ReloadInputId].started -= OnReloadBtnPressed;
+
+        UnsubscribeToWeaponEvents();
+    }
+    
+    private void OnShootBtnPressed(InputAction.CallbackContext context) {
+        EquippedWeapon.Use(ActivateTime.OnPress);
     }
 
-    private void OnShootBtnPressed() {
-        EquippedWeapon.Use(ActivateTime.OnPress, PlayerUnit.Instance);
-        OnAmmoUpdated?.Invoke(EquippedWeapon.CurrentClip);
+    private void OnShootBtnHeld(InputAction.CallbackContext context) {
+        EquippedWeapon.Use(ActivateTime.OnHeld);
     }
 
-    private void OnShootBtnHeld() {
-        EquippedWeapon.Use(ActivateTime.OnHeld, PlayerUnit.Instance);
-        OnAmmoUpdated?.Invoke(EquippedWeapon.CurrentClip);
+    private void OnShootBtnReleased(InputAction.CallbackContext context) {
+        EquippedWeapon.Use(ActivateTime.OnRelease);
     }
 
-    private void OnShootBtnReleased() {
-        EquippedWeapon.Use(ActivateTime.OnRelease, PlayerUnit.Instance);
-        OnAmmoUpdated?.Invoke(EquippedWeapon.CurrentClip);
-    }
-
-    private void OnReloadBtnPressed() {
+    private void OnReloadBtnPressed(InputAction.CallbackContext context) {
         EquippedWeapon.Reload();
+    }
+
+    private void OnCurrentClipUpdated(int currentClip) {
+        OnAmmoUpdated?.Invoke(currentClip);
     }
 
     private void ReloadStarted() {

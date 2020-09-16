@@ -12,7 +12,11 @@ public class EnemyUnit : NPCUnit, PooledObject {
     public void Despawn() {
         gameObject.SetActive(false);
         PooledObjectManager.Instance.ReturnPooledObject(this.name, this);
+    }
+
+    protected override void OnDefeated() {
         EnemyManager.Instance.OnAllianceMessageSent -= OnAllianceMessageSent;
+        base.OnDefeated();
     }
 
     public void Spawn() {

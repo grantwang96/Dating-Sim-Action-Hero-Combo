@@ -40,11 +40,16 @@ public class Unit : MonoBehaviour
         UnitId = unitId;
         UnitData = unitData;
         _damageable.Initialize(); // to prevent race condition
+        _moveController.Initialize();
+        _animationController.Initialize();
         SubscribeToEvents();
         OnUnitInitialized?.Invoke();
     }
 
     public virtual void Dispose() {
+        _damageable.Dispose();
+        _moveController.Dispose();
+        _animationController.Dispose();
         UnsubscribeToEvents();
     }
 
@@ -56,8 +61,12 @@ public class Unit : MonoBehaviour
         _damageable.OnDefeated -= OnDefeated;
     }
 
-    private void OnDefeated() {
+    protected virtual void OnDefeated() {
         OnUnitDefeated?.Invoke(this);
+    }
+
+    protected virtual void OnUnitsManagerActiveSet(bool active) {
+
     }
 }
 

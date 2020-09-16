@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public interface IDamageable
+public interface IDamageable : IUnitComponent
 {
     int Health { get; }
     int MaxHealth { get; }

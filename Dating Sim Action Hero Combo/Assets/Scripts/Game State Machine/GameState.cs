@@ -41,10 +41,11 @@ public class GameState : MonoBehaviour {
     
     // attempt to enter this state
     public virtual void Enter() {
+        Debug.Log($"Entering game state {name}");
         IsLoading = true;
         // enter parent state first, if necessary
         if (ParentState != null && !ParentState.IsActive) {
-            ParentState.OnGameStateEnter += OnReadyToEnter;
+            ParentState.OnGameStateEnter += OnParentStateEntered;
             ParentState.Enter();
             return;
         }
@@ -68,23 +69,30 @@ public class GameState : MonoBehaviour {
     public virtual void Exit(GameState nextState) {
         // check to see if we actually need to exit
         if (nextState.StateOnPath(this)) {
+            Debug.Log($"No need to exit state {name}");
             return;
         }
+        // have the parent exit as well if necessary
+        if (ParentState != null) {
+            ParentState.Exit(nextState);
+        }
+        Debug.Log($"Exiting state {name}. New state is {nextState}");
         IsLoading = false;
         IsActive = false;
         Active = true;
-        DeregisterPrefabs();
         DisposeManagers();
+        DeregisterPrefabs();
+        DeregisterUIPrefabs();
         OnGameStateExit?.Invoke();
     }
 
     // check if a given state is on this state's active path
     public bool StateOnPath(GameState state) {
-        if (ParentState == null) {
-            return false;
-        }
         if (this == state) {
             return true;
+        }
+        if (ParentState == null) {
+            return false;
         }
         return ParentState.StateOnPath(state);
     }
@@ -108,7 +116,13 @@ public class GameState : MonoBehaviour {
         }
     }
 
+    protected void OnParentStateEntered() {
+        ParentState.OnGameStateEnter -= OnParentStateEntered;
+        OnReadyToEnter();
+    }
+
     protected void OnReadyToEnter() {
+        CustomLogger.Log(name, $"Ready to enter {name}");
         if (RequiresScene()) {
             // that means a scene transition is necessary and we haven't fully loaded yet
             TryToLoadScene();
@@ -120,7 +134,7 @@ public class GameState : MonoBehaviour {
     private void TryToLoadScene() {
         bool success = SceneController.Instance.TransitionToScene(_sceneName, _requiresLoadingScreen);
         if (!success) {
-            CustomLogger.Error($"[{this.name}]", $"[{nameof(GameState)}] Failed to find and load scene!");
+            CustomLogger.Error(name, $"[{nameof(GameState)}] Failed to find and load scene!");
             OnStateEnterFailed();
             return;
         }
@@ -136,6 +150,7 @@ public class GameState : MonoBehaviour {
 
     // when the game the state is ready to initialize (scene has been loaded, parents are ready, etc.)
     protected virtual void OnStateEnterSuccess() {
+        CustomLogger.Log(name, $"Successfully entered state {name}!");
         IsLoading = false;
         IsActive = true;
         Active = true;
@@ -145,6 +160,7 @@ public class GameState : MonoBehaviour {
 
     protected virtual void InitializeManagers() {
         if (_initializableManagers == null) {
+            OnManagersInitializationComplete();
             return;
         }
         _currentManagerIndex = 0;
@@ -165,6 +181,11 @@ public class GameState : MonoBehaviour {
 
     protected void OnManagersInitializationComplete() {
         RegisterPrefabs();
+        RegisterUIPrefabs();
+        OnStateEnterComplete();
+    }
+
+    protected virtual void OnStateEnterComplete() {
         if (ParentState != null) {
             ParentState.OnGameStateEnter -= OnStateEnterSuccess;
         }
@@ -190,7 +211,7 @@ public class GameState : MonoBehaviour {
         for(int i = 0; i < _uiPrefabs.Count; i++) {
             UIObject uiObject = UIManager.Instance.CreateNewUIObject(_uiPrefabs[i].UIPrefabId, _uiPrefabs[i].LayerID);
             if (uiObject == null) {
-                CustomLogger.Error(this.name, $"Could not retrieve ui objet with id {_uiPrefabs[i].UIPrefabId}");
+                CustomLogger.Error(this.name, $"Could not retrieve ui object with id {_uiPrefabs[i].UIPrefabId}");
                 continue;
             }
             uiObject.Initialize();

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System;
 
-public interface IUnitsManager : IInitializableManager{
-
+public interface IUnitsManager : IInitializableManager {
+    
     void RegisterUnit(Unit unit);
     void DeregisterUnit(Unit unit);
     List<Unit> GetUnitListByTags(UnitTags tags);
-
+    
     event Action<Unit> OnUnitRegistered;
     event Action<Unit> OnUnitDeregistered;
 }
@@ -16,23 +16,35 @@ public interface IUnitsManager : IInitializableManager{
 /// </summary>
 public class UnitsManager : IUnitsManager
 {
-    public static IUnitsManager Instance { get; private set; }
-
+    public static IUnitsManager Instance => GetOrSetInstance();
+    private static IUnitsManager _instance;
+    
     public event Action<Unit> OnUnitRegistered;
     public event Action<Unit> OnUnitDeregistered;
 
     private List<Unit> _allUnits = new List<Unit>();
     private Dictionary<UnitTags, List<Unit>> _unitsByTags = new Dictionary<UnitTags, List<Unit>>();
+
+    private static IUnitsManager GetOrSetInstance() {
+        if(_instance == null) {
+            _instance = new UnitsManager();
+        }
+        return _instance;
+    }
     
     public void Initialize(Action<bool> initializationCallback = null) {
-        Instance = this;
         initializationCallback?.Invoke(true);
     }
 
     public void Dispose() {
-
+        for(int i = 0; i < _allUnits.Count; i++) {
+            Unit unit = _allUnits[i];
+            unit.Dispose();
+        }
+        _allUnits.Clear();
+        _unitsByTags.Clear();
     }
-
+    
     public void RegisterUnit(Unit unit) {
         _allUnits.Add(unit);
         AddUnitToUnitsByTags(unit, unit.UnitTags);
@@ -49,6 +61,7 @@ public class UnitsManager : IUnitsManager
     public void DeregisterUnit(Unit unit) {
         _allUnits.Remove(unit);
         RemoveUnitFromUnitsByTags(unit, unit.UnitTags);
+        unit.Dispose();
         OnUnitDeregistered?.Invoke(unit);
     }
 

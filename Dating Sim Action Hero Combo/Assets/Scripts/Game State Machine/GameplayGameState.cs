@@ -7,16 +7,29 @@ using UnityEngine;
 /// </summary>
 public class GameplayGameState : GameState
 {
+    private const string OnGameEndedTransition = "game_ended";
+
     protected override IInitializableManager[] _initializableManagers => new IInitializableManager[] {
         // game managers
-        new GameManager(),
-        new LevelDataManager(),
-        new UnitsManager(),
-        new EnemyManager(),
-        new QuestManager(),
+        GameManager.Instance,
+        LevelDataManager.Instance,
+        UnitsManager.Instance,
+        EnemyManager.Instance,
+        QuestManager.Instance,
 
         // ui managers
-        new NPCUIDisplayManager(),
-        new QuestInfoDisplayManager()
+        NPCUIDisplayManager.Instance,
+        QuestInfoDisplayManager.Instance
     };
+
+    protected override void OnStateEnterComplete() {
+        base.OnStateEnterComplete();
+        GameManager.Instance.OnGameEnded += OnGameEnded;
+    }
+
+    // temp: remove this when game over screen is created
+    private void OnGameEnded() {
+        GameManager.Instance.OnGameEnded -= OnGameEnded;
+        GameStateManager.Instance.HandleTransition(OnGameEndedTransition);
+    }
 }

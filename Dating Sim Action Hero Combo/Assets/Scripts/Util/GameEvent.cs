@@ -1,20 +1,29 @@
 ﻿using System;
 
+// the mega class that will store all the important game events that fire
+public static partial class GameEventsManager {
+    
+}
+
 public class GameEvent {
     public event Action GameEventAction;
 
+    // actually fire the event
     public void Broadcast() {
         GameEventAction?.Invoke();
     }
 
+    // register a listener
     public void Subscribe(Action action) {
         GameEventAction += action;
     }
 
+    // unregister a listener
     public void Unsubscribe(Action action) {
         GameEventAction -= action;
     }
 
+    // unregister all listeners
     public void UnsubscribeAll() {
         GameEventAction = null;
     }
