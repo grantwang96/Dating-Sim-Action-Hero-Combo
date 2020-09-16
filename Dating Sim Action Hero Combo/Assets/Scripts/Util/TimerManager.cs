@@ -12,8 +12,15 @@ public class TimerManager : MonoBehaviour
 
     private readonly List<TimerObject> _timersToRemove = new List<TimerObject>();
 
+    private bool _active = true;
+
     private void Awake() {
         Instance = this;
+        GameEventsManager.Pause.Subscribe(OnGamePaused);
+    }
+
+    private void OnDestroy() {
+        GameEventsManager.Pause.Unsubscribe(OnGamePaused);
     }
 
     // Update is called once per frame
@@ -47,12 +54,18 @@ public class TimerManager : MonoBehaviour
     }
 
     private void UpdateAllTimers() {
+        if (!_active) {
+            return;
+        }
         for(int i = 0; i < _allTimerObjects.Count; i++) {
             _allTimerObjects[i].Increment();
         }
     }
 
     private void RemoveCompletedTimers() {
+        if (!_active) {
+            return;
+        }
         for (int i = 0; i < _timersToRemove.Count; i++) {
             RemoveTimer(_timersToRemove[i].Id);
         }
@@ -61,6 +74,10 @@ public class TimerManager : MonoBehaviour
 
     private void OnTimerCompleted(TimerObject timer) {
         _timersToRemove.Add(timer);
+    }
+
+    private void OnGamePaused(bool paused) {
+        _active = !paused;
     }
 }
 
@@ -90,5 +107,19 @@ public abstract class TimerObject {
 
     protected virtual void DoTimerAction() {
         OnTimerCompleted?.Invoke(this);
+    }
+}
+
+public class SimpleActionTimer : TimerObject {
+
+    private Action _callback;
+
+    public SimpleActionTimer(string id, float duration, Action action) : base(id, duration) {
+        _callback = action;
+    }
+
+    protected override void DoTimerAction() {
+        _callback?.Invoke();
+        base.DoTimerAction();
     }
 }

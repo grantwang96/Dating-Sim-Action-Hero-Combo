@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class NPCUIDisplayManager : IInitializableManager
-{
+public class NPCUIDisplayManager : IInitializableManager {
     public static NPCUIDisplayManager Instance => GetOrSetInstance();
     private static NPCUIDisplayManager _instance;
 
@@ -12,7 +11,7 @@ public class NPCUIDisplayManager : IInitializableManager
     private Dictionary<Unit, NPCUIDisplay> _registeredUnits = new Dictionary<Unit, NPCUIDisplay>();
 
     private static NPCUIDisplayManager GetOrSetInstance() {
-        if(_instance == null) {
+        if (_instance == null) {
             _instance = new NPCUIDisplayManager();
         }
         return _instance;
@@ -21,22 +20,29 @@ public class NPCUIDisplayManager : IInitializableManager
     public void Initialize(Action<bool> initializationCallback = null) {
 
         EnemyManager.Instance.OnEnemySpawned += OnEnemySpawned;
-
+        RegisterPooledObjects();
         initializationCallback?.Invoke(true);
+    }
+
+    private void RegisterPooledObjects() {
+        if (!PooledObjectManager.Instance.RegisterPooledObject(NPCUIDisplayPrefabId, 20)) {
+            CustomLogger.Error(nameof(NPCUIDisplayManager), $"Failed to register object with id {NPCUIDisplayPrefabId}");
+        }
     }
 
     public void Dispose() {
         EnemyManager.Instance.OnEnemySpawned -= OnEnemySpawned;
+        DeregisterPooledObjects();
         ClearAllDisplays();
+    }
+
+    private void DeregisterPooledObjects() {
+        PooledObjectManager.Instance.DeregisterPooledObject(NPCUIDisplayPrefabId);
     }
 
     private void OnEnemySpawned(Unit enemy) {
         if(!PooledObjectManager.Instance.UsePooledObject(NPCUIDisplayPrefabId, out PooledObject obj)) {
-            if(!PooledObjectManager.Instance.RegisterPooledObject(NPCUIDisplayPrefabId, 20)) {
-                CustomLogger.Error(nameof(NPCUIDisplayManager), $"Failed to register object with id {NPCUIDisplayPrefabId}");
-                return;
-            }
-            OnEnemySpawned(enemy);
+            CustomLogger.Error(nameof(NPCUIDisplayManager), $"Could not get NPC info display object with id {NPCUIDisplayPrefabId}!");
             return;
         }
         NPCUIDisplay npcUIDisplay = obj as NPCUIDisplay;

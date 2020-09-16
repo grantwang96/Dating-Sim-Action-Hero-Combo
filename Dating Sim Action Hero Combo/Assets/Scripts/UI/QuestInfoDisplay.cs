@@ -19,7 +19,7 @@ public class QuestInfoDisplay : UIObject {
         QuestFinished = false;
         if (IsQuestFinished(QuestManager.Instance.CurrentQuestState.Status)) {
             AutoFinishQuest(QuestManager.Instance.CurrentQuestState.Status);
-            return false;
+            return base.Initialize();
         }
         _questState = QuestManager.Instance.CurrentQuestState;
         _currentQuestText.text = _questState.QuestDescription;

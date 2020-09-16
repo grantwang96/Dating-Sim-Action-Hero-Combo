@@ -38,6 +38,6 @@ public class PauseMenu : UIObject
     }
 
     private void OnQuitBtnPressed() {
-        GameStateManager.Instance.HandleTransition(QuitGameTransitionId);
+        GameManager.Instance.EndGame();
     }
 }

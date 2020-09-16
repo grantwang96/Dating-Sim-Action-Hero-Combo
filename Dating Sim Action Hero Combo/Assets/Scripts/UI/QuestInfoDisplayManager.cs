@@ -36,7 +36,6 @@ public class QuestInfoDisplayManager : IInitializableManager {
 
         // listen to quest manager events
         QuestManager.Instance.OnCurrentQuestUpdated += OnCurrentQuestUpdated;
-        QuestManager.Instance.OnAllQuestsCompleted += OnAllQuestsCompleted;
 
         CustomLogger.Log(nameof(QuestManager), $"Initializing {nameof(QuestInfoDisplayManager)}");
         initializationCallback?.Invoke(true);
@@ -75,14 +74,9 @@ public class QuestInfoDisplayManager : IInitializableManager {
         QuestState nextQuest = _queuedQuestStates.Dequeue();
         _currentQuestInfoDisplay.Initialize();
     }
-
-    private void OnAllQuestsCompleted() {
-        GameManager.Instance.EndGame();
-    }
-
+    
     public void Dispose() {
         QuestManager.Instance.OnCurrentQuestUpdated -= OnCurrentQuestUpdated;
-        QuestManager.Instance.OnAllQuestsCompleted -= OnAllQuestsCompleted;
         _currentQuestInfoDisplay.OnDisplayQuestCompleteFinished -= OnQuestDisplayCompleteFinished;
         _currentQuestInfoDisplay.OnDisplayQuestFailedFinished -= OnQuestDisplayFailedFinished;
 

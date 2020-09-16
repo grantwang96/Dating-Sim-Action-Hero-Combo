@@ -13,6 +13,9 @@ public interface IEnemyManager : IAllianceManager {
     void DespawnEnemy(EnemyUnit controller);
 }
 
+/// <summary>
+/// Manages spawning and messaging of hostile units
+/// </summary>
 public class EnemyManager : IEnemyManager
 {
     private const float DespawnTime = 3f;
@@ -44,10 +47,15 @@ public class EnemyManager : IEnemyManager
         initializationCallback?.Invoke(true);
     }
 
-    public void Dispose() {
-        for(int i = 0; i < _enemyUnits.Count; i++) {
+    private void RemoveAllEnemies() {
+        for (int i = 0; i < _enemyUnits.Count; i++) {
+            RemoveEnemyDespawnTimer(_enemyUnits[i]);
             _enemyUnits[i].Despawn();
         }
+    }
+
+    public void Dispose() {
+        RemoveAllEnemies();
         _enemyUnits.Clear();
         _enemyDataConfig.Clear();
     }
@@ -123,9 +131,18 @@ public class EnemyManager : IEnemyManager
             return;
         }
         RemoveUnitListeners(enemy);
+        AddEnemyDespawnTimer(enemy);
+         OnEnemyDefeated?.Invoke(unit);
+    }
+
+    private void AddEnemyDespawnTimer(EnemyUnit enemy) {
         string id = string.Format(DespawnUnitId, enemy.UnitId);
         TimerManager.Instance.AddTimer(new DespawnEnemyTimer(enemy, id, DespawnTime));
-        OnEnemyDefeated?.Invoke(unit);
+    }
+
+    private void RemoveEnemyDespawnTimer(EnemyUnit enemy) {
+        string timerId = string.Format(DespawnUnitId, enemy.UnitId);
+        TimerManager.Instance.RemoveTimer(timerId);
     }
 
     // process certain unit messages in order to message other units in the "alliance"

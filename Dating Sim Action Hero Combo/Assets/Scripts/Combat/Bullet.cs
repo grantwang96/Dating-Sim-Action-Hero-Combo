@@ -56,11 +56,14 @@ public class Bullet : MonoBehaviour, PooledObject
     }
 
     private void OnHitBoxTriggered(Collider2D collider) {
+        // check if we hit something
         IDamageable damageable = collider.GetComponent<IDamageable>();
         if (damageable != null && damageable != _ownerDamageable) {
             damageable.TakeDamage(_power, DamageType.Normal, _owner);
         }
+        // remove the bullet
         Despawn();
+        // trigger some fx
     }
 
     public void Despawn() {

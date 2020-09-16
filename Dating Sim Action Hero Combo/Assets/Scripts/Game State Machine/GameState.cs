@@ -76,12 +76,16 @@ public class GameState : MonoBehaviour {
         if (ParentState != null) {
             ParentState.Exit(nextState);
         }
-        Debug.Log($"Exiting state {name}. New state is {nextState}");
+        ConfirmExitState();
+    }
+
+    protected virtual void ConfirmExitState() {
+        Debug.Log($"Exiting state {name}...");
         IsLoading = false;
         IsActive = false;
-        Active = true;
+        Active = false;
         DisposeManagers();
-        DeregisterPrefabs();
+        DeregisterPooledObjectPrefabs();
         DeregisterUIPrefabs();
         OnGameStateExit?.Invoke();
     }
@@ -180,7 +184,7 @@ public class GameState : MonoBehaviour {
     }
 
     protected void OnManagersInitializationComplete() {
-        RegisterPrefabs();
+        RegisterPooledObjectPrefabs();
         RegisterUIPrefabs();
         OnStateEnterComplete();
     }
@@ -201,7 +205,7 @@ public class GameState : MonoBehaviour {
         }
     }
 
-    private void RegisterPrefabs() {
+    private void RegisterPooledObjectPrefabs() {
         for (int i = 0; i < _pooledObjectPrefabAssets.Count; i++) {
             PooledObjectManager.Instance.RegisterPooledObject(_pooledObjectPrefabAssets[i].PoolId, _pooledObjectPrefabAssets[i].InitialCount);
         }
@@ -219,9 +223,11 @@ public class GameState : MonoBehaviour {
         }
     }
 
-    private void DeregisterPrefabs() {
+    private void DeregisterPooledObjectPrefabs() {
         for (int i = 0; i < _pooledObjectPrefabAssets.Count; i++) {
-            PooledObjectManager.Instance.DeregisterPooledObject(_pooledObjectPrefabAssets[i].PoolId);
+            string poolId = _pooledObjectPrefabAssets[i].PoolId;
+            Debug.Log($"Deregistering {poolId}...");
+            PooledObjectManager.Instance.DeregisterPooledObject(poolId);
         }
     }
 

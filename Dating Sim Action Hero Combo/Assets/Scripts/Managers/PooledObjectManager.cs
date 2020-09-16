@@ -79,16 +79,18 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
             clone.name = poolId;
             PooledObject clonePO = clone.GetComponent<PooledObject>();
             _objectPool[poolId].AvailableObjects.Add(clonePO);
+            _objectPool[poolId].GameObjects.Add(clonePO, clone);
             clonePO.Despawn(); // hide the object
         }
     }
 
     public void DeregisterPooledObject(string objectId) {
+        // assert that a pool with this id exists
         if (!_objectPool.ContainsKey(objectId)) {
             CustomLogger.Error(nameof(PooledObjectManager), $"Does not contain entry with id {objectId}!");
             return;
         }
-        // despawn all currently spawned pooled objects
+        // despawn all currently active pooled objects
         List<PooledObject> objsToDespawn = new List<PooledObject>();
         for(int i = 0; i < _objectPool[objectId].InUseObjects.Count; i++) {
             PooledObject pooledObject = _objectPool[objectId].InUseObjects[i];
@@ -97,10 +99,12 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
         for(int i = 0; i < objsToDespawn.Count; i++) {
             objsToDespawn[i].Despawn();
         }
+        _objectPool[objectId].AvailableObjects.AddRange(objsToDespawn);
         // remove all existing pooled objects
+        Debug.Log($"Pool Id: {objectId}");
         foreach (PooledObject pooledObject in _objectPool[objectId].AvailableObjects) {
-            UnityEngine.Object obj = pooledObject as UnityEngine.Object;
-            Destroy(obj);
+            GameObject go = _objectPool[objectId].GameObjects[pooledObject];
+            Destroy(go);
         }
         _objectPool.Remove(objectId);
     }
@@ -137,6 +141,7 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
         public GameObject BaseResource;
         public List<PooledObject> AvailableObjects = new List<PooledObject>();
         public List<PooledObject> InUseObjects = new List<PooledObject>();
+        public Dictionary<PooledObject, GameObject> GameObjects = new Dictionary<PooledObject, GameObject>();
     }
 }
 

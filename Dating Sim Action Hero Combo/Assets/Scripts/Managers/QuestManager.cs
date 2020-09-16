@@ -9,6 +9,7 @@ public class QuestManager : IInitializableManager
     public static QuestManager _instance;
 
     public QuestState CurrentQuestState { get; private set; }
+    public bool AllQuestsCompleted { get; private set; }
 
     public event Action OnCurrentQuestUpdated;
     public event Action<QuestState> OnCurrentQuestCompleted;
@@ -30,6 +31,7 @@ public class QuestManager : IInitializableManager
         GameManager.Instance.OnGameStarted += OnGameStart;
         GameManager.Instance.OnGameEnded += OnGameEnd;
         CustomLogger.Log(nameof(QuestManager), $"Initializing {nameof(QuestManager)}");
+        AllQuestsCompleted = false;
         initializationCallback?.Invoke(true);
     }
 
@@ -61,6 +63,7 @@ public class QuestManager : IInitializableManager
 
     private void InitializeCurrentQuest() {
         if(_currentQuestIndex >= _questList.Count) {
+            AllQuestsCompleted = true;
             OnAllQuestsCompleted?.Invoke();
             return;
         }
