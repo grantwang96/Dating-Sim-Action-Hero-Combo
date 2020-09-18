@@ -9,6 +9,8 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
     private const string OutfitSwapInputId = "SwapOutfit";
     public static PlayerOutfitController Instance { get; private set; }
 
+    public bool AgentMode => _agentMode;
+
     [SerializeField] private PlayerUnit _unit;
     [SerializeField] private bool _agentMode;
     private bool _outfitChangeInProgress;
@@ -16,8 +18,6 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
     private IPlayerActionController _combatSet;
     private IPlayerActionController _civilianSet;
     private IPlayerActionController _currentSet;
-
-    public bool AgentMode => _agentMode;
     
     public void Initialize() {
         Instance = this;
@@ -25,14 +25,12 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
         _combatSet = new PlayerCombatController(_unit);
         SetActionController(_agentMode);
         SubscribeToEvents();
-        GameEventsManager.Pause.Subscribe(OnGamePause);
     }
 
     public void Dispose() {
         _civilianSet.SetActive(false);
         _combatSet.SetActive(false);
         UnsubscribeToEvents();
-        GameEventsManager.Pause.Unsubscribe(OnGamePause);
     }
     
     private void SubscribeToEvents() {
@@ -41,15 +39,6 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
 
     private void UnsubscribeToEvents() {
         InputController.Instance.GameplayActionMap[OutfitSwapInputId].started -= BeginOutfitChange;
-    }
-
-    private void OnGamePause(bool paused) {
-        if (paused) {
-            UnsubscribeToEvents();
-        } else {
-            SubscribeToEvents();
-        }
-        _currentSet.SetActive(!paused);
     }
 
     private void BeginOutfitChange(InputAction.CallbackContext context) {

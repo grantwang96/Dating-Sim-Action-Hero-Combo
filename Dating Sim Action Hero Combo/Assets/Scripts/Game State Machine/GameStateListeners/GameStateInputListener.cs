@@ -3,23 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class GameStateInputListener : MonoBehaviour
+public abstract class GameStateInputListener : GameStateListener
 {
     [SerializeField] private string _inputId;
-    [SerializeField] private GameState _gameState;
     [SerializeField] private InputMapSet _inputMapSet;
 
-    private void Awake() {
-        _gameState.OnGameStateEnter += OnGameStateEnter;
-        _gameState.OnGameStateExit += OnGameStateExit;
-    }
-
-    private void OnDestroy() {
-        _gameState.OnGameStateEnter -= OnGameStateEnter;
-        _gameState.OnGameStateExit -= OnGameStateExit;
-    }
-
-    private void OnGameStateEnter() {
+    protected override void OnGameStateEntered() {
         switch (_inputMapSet) {
             case InputMapSet.Gameplay:
                 InputController.Instance.GameplayActionMap[_inputId].started += OnInputPressed;
@@ -32,7 +21,7 @@ public abstract class GameStateInputListener : MonoBehaviour
         }
     }
 
-    private void OnGameStateExit() {
+    protected override void OnGameStateExited() {
         switch (_inputMapSet) {
             case InputMapSet.Gameplay:
                 InputController.Instance.GameplayActionMap[_inputId].started -= OnInputPressed;

@@ -17,6 +17,7 @@ public class GameplayGameState : GameState
 
         // ui managers
         NPCUIDisplayManager.Instance,
-        QuestInfoDisplayManager.Instance
+        QuestInfoDisplayManager.Instance,
+        DialogManager.Instance,
     };
 }

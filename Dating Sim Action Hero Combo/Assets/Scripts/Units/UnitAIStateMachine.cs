@@ -39,14 +39,14 @@ public class UnitAIStateMachine : MonoBehaviour
     private void OnUnitInitialized() {
         Debug.Log("initialized");
         _active = true;
-        GameEventsManager.Pause.Subscribe(OnGamePaused);
+        GameEventsManager.PauseMenu.Subscribe(OnGamePaused);
         _unit.OnUnitDefeated += OnUnitDefeated;
         _unit.OnUnitMessageReceived += OnAllianceMessageReceived;
         OnReadyToTransitionState(_startingState);
     }
 
     private void OnUnitDefeated(Unit unit) {
-        GameEventsManager.Pause.Unsubscribe(OnGamePaused);
+        GameEventsManager.PauseMenu.Unsubscribe(OnGamePaused);
         _unit.OnUnitDefeated -= OnUnitDefeated;
         _unit.OnUnitMessageReceived -= OnAllianceMessageReceived;
         OnReadyToTransitionState(_deathState);

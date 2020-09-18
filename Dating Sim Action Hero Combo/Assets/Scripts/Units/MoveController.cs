@@ -24,11 +24,11 @@ public abstract class MoveController : MonoBehaviour, IUnitComponent {
     public virtual void Initialize() {
         UpdateMapSpacePosition(LevelDataManager.Instance.WorldToArraySpace(transform.position));
         _active = true;
-        GameEventsManager.Pause.Subscribe(OnGamePause);
+        GameEventsManager.PauseMenu.Subscribe(OnGamePause);
     }
 
     public virtual void Dispose() {
-        GameEventsManager.Pause.Unsubscribe(OnGamePause);
+        GameEventsManager.PauseMenu.Unsubscribe(OnGamePause);
     }
 
     protected virtual void FixedUpdate() {

@@ -6,7 +6,8 @@ public enum UILayerId {
     HUD,
     Panels,
     Notifications,
-    Overlay
+    Overlay,
+    Popup
 }
 
 public class UILayer : MonoBehaviour

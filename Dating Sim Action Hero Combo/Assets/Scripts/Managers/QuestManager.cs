@@ -28,16 +28,16 @@ public class QuestManager : IInitializableManager
 
     public void Initialize(Action<bool> initializationCallback = null) {
         InitializeQuestList();
-        GameManager.Instance.OnGameStarted += OnGameStart;
-        GameManager.Instance.OnGameEnded += OnGameEnd;
+        GameEventsManager.StartGame?.Subscribe(OnGameStart);
+        GameEventsManager.EndGame?.Subscribe(OnGameEnd);
         CustomLogger.Log(nameof(QuestManager), $"Initializing {nameof(QuestManager)}");
         AllQuestsCompleted = false;
         initializationCallback?.Invoke(true);
     }
 
     public void Dispose() {
-        GameManager.Instance.OnGameStarted -= OnGameStart;
-        GameManager.Instance.OnGameEnded -= OnGameEnd;
+        GameEventsManager.StartGame?.Unsubscribe(OnGameStart);
+        GameEventsManager.EndGame?.Unsubscribe(OnGameEnd);
     }
 
     private void InitializeQuestList() {
@@ -51,9 +51,9 @@ public class QuestManager : IInitializableManager
         CustomLogger.Log(nameof(QuestManager), $"Game Started");
     }
 
-    private void OnGameEnd() {
-        GameManager.Instance.OnGameStarted -= OnGameStart;
-        GameManager.Instance.OnGameEnded -= OnGameEnd;
+    private void OnGameEnd(EndGameContext endGameContext) {
+        GameEventsManager.StartGame?.Unsubscribe(OnGameStart);
+        GameEventsManager.EndGame?.Unsubscribe(OnGameEnd);
     }
 
     private void NextQuest() {

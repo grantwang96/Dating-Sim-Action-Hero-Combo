@@ -31,9 +31,9 @@ public class NPCUIDisplayManager : IInitializableManager {
     }
 
     public void Dispose() {
+        _registeredUnits.Clear();
         EnemyManager.Instance.OnEnemySpawned -= OnEnemySpawned;
         DeregisterPooledObjects();
-        ClearAllDisplays();
     }
 
     private void DeregisterPooledObjects() {
@@ -66,13 +66,5 @@ public class NPCUIDisplayManager : IInitializableManager {
             _registeredUnits.Remove(enemy);
             enemy.OnUnitDefeated -= OnEnemyDefeated;
         }
-    }
-
-    private void ClearAllDisplays() {
-        foreach (Unit unit in _registeredUnits.Keys) {
-            _registeredUnits[unit].Despawn();
-            PooledObjectManager.Instance.ReturnPooledObject(NPCUIDisplayPrefabId, _registeredUnits[unit]);
-        }
-        _registeredUnits.Clear();
     }
 }

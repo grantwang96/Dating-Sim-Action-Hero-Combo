@@ -26,6 +26,11 @@ public class QuestInfoDisplay : UIObject {
         return base.Initialize();
     }
 
+    public override void CleanUp() {
+        Hide();
+        base.CleanUp();
+    }
+
     private static bool IsQuestFinished(QuestStatus status) {
         return status == QuestStatus.Aborted || status == QuestStatus.Completed || status == QuestStatus.Failed;
     }

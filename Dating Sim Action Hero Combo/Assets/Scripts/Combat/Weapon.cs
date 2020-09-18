@@ -81,8 +81,8 @@ public abstract class Weapon {
 public class PlayerWeapon : Weapon {
 
     public PlayerWeapon(PlayerUnit unit, WeaponData weaponData, int totalAmmo) : base(unit, weaponData, totalAmmo) {
-        GameManager.Instance.OnGameEnded += OnGameEnd;
-        GameEventsManager.Pause.Subscribe(OnGamePaused);
+        GameEventsManager.EndGame.Subscribe(OnGameEnd);
+        GameEventsManager.PauseMenu.Subscribe(OnGamePaused);
     }
 
     protected override void TryActivateWeapon(ActivateTime time) {
@@ -114,11 +114,11 @@ public class PlayerWeapon : Weapon {
         TryActivateWeapon(ActivateTime.OnHeld);
     }
 
-    private void OnGameEnd() {
+    private void OnGameEnd(EndGameContext endGameContext) {
         MonoBehaviourMaster.Instance.OnFixedUpdate -= ProcessHeldFire;
         _weaponState.Clear();
-        GameManager.Instance.OnGameEnded -= OnGameEnd;
-        GameEventsManager.Pause.Unsubscribe(OnGamePaused);
+        GameEventsManager.EndGame.Unsubscribe(OnGameEnd);
+        GameEventsManager.PauseMenu.Unsubscribe(OnGamePaused);
     }
 
     private void OnGamePaused(bool paused) {

@@ -67,6 +67,7 @@ public class UIManager : MonoBehaviour
             CustomLogger.Error(nameof(UIManager), $"Could not find UI Prefab with id {uiPrefabId}");
             return;
         }
+        entry.UIObject.CleanUp();
         Destroy(entry.UIObject.gameObject);
         _activeUI.Remove(uiPrefabId);
     }

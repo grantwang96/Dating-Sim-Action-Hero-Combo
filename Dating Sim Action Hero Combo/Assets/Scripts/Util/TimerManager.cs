@@ -16,11 +16,11 @@ public class TimerManager : MonoBehaviour
 
     private void Awake() {
         Instance = this;
-        GameEventsManager.Pause.Subscribe(OnGamePaused);
+        GameEventsManager.PauseMenu.Subscribe(OnGamePaused);
     }
 
     private void OnDestroy() {
-        GameEventsManager.Pause.Unsubscribe(OnGamePaused);
+        GameEventsManager.PauseMenu.Unsubscribe(OnGamePaused);
     }
 
     // Update is called once per frame

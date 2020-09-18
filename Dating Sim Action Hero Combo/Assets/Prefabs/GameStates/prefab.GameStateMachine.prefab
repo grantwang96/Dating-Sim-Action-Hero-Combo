@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _transitions:
-  - _transitionName: PlayGame
-    _gameState: {fileID: 5425585066014061386}
+  - _transitionName: play_test_combat
+    _gameState: {fileID: 2556836493102357661}
   _sceneName: MainMenu
   _requiresLoadingScreen: 0
   _pooledObjectPrefabAssets: []
@@ -484,9 +484,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5258079899110035727}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5425585066014061386 stripped
+--- !u!114 &2556836493102357661 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 266837248563864133, guid: 888a20dadba65fb44b2938b9ab178cb1,
+  m_CorrespondingSourceObject: {fileID: 7747254522984811922, guid: 888a20dadba65fb44b2938b9ab178cb1,
     type: 3}
   m_PrefabInstance: {fileID: 5258079899110035727}
   m_PrefabAsset: {fileID: 0}

@@ -43,11 +43,11 @@ public class UnitAnimationController : MonoBehaviour, IAnimationController, IUni
     private bool _active = true;
 
     public void Initialize() {
-        GameEventsManager.Pause.Subscribe(OnGamePaused);
+        GameEventsManager.PauseMenu.Subscribe(OnGamePaused);
     }
 
     public void Dispose() {
-        GameEventsManager.Pause.Unsubscribe(OnGamePaused);
+        GameEventsManager.PauseMenu.Unsubscribe(OnGamePaused);
     }
 
     private void OnGamePaused(bool paused) {
