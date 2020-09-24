@@ -11,7 +11,7 @@ public class MapData : ScriptableObject
     [SerializeField] private List<TileData> _tileDatas = new List<TileData>();
 
     public int MapSizeX => _mapSizeX;
-    public int MapSizeY => _mapSizeX;
+    public int MapSizeY => _mapSizeY;
     public TileData DefaultTileData => _defaultTileData;
     public IReadOnlyList<TileData> TileDatas => _tileDatas;
 }
