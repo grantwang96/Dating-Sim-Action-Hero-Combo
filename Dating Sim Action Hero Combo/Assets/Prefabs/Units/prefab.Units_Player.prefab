@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unit: {fileID: 8202479465019601312}
-  _agentMode: 0
+  _outfitState: 1
 --- !u!114 &4753258251025489057
 MonoBehaviour:
   m_ObjectHideFlags: 0

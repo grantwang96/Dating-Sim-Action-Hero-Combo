@@ -15,7 +15,7 @@ public class DialogManager : IInitializableManager
     private UIDialog _uiDialog;
 
     public event Action OnDialogQueued;
-    public event Action OnDialogFinished;
+    public event Action OnShowDialogFinished;
 
     private static DialogManager GetOrSetInstance() {
         if(_instance == null) {
@@ -68,7 +68,7 @@ public class DialogManager : IInitializableManager
 
     private void ShowNextDialog() {
         if(_dialogsToShow.Count == 0) {
-            DialogFinished();
+            ShowDialogFinished();
             return;
         }
         CurrentDialogData = _dialogsToShow.Dequeue();
@@ -87,10 +87,10 @@ public class DialogManager : IInitializableManager
         _uiDialog.Hide();
     }
 
-    private void DialogFinished() {
+    private void ShowDialogFinished() {
         HideCurrentDialog();
         CurrentDialogData = null;
-        OnDialogFinished?.Invoke();
+        OnShowDialogFinished?.Invoke();
     }
 
     private void OnDialogContinue() {

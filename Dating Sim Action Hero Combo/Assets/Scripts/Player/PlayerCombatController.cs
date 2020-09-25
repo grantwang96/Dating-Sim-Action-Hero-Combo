@@ -6,9 +6,6 @@ using System;
 
 public class PlayerCombatController : PlayerActionController
 {
-    private const string ShootInputId = "Fire";
-    private const string ReloadInputId = "Reload";
-
     public static PlayerCombatController Instance { get; private set; }
 
     // store currently held weapon
@@ -56,10 +53,10 @@ public class PlayerCombatController : PlayerActionController
     protected override void SubscribeToEvents() {
         base.SubscribeToEvents();
 
-        InputController.Instance.GameplayActionMap[ShootInputId].started += OnShootBtnPressed;
-        InputController.Instance.GameplayActionMap[ShootInputId].performed += OnShootBtnHeld;
-        InputController.Instance.GameplayActionMap[ShootInputId].canceled += OnShootBtnReleased;
-        InputController.Instance.GameplayActionMap[ReloadInputId].started += OnReloadBtnPressed;
+        InputController.Instance.GameplayActionMap[InputStrings.FireKey].started += OnShootBtnPressed;
+        InputController.Instance.GameplayActionMap[InputStrings.FireKey].performed += OnShootBtnHeld;
+        InputController.Instance.GameplayActionMap[InputStrings.FireKey].canceled += OnShootBtnReleased;
+        InputController.Instance.GameplayActionMap[InputStrings.ReloadKey].started += OnReloadBtnPressed;
 
         SubscribeToWeaponEvents();
     }
@@ -67,11 +64,11 @@ public class PlayerCombatController : PlayerActionController
     protected override void UnsubscribeToEvents() {
         base.UnsubscribeToEvents();
 
-        InputController.Instance.GameplayActionMap[ShootInputId].started -= OnShootBtnPressed;
-        InputController.Instance.GameplayActionMap[ShootInputId].performed -= OnShootBtnHeld;
-        InputController.Instance.GameplayActionMap[ShootInputId].canceled -= OnShootBtnReleased;
+        InputController.Instance.GameplayActionMap[InputStrings.FireKey].started -= OnShootBtnPressed;
+        InputController.Instance.GameplayActionMap[InputStrings.FireKey].performed -= OnShootBtnHeld;
+        InputController.Instance.GameplayActionMap[InputStrings.FireKey].canceled -= OnShootBtnReleased;
 
-        InputController.Instance.GameplayActionMap[ReloadInputId].started -= OnReloadBtnPressed;
+        InputController.Instance.GameplayActionMap[InputStrings.ReloadKey].started -= OnReloadBtnPressed;
 
         UnsubscribeToWeaponEvents();
     }

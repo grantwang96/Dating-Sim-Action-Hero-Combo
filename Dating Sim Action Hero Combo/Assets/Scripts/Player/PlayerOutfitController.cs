@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
+using System;
+
+public enum PlayerOutfitState {
+    Unknown,
+    Civilian,
+    Agent
+}
 
 public class PlayerOutfitController : MonoBehaviour, IUnitComponent
 {
-    private const string OutfitSwapInputId = "SwapOutfit";
     public static PlayerOutfitController Instance { get; private set; }
 
-    public bool AgentMode => _agentMode;
+    public PlayerOutfitState OutfitState => _outfitState;
+    public event Action OnOutfitChangeStarted;
+    public event Action OnOutfitChangeComplete;
 
     [SerializeField] private PlayerUnit _unit;
-    [SerializeField] private bool _agentMode;
+    [SerializeField] private PlayerOutfitState _outfitState;
     private bool _outfitChangeInProgress;
 
     private IPlayerActionController _combatSet;
@@ -23,7 +30,7 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
         Instance = this;
         _civilianSet = new PlayerCivilianController(_unit);
         _combatSet = new PlayerCombatController(_unit);
-        SetActionController(_agentMode);
+        SetActionController(_outfitState);
         SubscribeToEvents();
     }
 
@@ -34,11 +41,11 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
     }
     
     private void SubscribeToEvents() {
-        InputController.Instance.GameplayActionMap[OutfitSwapInputId].started += BeginOutfitChange;
+        InputController.Instance.GameplayActionMap[InputStrings.OutfitSwapKey].canceled += BeginOutfitChange;
     }
 
     private void UnsubscribeToEvents() {
-        InputController.Instance.GameplayActionMap[OutfitSwapInputId].started -= BeginOutfitChange;
+        InputController.Instance.GameplayActionMap[InputStrings.OutfitSwapKey].canceled -= BeginOutfitChange;
     }
 
     private void BeginOutfitChange(InputAction.CallbackContext context) {
@@ -46,27 +53,40 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
             return;
         }
         _outfitChangeInProgress = true;
+        _currentSet.SetActive(false);
+        OnOutfitChangeStarted?.Invoke();
         // do outfit change
+        StartCoroutine(ChangeOutfits());
+    }
 
-        // temp just do it immediately for now
+    private IEnumerator ChangeOutfits() {
+        yield return new WaitForSeconds(3f);
         FinishOutfitChange();
     }
-
+    
     private void FinishOutfitChange() {
         _outfitChangeInProgress = false;
-        _agentMode = !_agentMode;
-        SetActionController(_agentMode);
+        if(_outfitState == PlayerOutfitState.Civilian) {
+            _outfitState = PlayerOutfitState.Agent;
+        } else {
+            _outfitState = PlayerOutfitState.Civilian;
+        }
+        SetActionController(_outfitState);
+        OnOutfitChangeComplete?.Invoke();
     }
 
-    private void SetActionController(bool agentMode) {
-        if (agentMode) {
-            _combatSet.SetActive(true);
-            _civilianSet.SetActive(false);
-            _currentSet = _combatSet;
-        } else {
-            _combatSet.SetActive(false);
-            _civilianSet.SetActive(true);
-            _currentSet = _civilianSet;
+    private void SetActionController(PlayerOutfitState outfitMode) {
+        _combatSet.SetActive(outfitMode == PlayerOutfitState.Agent);
+        _civilianSet.SetActive(outfitMode == PlayerOutfitState.Civilian);
+        switch (outfitMode) {
+            case PlayerOutfitState.Agent:
+                _currentSet = _combatSet;
+                break;
+            case PlayerOutfitState.Civilian:
+                _currentSet = _civilianSet;
+                break;
+            default:
+                break;
         }
     }
 }

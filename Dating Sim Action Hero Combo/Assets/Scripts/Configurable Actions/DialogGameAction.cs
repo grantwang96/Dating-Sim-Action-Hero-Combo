@@ -34,7 +34,7 @@ public class DialogGameActionState : IConfiguredGameActionState {
 
     public void Execute() {
         DialogManager.Instance.EnqueueDialog(_data.Dialogs);
-        DialogManager.Instance.OnDialogFinished += OnAllDialogSeen;
+        DialogManager.Instance.OnShowDialogFinished += OnAllDialogSeen;
     }
 
     private void OnAllDialogSeen() {

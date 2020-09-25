@@ -8,9 +8,7 @@ public interface IPlayerActionController
 }
 
 public class PlayerActionController : IPlayerActionController {
-
-    private const string InteractInputId = "Interact";
-
+    
     protected PlayerUnit _unit;
 
     protected IInteractable _currentInteractable;
@@ -31,15 +29,15 @@ public class PlayerActionController : IPlayerActionController {
     }
 
     protected virtual void SubscribeToEvents() {
-        InputController.Instance.GameplayActionMap[InteractInputId].started += OnInteractPressed;
-        InputController.Instance.GameplayActionMap[InteractInputId].performed += OnInteractHeld;
-        InputController.Instance.GameplayActionMap[InteractInputId].canceled += OnInteractReleased;
+        InputController.Instance.GameplayActionMap[InputStrings.InteractKey].started += OnInteractPressed;
+        InputController.Instance.GameplayActionMap[InputStrings.InteractKey].performed += OnInteractHeld;
+        InputController.Instance.GameplayActionMap[InputStrings.InteractKey].canceled += OnInteractReleased;
     }
 
     protected virtual void UnsubscribeToEvents() {
-        InputController.Instance.GameplayActionMap[InteractInputId].started -= OnInteractPressed;
-        InputController.Instance.GameplayActionMap[InteractInputId].performed -= OnInteractHeld;
-        InputController.Instance.GameplayActionMap[InteractInputId].canceled -= OnInteractReleased;
+        InputController.Instance.GameplayActionMap[InputStrings.InteractKey].started -= OnInteractPressed;
+        InputController.Instance.GameplayActionMap[InputStrings.InteractKey].performed -= OnInteractHeld;
+        InputController.Instance.GameplayActionMap[InputStrings.InteractKey].canceled -= OnInteractReleased;
     }
 
     protected virtual bool CanInteract() {

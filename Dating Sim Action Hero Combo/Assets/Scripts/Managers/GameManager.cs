@@ -35,8 +35,7 @@ public class GameManager : IInitializableManager {
     }
 
     public void Dispose() {
-        GameEventsManager.StartGame?.Unsubscribe(StartGame);
-        GameEventsManager.ExitGame?.Unsubscribe(ExitGame);
+
     }
 
     // game begins, player is given control, the first quest appears, etc.

@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHud : UIObject
 {
     [SerializeField] private FillBar _healthBar;
     [SerializeField] private FillBar _ammoBar;
+    [SerializeField] private GameObject _outfitChangeInProgressDisplay;
+    [SerializeField] private GameObject _agentModeActiveDisplay;
+    [SerializeField] private GameObject _civilianModeDisplay;
 
     [SerializeField] private int _currentHealth;
     [SerializeField] private int _maxHealth;
@@ -41,20 +45,38 @@ public class PlayerHud : UIObject
         _ammoBar.UpdateValueInstant((float)_ammo / _fullClip);
     }
 
+    private void OnOutfitChangeComplete() {
+        PlayerOutfitState outfitState = PlayerOutfitController.Instance.OutfitState;
+        _agentModeActiveDisplay.SetActive(outfitState == PlayerOutfitState.Agent);
+        _civilianModeDisplay.SetActive(outfitState == PlayerOutfitState.Civilian);
+        _outfitChangeInProgressDisplay.SetActive(false);
+    }
+
+    private void OnOutfitChangeStart() {
+        _outfitChangeInProgressDisplay.SetActive(true);
+        _agentModeActiveDisplay.SetActive(false);
+        _civilianModeDisplay.SetActive(false);
+    }
+
     public override void Display() {
         base.Display();
         PlayerUnit.Instance.Damageable.OnCurrentHealthChanged += OnHealthChanged;
+        PlayerOutfitController.Instance.OnOutfitChangeComplete += OnOutfitChangeComplete;
+        PlayerOutfitController.Instance.OnOutfitChangeStarted += OnOutfitChangeStart;
         PlayerCombatController.Instance.OnAmmoUpdated += OnAmmoUpdated;
         PlayerCombatController.Instance.OnReloadStarted += OnReloadStarted;
         PlayerCombatController.Instance.OnReloadFinished += OnReloadFinished;
         OnHealthChanged(PlayerUnit.Instance.Damageable.Health);
         OnAmmoUpdated(PlayerCombatController.Instance.EquippedWeapon.CurrentClip);
+        OnOutfitChangeComplete();
         gameObject.SetActive(true);
     }
 
     public override void Hide() {
         base.Hide();
         PlayerUnit.Instance.Damageable.OnCurrentHealthChanged -= OnHealthChanged;
+        PlayerOutfitController.Instance.OnOutfitChangeComplete -= OnOutfitChangeComplete;
+        PlayerOutfitController.Instance.OnOutfitChangeStarted -= OnOutfitChangeStart;
         PlayerCombatController.Instance.OnAmmoUpdated -= OnAmmoUpdated;
         PlayerCombatController.Instance.OnReloadStarted -= OnReloadStarted;
         PlayerCombatController.Instance.OnReloadFinished -= OnReloadFinished;
