@@ -84,6 +84,7 @@ public class GameManager : IInitializableManager {
     // called to exit the gameplay state and enter the next state (end result screens, etc.)
     private void ContinueFromGameEnd() {
         GameStateManager.Instance.HandleTransition(ContinueToResultsTransition);
+        GameEventsManager.EndGameResults.Broadcast();
     }
 }
 
@@ -109,5 +110,6 @@ public static partial class GameEventsManager {
     public static GameEvent StartGame { get; } = new GameEvent();
     public static GameEvent<EndGameContext> EndGame { get; } = new GameEvent<EndGameContext>();
     public static GameEvent<bool> PauseMenu { get; } = new GameEvent<bool>();
+    public static GameEvent EndGameResults { get; } = new GameEvent();
     public static GameEvent ExitGame { get; } = new GameEvent();
 }

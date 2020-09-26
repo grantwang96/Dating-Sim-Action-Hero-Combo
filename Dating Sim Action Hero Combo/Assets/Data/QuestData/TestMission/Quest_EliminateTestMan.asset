@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad5dd7576922094e8455d873ff68145, type: 3}
+  m_Name: Quest_EliminateTestMan
+  m_EditorClassIdentifier: 
+  _questId: ELIMINATE_TEST_MAN
+  _questName: Elimination Test
+  _questDescription: Eliminate Test Man
+  _objectives:
+  - {fileID: 11400000, guid: b2bf1e89b6a42ed4da5c51a71df7f5f7, type: 2}

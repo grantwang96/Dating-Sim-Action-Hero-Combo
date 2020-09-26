@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestLevel
   m_EditorClassIdentifier: 
   _mapData: {fileID: 11400000, guid: cd712f0ef69271749b9ace8cdecd38ea, type: 2}
-  _questDatas:
-  - {fileID: 11400000, guid: b2c7ea6daded90f4aa2f69eaad85243c, type: 2}
+  _missionQuestDatas:
+  - {fileID: 11400000, guid: 93e4d1105910f0847b65b5c98241d09a, type: 2}
   _enemyDatas:
   - {fileID: 11400000, guid: bc1335ad02027ff4aa482d81f6c447b5, type: 2}

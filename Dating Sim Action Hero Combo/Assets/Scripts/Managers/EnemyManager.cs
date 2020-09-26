@@ -64,7 +64,7 @@ public class EnemyManager : IEnemyManager
         _enemyDataConfig.Clear();
         GameLevelData currentGameLevel = GameLevelDataController.Instance.CurrentGameLevelData;
         for(int i = 0; i < currentGameLevel.EnemyDatas.Count; i++) {
-            _enemyDataConfig.Add(currentGameLevel.EnemyDatas[i].name, currentGameLevel.EnemyDatas[i]);
+            _enemyDataConfig.Add(currentGameLevel.EnemyDatas[i].UnitPrefabId, currentGameLevel.EnemyDatas[i]);
         }
     }
     #endregion

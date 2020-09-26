@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameLevelData : ScriptableObject
 {
     [SerializeField] private MapData _mapData;
-    [SerializeField] private List<Quest> _questDatas = new List<Quest>();
+    [SerializeField] private List<Quest> _missionQuestDatas = new List<Quest>();
+    [SerializeField] private List<Quest> _dateQuestdatas = new List<Quest>();
     [SerializeField] private List<EnemyData> _enemyDatas = new List<EnemyData>();
     // civilian data types
     // law enforcement data types?
@@ -14,6 +15,7 @@ public class GameLevelData : ScriptableObject
     // dialog data?
     
     public MapData MapData => _mapData;
-    public IReadOnlyList<Quest> QuestDatas => _questDatas;
+    public IReadOnlyList<Quest> MissionQuestDatas => _missionQuestDatas;
+    public IReadOnlyList<Quest> DateQuestDatas => _dateQuestdatas;
     public List<EnemyData> EnemyDatas => _enemyDatas;
 }
