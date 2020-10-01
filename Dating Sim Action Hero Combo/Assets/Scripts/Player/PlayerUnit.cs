@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerUnit : Unit, ITileOccupant {
+public class PlayerUnit : Unit {
 
     private const string PlayerHudId = "PlayerHud";
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UnitAIStateMachine : MonoBehaviour
 {
+    public NPCUnit Unit => _unit;
+
     [SerializeField] private NPCUnit _unit;
     [SerializeField] private AIState _startingState;
     [SerializeField] private AIState _deathState;
@@ -37,7 +39,6 @@ public class UnitAIStateMachine : MonoBehaviour
     }
 
     private void OnUnitInitialized() {
-        Debug.Log("initialized");
         _active = true;
         GameEventsManager.PauseMenu.Subscribe(OnGamePaused);
         _unit.OnUnitDefeated += OnUnitDefeated;

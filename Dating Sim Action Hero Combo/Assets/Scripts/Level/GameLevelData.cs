@@ -9,6 +9,7 @@ public class GameLevelData : ScriptableObject
     [SerializeField] private List<Quest> _missionQuestDatas = new List<Quest>();
     [SerializeField] private List<Quest> _dateQuestdatas = new List<Quest>();
     [SerializeField] private List<EnemyData> _enemyDatas = new List<EnemyData>();
+    [SerializeField] private DateData _dateData;
     // civilian data types
     // law enforcement data types?
     // cutscene data?
@@ -18,4 +19,5 @@ public class GameLevelData : ScriptableObject
     public IReadOnlyList<Quest> MissionQuestDatas => _missionQuestDatas;
     public IReadOnlyList<Quest> DateQuestDatas => _dateQuestdatas;
     public List<EnemyData> EnemyDatas => _enemyDatas;
+    public DateData DateData => _dateData;
 }

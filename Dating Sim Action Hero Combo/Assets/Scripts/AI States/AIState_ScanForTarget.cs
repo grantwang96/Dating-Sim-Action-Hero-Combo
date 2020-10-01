@@ -5,6 +5,12 @@ using UnityEngine;
 public class AIState_ScanForTarget : AIState
 {
     [SerializeField] private AIState _onTargetFound;
+    [SerializeField] private FieldOfViewVisualizer _visualizedFieldOfView;
+
+    public override void Enter(AIStateInitializationData initData = null) {
+        base.Enter(initData);
+        _visualizedFieldOfView.SetActive(true);
+    }
 
     public override void Execute() {
         base.Execute();
@@ -14,6 +20,11 @@ public class AIState_ScanForTarget : AIState
             return;
         }
         return;
+    }
+
+    public override void Exit(AIState nextState) {
+        base.Exit(nextState);
+        _visualizedFieldOfView.SetActive(false);
     }
 
     private void OnFoundHostile() {

@@ -1,12 +1,15 @@
-﻿
+﻿using System.Collections.Generic;
+
 public interface ITileInfo {
     int X { get; }
     int Y { get; }
     TileData Data { get; }
-    ITileOccupant Occupant { get; }
+    IReadOnlyList<ITileOccupant> Occupants { get; }
 
     void UpdateTile(TileData newData);
-    void SetOccupant(ITileOccupant occupant);
+    void AddOccupant(ITileOccupant occupant);
+    void RemoveOccupant(ITileOccupant occupant);
+    bool ContainsOccupant(ITileOccupant occupant);
 }
 
 public class TileInfo : ITileInfo {
@@ -14,7 +17,9 @@ public class TileInfo : ITileInfo {
     public int X { get; private set; }
     public int Y { get; private set; }
     public TileData Data { get; private set; }
-    public ITileOccupant Occupant { get; private set; }
+    public IReadOnlyList<ITileOccupant> Occupants => _occupants;
+
+    private readonly List<ITileOccupant> _occupants = new List<ITileOccupant>();
 
     public TileInfo(int x, int y, TileData type) {
         X = x;
@@ -26,7 +31,18 @@ public class TileInfo : ITileInfo {
         Data = newData;
     }
 
-    public void SetOccupant(ITileOccupant occupant) {
-        Occupant = occupant;
+    public void AddOccupant(ITileOccupant occupant) {
+        if (_occupants.Contains(occupant)) {
+            return;
+        }
+        _occupants.Add(occupant);
+    }
+
+    public void RemoveOccupant(ITileOccupant occupant) {
+        _occupants.Remove(occupant);
+    }
+
+    public bool ContainsOccupant(ITileOccupant occupant) {
+        return _occupants.Contains(occupant);
     }
 }

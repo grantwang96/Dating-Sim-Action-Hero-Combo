@@ -4,23 +4,36 @@ using UnityEngine;
 
 public class AIState_Scan : AIState {
 
+    [SerializeField] private UnitTags _scanForTags;
     [SerializeField] private AIState _onHostileFoundState;
-    
+    [SerializeField] private FieldOfViewVisualizer _visualizedFieldOfView;
+
+    private List<Unit> _detectedUnits = new List<Unit>();
+
+    public override void Enter(AIStateInitializationData initData = null) {
+        base.Enter(initData);
+        _visualizedFieldOfView.SetActive(true);
+    }
+
     public override void Execute() {
         base.Execute();
-        bool foundHostile = ScanAll();
-        if (foundHostile) {
-            OnFoundHostile();
-            return;
-        }
-        return;
+        ScanAll();
+    }
+
+    public override void Exit(AIState nextState) {
+        base.Exit(nextState);
+        _visualizedFieldOfView.SetActive(false);
     }
 
     private void OnFoundHostile() {
         SetReadyToTransition(_onHostileFoundState);
     }
 
-    private bool ScanAll() {
-        return _unit.TargetManager.GeneralScan();
+    private void ScanAll() {
+        _unit.TargetManager.GeneralScan(_detectedUnits, _scanForTags);
+        if(_detectedUnits.Count > 0) {
+            _unit.TargetManager.TrySetTarget(_detectedUnits[0]);
+            OnFoundHostile();
+        }
     }
 }

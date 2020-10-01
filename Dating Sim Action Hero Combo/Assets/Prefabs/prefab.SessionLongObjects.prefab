@@ -964,6 +964,9 @@ MonoBehaviour:
   - AssetId: Player
     Prefab: {fileID: 8202479465019601318, guid: ddeed812588bede46a3a22a0db65e8b9,
       type: 3}
+  - AssetId: Date
+    Prefab: {fileID: 5512569929068821090, guid: 61966af600ef7b84da49e8152178d7b8,
+      type: 3}
   _uiPrefabs:
   - AssetId: PlayerHud
     Prefab: {fileID: 5919136179957349158, guid: 3c096e12e98b78543875da02f03b7703,

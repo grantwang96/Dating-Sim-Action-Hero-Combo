@@ -15,11 +15,14 @@ public interface ILevelDataManager : IInitializableManager {
     void UpdateTile(int x, int y, string tileType = "");
     ITileInfo GetTileAt(int x, int y);
     List<ITileInfo> GetTilesWithinRadius(IntVector3 position, int radius);
-    void SetOccupant(IntVector3 position, ITileOccupant occupant);
-
+    void AddOccupant(IntVector3 position, ITileOccupant occupant);
+    void RemoveOccupant(IntVector3 position, ITileOccupant occupant);
     bool TryGetEnemySpawn(string id, out EnemySpawn spawn);
     void RegisterEnemySpawn(string id, EnemySpawn spawn);
     void DeregisterEnemySpawn(string id);
+    void RegisterNPCSpawnPoint(string id, Transform transform);
+    void DeregisterNPCSpawnPoint(string id);
+    bool TryGetNPCSpawnPoint(string id, out Transform spawnpoint);
 }
 
 public enum PathStatus {
@@ -36,10 +39,10 @@ public class LevelDataManager : ILevelDataManager {
     public int MapBoundsX { get; private set; }
     public int MapBoundsY { get; private set; }
 
-    private Dictionary<string, EnemySpawn> _enemySpawnPoints = new Dictionary<string, EnemySpawn>();
-
+    private readonly Dictionary<string, EnemySpawn> _enemySpawnPoints = new Dictionary<string, EnemySpawn>();
+    private readonly Dictionary<string, TileData> _tileConfig = new Dictionary<string, TileData>();
+    private readonly Dictionary<string, Transform> _npcSpawnPoints = new Dictionary<string, Transform>();
     private ITileInfo[][] _tiles;
-    private Dictionary<string, TileData> _tileConfig = new Dictionary<string, TileData>();
 
     private static ILevelDataManager GetOrSetInstance() {
         if(_instance == null) {
@@ -115,12 +118,22 @@ public class LevelDataManager : ILevelDataManager {
         return position.x >= 0 && position.x < MapBoundsX && position.y >= 0 && position.y < MapBoundsY;
     }
 
-    public void SetOccupant(IntVector3 position, ITileOccupant occupant) {
+    public void AddOccupant(IntVector3 position, ITileOccupant occupant) {
         if (!IsWithinMap(position)) {
             CustomLogger.Error(nameof(LevelDataManager), $"Position {position} is out of bounds!");
             return;
         }
-        _tiles[position.x][position.y].SetOccupant(occupant);
+        ITileInfo tileInfo = _tiles[position.x][position.y];
+        tileInfo.AddOccupant(occupant);
+    }
+
+    public void RemoveOccupant(IntVector3 position, ITileOccupant occupant) {
+        if (!IsWithinMap(position)) {
+            CustomLogger.Error(nameof(LevelDataManager), $"Position {position} is out of bounds!");
+            return;
+        }
+        ITileInfo tileInfo = _tiles[position.x][position.y];
+        tileInfo.RemoveOccupant(occupant);
     }
 
     public IntVector3 WorldToArraySpace(Vector2 worldPos) {
@@ -151,5 +164,20 @@ public class LevelDataManager : ILevelDataManager {
 
     public void DeregisterEnemySpawn(string id) {
         _enemySpawnPoints.Remove(id);
+    }
+
+    public void RegisterNPCSpawnPoint(string id, Transform transform) {
+        if (_npcSpawnPoints.ContainsKey(id)) {
+            return;
+        }
+        _npcSpawnPoints.Add(id, transform);
+    }
+
+    public void DeregisterNPCSpawnPoint(string id) {
+        _npcSpawnPoints.Remove(id);
+    }
+
+    public bool TryGetNPCSpawnPoint(string id, out Transform spawnpoint) {
+        return _npcSpawnPoints.TryGetValue(id, out spawnpoint);
     }
 }

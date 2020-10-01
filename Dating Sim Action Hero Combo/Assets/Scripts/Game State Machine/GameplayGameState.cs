@@ -14,6 +14,7 @@ public class GameplayGameState : GameState
         UnitsManager.Instance,
         EnemyManager.Instance,
         QuestManager.Instance,
+        DateStateManager.Instance,
 
         // ui managers
         NPCUIDisplayManager.Instance,

@@ -11,16 +11,28 @@ public class AIState_Chase : AIState
 
     public override void Enter(AIStateInitializationData initData = null) {
         base.Enter(initData);
-        PathStatus status = _unit.Navigator.SetDestination(_unit.MoveController.MapPosition, _unit.TargetManager.CurrentTarget.MoveController.MapPosition);
+        _unit.Navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
+        PathStatus status = _unit.Navigator.SetDestination(
+            _unit.MoveController.MapPosition,
+            GetClosestAvailableTile());
         if(status == PathStatus.Invalid) {
+            CustomLogger.Warn(nameof(AIState_Chase), $"Could not path to destination!");
             SetReadyToTransition(_onFailedToPath);
             return;
         }
         _unit.Navigator.LookTarget = null;
         float speed = _fullSpeed ? _unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
         _moveController.SetSpeed(speed);
-        _unit.Navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
-        _unit.Navigator.SetDestination(_moveController.MapPosition, _unit.Navigator.TargetPosition);
+    }
+
+    private IntVector3 GetClosestAvailableTile() {
+        List<IntVector3> positions = MapService.GetTraversableTiles
+            (1, _unit.TargetManager.CurrentTarget.MoveController.MapPosition, _unit, _unit.UnitData.TraversableThreshold, 0);
+        if(positions.Count == 0) {
+            CustomLogger.Warn(nameof(AIState_Chase), $"Could not find any positions to path to!");
+            return _unit.MoveController.MapPosition;
+        }
+        return positions[Random.Range(0, positions.Count)];
     }
 
     public override void Exit(AIState nextState) {

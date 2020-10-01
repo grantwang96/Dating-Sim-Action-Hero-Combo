@@ -5,7 +5,7 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour, ITileOccupant
 {
     [SerializeField] private UnitTags _unitTags;
     public UnitTags UnitTags => _unitTags;
@@ -63,10 +63,6 @@ public class Unit : MonoBehaviour
 
     protected virtual void OnDefeated() {
         OnUnitDefeated?.Invoke(this);
-    }
-
-    protected virtual void OnUnitsManagerActiveSet(bool active) {
-
     }
 }
 

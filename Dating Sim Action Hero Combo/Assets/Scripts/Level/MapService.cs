@@ -63,7 +63,9 @@ public partial class MapService
 
                 // ensure that this tile is traversable
                 ITileInfo neighborTileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = neighborTileInfo != null && neighborTileInfo.Occupant == null && !neighborTileInfo.Data.IsSolid;
+                bool _canTraverse = neighborTileInfo != null
+                    && neighborTileInfo.Occupants.Count == 0
+                    && !neighborTileInfo.Data.IsSolid;
 
                 if (!_canTraverse || ContainsNode(neighborX, neighborY, toBeVisited)) {
                     continue;
@@ -88,7 +90,12 @@ public partial class MapService
         return traversableTargets;
     }
 
-    public static List<IntVector3> GetTraversableTiles(int radius, IntVector3 start, int minDistance = 0) {
+    public static List<IntVector3> GetTraversableTiles(
+        int radius,
+        IntVector3 start,
+        ITileOccupant occupant,
+        int traversableThreshold,
+        int minDistance = 0) {
         List<TileNode> toBeVisited = new List<TileNode>();
         List<IntVector3> alreadyVisited = new List<IntVector3>();
 
@@ -110,7 +117,9 @@ public partial class MapService
         while(toBeVisited.Count != 0) {
             count++;
             current = toBeVisited[0];
-            TryAddToList(minDistance, traversableTargets, current);
+            if(current.DistanceFromStart >= minDistance) {
+                traversableTargets.Add(new IntVector3(current.X, current.Y));
+            }
             toBeVisited.RemoveAt(0);
             alreadyVisited.Add(new IntVector3(current.X, current.Y));
 
@@ -126,12 +135,12 @@ public partial class MapService
                     continue;
                 }
 
-                if (alreadyVisited.Contains(neighbor) || !LevelDataManager.Instance.IsWithinMap(neighbor)) {
+                if (ContainsIntVector3(neighborX, neighborY, alreadyVisited) || !LevelDataManager.Instance.IsWithinMap(neighbor)) {
                     continue;
                 }
 
                 ITileInfo neighborTileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = IsTileTraversable(neighborTileInfo);
+                bool _canTraverse = IsTileTraversable(neighborTileInfo, occupant, traversableThreshold);
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -140,8 +149,8 @@ public partial class MapService
                     ITileInfo neighborTileX = LevelDataManager.Instance.GetTileAt(current.X + dirX, current.Y);
                     ITileInfo neighborTileY = LevelDataManager.Instance.GetTileAt(current.X, current.Y + dirY);
                     // check if both tiles are available
-                    _canTraverse &= IsTileTraversable(neighborTileX);
-                    _canTraverse &= IsTileTraversable(neighborTileY);
+                    _canTraverse &= IsTileTraversable(neighborTileX, occupant, traversableThreshold);
+                    _canTraverse &= IsTileTraversable(neighborTileY, occupant, traversableThreshold);
                 }
 
                 if (ContainsNode(neighborX, neighborY, toBeVisited)) {
@@ -160,13 +169,12 @@ public partial class MapService
                 break;
             }
         }
-
         return traversableTargets;
     }
     
     // add this to the list if at the proper distance
     private static void TryAddToList(int minDistance, List<IntVector3> list, TileNode node) {
-        if(node.DistanceFromStart >= minDistance) {
+        if (node.DistanceFromStart >= minDistance) {
             list.Add(new IntVector3(node.X, node.Y));
         }
     }
@@ -174,6 +182,15 @@ public partial class MapService
     private static bool ContainsNode(int x, int y, List<TileNode> toBeVisited) {
         for (int i = 0; i < toBeVisited.Count; i++) {
             if (toBeVisited[i].X == x && toBeVisited[i].Y == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static bool ContainsIntVector3(int x, int y, List<IntVector3> list) {
+        for(int i = 0; i < list.Count; i++) {
+            if(list[i].x == x && list[i].y == y) {
                 return true;
             }
         }

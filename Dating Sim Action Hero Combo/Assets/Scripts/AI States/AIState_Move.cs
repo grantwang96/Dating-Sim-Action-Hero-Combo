@@ -10,7 +10,7 @@ public class AIState_Move : AIState
     [SerializeField] private AIState _onArrivedDestination;
 
     public override void Enter(AIStateInitializationData initData = null) {
-        float speed = _fullSpeed ? _unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
+        float speed = _fullSpeed ? _stateMachine.Unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
         // Get path to next destination here
         if(_moveController == null) {
             return;

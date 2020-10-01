@@ -14,11 +14,13 @@ public class Quest : ScriptableObject
     [SerializeField] protected string _questName;
     [SerializeField] protected string _questDescription;
     [SerializeField] protected List<QuestObjectiveData> _objectives = new List<QuestObjectiveData>();
+    [SerializeField] private int _dateScoreReward;
 
     public string QuestId => _questId;
     public string QuestName => _questName;
     public string QuestDescription => _questDescription;
     public IReadOnlyList<QuestObjectiveData> Objectives => _objectives;
+    public int DateScoreReward => _dateScoreReward;
 
     public QuestState Begin() {
         return new QuestState(this);
@@ -28,9 +30,10 @@ public class Quest : ScriptableObject
 public class QuestState {
 
     public QuestStatus Status { get; private set; }
-    public string QuestName { get; private set; }
-    public string QuestDescription { get; }
+    public string QuestName => _questData.QuestName;
+    public string QuestDescription => _questData.QuestDescription;
     public IReadOnlyList<QuestObjectiveState> ObjectiveStates => _objectiveStates;
+    public int DateScoreReward => _questData.DateScoreReward;
 
     public event Action OnStateUpdated;
     public event Action OnCompleted;
@@ -44,8 +47,6 @@ public class QuestState {
     public QuestState(Quest questData) {
         _questData = questData;
         LoadObjectives();
-        QuestName = questData.QuestName;
-        QuestDescription = questData.QuestDescription;
         Status = QuestStatus.Ongoing;
     }
 

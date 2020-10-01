@@ -8,7 +8,7 @@ public class TestInteractable : MonoBehaviour, IInteractable
     public bool Interactable => _interactable;
 
     private void Start() {
-        LevelDataManager.Instance.SetOccupant(LevelDataManager.Instance.WorldToArraySpace(transform.position), this);
+        LevelDataManager.Instance.AddOccupant(LevelDataManager.Instance.WorldToArraySpace(transform.position), this);
     }
 
     public void InteractStart() {

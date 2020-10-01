@@ -19,7 +19,11 @@ public partial class MapService
         new IntVector3(1, 1)
     };
 
-    public static PathStatus GetPathToDestination(IntVector3 startPosition, IntVector3 targetDestination, List<IntVector3> path) {
+    public static PathStatus GetPathToDestination(IntVector3 startPosition,
+        IntVector3 targetDestination, 
+       List<IntVector3> path,
+      ITileOccupant occupant,
+      int traversableThreshold) {
         // setup for path finding
         path?.Clear();
         List<TileNode> toBeVisited = new List<TileNode>();
@@ -31,7 +35,7 @@ public partial class MapService
             return PathStatus.Invalid;
         }
         ITileInfo startingTileInfo = LevelDataManager.Instance.GetTileAt(targetDestination.x, targetDestination.y);
-        if (startingTileInfo != null && startingTileInfo.Occupant != null && startingTileInfo.Data.IsSolid) {
+        if (startingTileInfo != null && startingTileInfo.Occupants.Count > 0 && startingTileInfo.Data.IsSolid) {
             CustomLogger.Warn(nameof(MapService), $"Target Destination {targetDestination} Invalid!");
             return PathStatus.Invalid;
         }
@@ -75,14 +79,16 @@ public partial class MapService
                 int neighborX = current.X + dirX;
                 int neighborY = current.Y + dirY;
                 IntVector3 neighbor = new IntVector3(neighborX, neighborY);
-                if (alreadyVisited.Contains(neighbor)) {
+                // check if we've already looked here
+                if (ContainsIntVector3(neighborX, neighborY, alreadyVisited)) {
                     continue;
                 }
+                // check if this tile is on the map
                 if(!LevelDataManager.Instance.IsWithinMap(neighbor)) {
                     continue;
                 }
                 ITileInfo neighborTileInfo = LevelDataManager.Instance.GetTileAt(neighborX, neighborY);
-                bool _canTraverse = IsTileTraversable(neighborTileInfo);
+                bool _canTraverse = IsTileTraversable(neighborTileInfo, occupant, traversableThreshold);
 
                 // if this is a corner piece
                 int sumOf = Mathf.Abs(dirX) + Mathf.Abs(dirY);
@@ -91,8 +97,8 @@ public partial class MapService
                     ITileInfo neighborTileX = LevelDataManager.Instance.GetTileAt(current.X + dirX, current.Y);
                     ITileInfo neighborTileY = LevelDataManager.Instance.GetTileAt(current.X, current.Y + dirY);
                     // check if both tiles are available
-                    _canTraverse &= IsTileTraversable(neighborTileX);
-                    _canTraverse &= IsTileTraversable(neighborTileY);
+                    _canTraverse &= IsTileTraversable(neighborTileX, occupant, traversableThreshold);
+                    _canTraverse &= IsTileTraversable(neighborTileY, occupant, traversableThreshold);
                 }
                 // if this tile is not traversable, ignore it
                 if (!_canTraverse) {
@@ -102,12 +108,14 @@ public partial class MapService
                 int distanceFromStart = DistanceFromStart(startX, startY, neighborX, neighborY);
 
                 // if this node is in "to be visited", check to see if the distance value needs to be updated and skipped
-                if (TryGetNode(neighborX, neighborY, toBeVisited, out int index)) {
-                    TileNode toBeVisitedNode = toBeVisited[index];
+                bool markedToBeVisited = TryGetNode(neighborX, neighborY, toBeVisited, out int toBeVisitedIndex);
+                if (markedToBeVisited) {
+                    TileNode toBeVisitedNode = toBeVisited[toBeVisitedIndex];
                     if (distanceFromStart < toBeVisitedNode.DistanceFromStart) {
                         toBeVisitedNode.DistanceFromStart = distanceFromStart;
-                        continue;
                     }
+                    // do not add again to the list
+                    continue;
                 }
 
                 // create a new node and add to open list
@@ -130,8 +138,12 @@ public partial class MapService
         return PathStatus.Invalid;
     }
 
-    private static bool IsTileTraversable(ITileInfo tileInfo) {
-        return tileInfo != null && tileInfo.Occupant == null && !tileInfo.Data.IsSolid;
+    private static bool IsTileTraversable(ITileInfo tileInfo, ITileOccupant occupant, int traversableThreshold) {
+        bool isTraversable = tileInfo != null;
+        isTraversable |= traversableThreshold > tileInfo.Occupants.Count;
+        isTraversable |= tileInfo.ContainsOccupant(occupant);
+        isTraversable &= !tileInfo.Data.IsSolid;
+        return isTraversable;
     }
 
     private static bool TryGetNode(int x, int y, List<TileNode> toBeVisited, out int index) {

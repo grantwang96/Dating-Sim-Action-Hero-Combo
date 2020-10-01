@@ -43,8 +43,8 @@ public class TestMonkey : MonoBehaviour
         StopCoroutine(DisplayMarkers());
         Path.Clear();
         DisableAllMarkers();
-        PathStatus status = MapService.GetPathToDestination(StartPos, EndPos, Path);
-        CustomLogger.Log(nameof(TestMonkey), $"Pathfinding ended with status {status}!");
+        // PathStatus status = MapService.GetPathToDestination(StartPos, EndPos, Path);
+        // CustomLogger.Log(nameof(TestMonkey), $"Pathfinding ended with status {status}!");
         StartCoroutine(DisplayMarkers());
     }
 

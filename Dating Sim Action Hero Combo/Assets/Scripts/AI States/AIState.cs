@@ -6,10 +6,10 @@ using System;
 public abstract class AIState : MonoBehaviour {
 
     [SerializeField] protected bool _active;
-    [SerializeField] protected NPCUnit _unit;
     [SerializeField] protected UnitAIStateMachine _stateMachine;
 
     protected bool _initialized;
+    protected NPCUnit _unit => _stateMachine.Unit;
 
     public AIState ParentState { get; protected set; }
     public string StateId { get; protected set; }

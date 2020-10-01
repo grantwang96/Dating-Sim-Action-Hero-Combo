@@ -21,13 +21,19 @@ public class AIState_Wander : AIState
     }
 
     private void GetNextWanderPosition() {
-        List<IntVector3> positions = MapService.GetPositionsWithinRadius(_wanderRangeMin, _moveController.MapPosition, _wanderRangeMax);
-        if(positions.Count == 0) {
+        List<IntVector3> positions = MapService.GetTraversableTiles(
+            _wanderRangeMax,
+            _moveController.MapPosition,
+            _unit,
+            _unit.UnitData.TraversableThreshold,
+            _wanderRangeMin);
+        _unit.Navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
+        if (positions.Count == 0) {
+            CustomLogger.Warn(nameof(AIState_Wander), $"Could not find available tile to traverse to!");
             OnArrivedFinalDestination();
             return;
         }
         _unit.Navigator.SetDestination(_moveController.MapPosition, positions[Random.Range(0, positions.Count)]);
-        _unit.Navigator.OnArrivedFinalDestination += OnArrivedFinalDestination;
         float speed = _fullSpeed ? _unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
         _moveController.SetSpeed(speed);
     }

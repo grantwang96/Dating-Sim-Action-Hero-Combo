@@ -12,9 +12,11 @@ public class NPCNavigator : MonoBehaviour
     public IntVector3 TargetPosition => _targetPosition;
     public Transform LookTarget { get; set; }
 
+    [SerializeField] private Unit _unit;
     [SerializeField] private NPCMoveController _moveController;
     [SerializeField] private List<IntVector3> _currentPath = new List<IntVector3>();
     [SerializeField] private IntVector3 _currentDestination;
+    [SerializeField] private bool _canPassThroughOccupants;
     private Vector2 _currentWorldDestination;
     private bool _isPathing;
 
@@ -24,7 +26,13 @@ public class NPCNavigator : MonoBehaviour
     // set the destination
     public PathStatus SetDestination(IntVector3 start, IntVector3 destination) {
         ClearDestination();
-        PathStatus pathStatus = MapService.GetPathToDestination(start, destination, _currentPath);
+        PathStatus pathStatus = MapService.GetPathToDestination(
+            start,
+            destination,
+            _currentPath,
+            _unit,
+            _unit.UnitData.TraversableThreshold
+            );
         if (pathStatus == PathStatus.Invalid) {
             ArrivedFinalDestination();
             return PathStatus.Invalid;
@@ -45,11 +53,20 @@ public class NPCNavigator : MonoBehaviour
 
     // update to the next position in the current path
     private void UpdateCurrentDestination() {
+        // if we've arrived, clean up
         if (_currentPath.Count == 0) {
             ArrivedFinalDestination();
             return;
         }
+        // set the current destination
         _currentDestination = _currentPath[0];
+        ITileInfo tileInfo = LevelDataManager.Instance.GetTileAt(_currentDestination.x, _currentDestination.y);
+        // ensure that the current destination is currently traversable
+        if(!_canPassThroughOccupants && tileInfo.Occupants.Count > 0) {
+            ArrivedFinalDestination();
+            return;
+        }
+        // set the world destination
         _currentWorldDestination = LevelDataManager.Instance.ArrayToWorldSpace(_currentPath[0].x, _currentPath[0].y);
         _currentPath.RemoveAt(0);
     }

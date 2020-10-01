@@ -23,6 +23,7 @@ public abstract class NPCUnit : Unit
     public override void Initialize(string unitId, UnitData data) {
         _collider.radius = .5f; // replace with UnitData field
         base.Initialize(unitId, data);
+        _targetManager.Initialize();
     }
 
     public void SendMessage(UnitMessage message) {

@@ -15,7 +15,7 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
     public static PlayerOutfitController Instance { get; private set; }
 
     public PlayerOutfitState OutfitState => _outfitState;
-    public event Action OnOutfitChangeStarted;
+    public event Action<PlayerOutfitState> OnOutfitChangeStarted;
     public event Action OnOutfitChangeComplete;
 
     [SerializeField] private PlayerUnit _unit;
@@ -54,7 +54,13 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
         }
         _outfitChangeInProgress = true;
         _currentSet.SetActive(false);
-        OnOutfitChangeStarted?.Invoke();
+        PlayerOutfitState newOutfitState;
+        if (_outfitState == PlayerOutfitState.Civilian) {
+            newOutfitState = PlayerOutfitState.Agent;
+        } else {
+            newOutfitState = PlayerOutfitState.Civilian;
+        }
+        OnOutfitChangeStarted?.Invoke(newOutfitState);
         // do outfit change
         StartCoroutine(ChangeOutfits());
     }

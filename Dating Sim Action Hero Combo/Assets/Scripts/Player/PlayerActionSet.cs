@@ -75,12 +75,17 @@ public class PlayerActionController : IPlayerActionController {
     private void OnUnitPositionUpdated(IntVector3 position) {
         _currentInteractable = null;
         List<ITileInfo> tiles = LevelDataManager.Instance.GetTilesWithinRadius(position, 1);
-        // TODO: sort this list by priority if multiple objects are interactable. For now, just use first object
         for(int i = 0; i < tiles.Count; i++) {
-            IInteractable interactable = (IInteractable) tiles[i].Occupant;
-            if(interactable != null) {
-                _currentInteractable = interactable;
-                break;
+            if(tiles[i].Occupants.Count == 0) {
+                continue;
+            }
+            // TODO: sort this list by priority if multiple objects are interactable. For now, just use first object
+            for (int j = 0; j < tiles[i].Occupants.Count; j++) {
+                IInteractable interactable = (IInteractable)tiles[i].Occupants[i];
+                if (interactable != null) {
+                    _currentInteractable = interactable;
+                    break;
+                }
             }
         }
     }

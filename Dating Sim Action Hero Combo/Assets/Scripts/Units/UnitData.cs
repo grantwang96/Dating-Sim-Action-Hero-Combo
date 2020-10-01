@@ -9,6 +9,7 @@ public class UnitData : ScriptableObject
     [SerializeField] protected DamageType _resistances;
     [SerializeField] protected float _runSpeed;
     [SerializeField] protected float _walkSpeed;
+    [SerializeField] protected int _traversableThreshold; // number of occupants before this object cannot traverse that tile
 
     [SerializeField] protected float _visionRange;
     [SerializeField] protected float _visionAngle;
@@ -26,6 +27,7 @@ public class UnitData : ScriptableObject
     public DamageType Resistances => _resistances;
     public float WalkSpeed => _walkSpeed;
     public float RunSpeed => _runSpeed;
+    public int TraversableThreshold => _traversableThreshold;
 
     public float VisionRange => _visionRange;
     public float VisionAngle => _visionAngle;

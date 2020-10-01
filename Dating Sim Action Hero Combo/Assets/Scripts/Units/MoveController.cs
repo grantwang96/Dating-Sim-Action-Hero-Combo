@@ -9,6 +9,7 @@ public abstract class MoveController : MonoBehaviour, IUnitComponent {
     [SerializeField] protected Transform _body;
     [SerializeField] protected Transform _front;
     [SerializeField] protected IntVector3 _mapPosition;
+    [SerializeField] protected Unit _unit;
 
     public IntVector3 MapPosition => _mapPosition;
     public Transform Body => _body;
@@ -40,7 +41,11 @@ public abstract class MoveController : MonoBehaviour, IUnitComponent {
     }
 
     protected virtual void UpdateMapSpacePosition(IntVector3 position) {
+        ITileInfo oldTileInfo = LevelDataManager.Instance.GetTileAt(_mapPosition.x, _mapPosition.y);
+        oldTileInfo.RemoveOccupant(_unit);
         _mapPosition = position;
+        ITileInfo newTileInfo = LevelDataManager.Instance.GetTileAt(_mapPosition.x, _mapPosition.y);
+        newTileInfo.AddOccupant(_unit);
         OnMapPositionUpdated?.Invoke(MapPosition);
     }
 

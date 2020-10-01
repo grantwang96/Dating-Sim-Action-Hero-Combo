@@ -25,7 +25,7 @@ public class AIState_SingleAnimation : AIState {
     }
 
     private void OnAnimationStatusUpdated(AnimationStatus status) {
-        if(status == AnimationStatus.Completed) {
+        if(status == AnimationStatus.Completed && _onAnimationCompleteState != null) {
             SetReadyToTransition(_onAnimationCompleteState);
         }
     }

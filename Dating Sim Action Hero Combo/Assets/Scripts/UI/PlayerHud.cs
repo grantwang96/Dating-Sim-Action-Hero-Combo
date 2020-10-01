@@ -52,7 +52,7 @@ public class PlayerHud : UIObject
         _outfitChangeInProgressDisplay.SetActive(false);
     }
 
-    private void OnOutfitChangeStart() {
+    private void OnOutfitChangeStart(PlayerOutfitState outfitState) {
         _outfitChangeInProgressDisplay.SetActive(true);
         _agentModeActiveDisplay.SetActive(false);
         _civilianModeDisplay.SetActive(false);

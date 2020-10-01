@@ -7,6 +7,10 @@ public class NPCTargetManager : MonoBehaviour
     private const int MaxFoundTargets = 15;
 
     public Unit CurrentTarget { get; private set; }
+    public LayerMask TargetLayers => _targetLayers;
+    public LayerMask VisionLayers => _visionLayers;
+    public float VisionAngle => _visionAngle;
+    public float VisionRange => _visionRange;
 
     [SerializeField] private Unit _unit;
     [SerializeField] private LayerMask _targetLayers;
@@ -16,30 +20,36 @@ public class NPCTargetManager : MonoBehaviour
 
     private Collider2D[] _foundColliders = new Collider2D[MaxFoundTargets];
 
-    private void Start() {
+    public void Initialize() {
         _visionAngle = _unit.UnitData.VisionAngle;
         _visionRange = _unit.UnitData.VisionRange;
         _visionLayers = _unit.UnitData.VisionLayers;
     }
 
-    public bool GeneralScan() {
+    public void GeneralScan(List<Unit> foundUnits, UnitTags unitTags) {
         int foundCollidersCount = Physics2D.OverlapCircleNonAlloc(_unit.MoveController.Body.position, _visionRange, _foundColliders, _targetLayers);
-        for(int i = 0; i < foundCollidersCount; i++) {
+        foundUnits.Clear();
+        for (int i = 0; i < foundCollidersCount; i++) {
             Collider2D collider = _foundColliders[i];
             Unit unit = collider.GetComponent<Unit>();
             if(unit != null && unit != _unit) {
-                if (Scan(unit, _unit.MoveController.Body.transform, _visionRange, _visionLayers, _visionAngle)) {
-                    CurrentTarget = unit;
-                    return true;
+                if (UnitUtils.ContainsTag(unit.UnitTags, unitTags) &&
+                    Scan(unit, _unit.MoveController.Body.transform, _visionRange, _visionLayers, _visionAngle)) {
+                    foundUnits.Add(unit);
                 }
             }
         }
-        return false;
     }
 
     // this function searches for a specific target
     public bool ScanForTarget(Unit target) {
         return Scan(target, _unit.MoveController.Body.transform, _visionRange, _visionLayers, _visionAngle);
+    }
+
+    public void TrySetTarget(Unit target) {
+        if (ScanForTarget(target)) {
+            CurrentTarget = target;
+        }
     }
 
     // overrides the current target without scanning

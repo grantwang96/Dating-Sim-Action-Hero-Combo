@@ -17,8 +17,9 @@ MonoBehaviour:
   _resistances: 0
   _runSpeed: 5
   _walkSpeed: 2
-  _visionRange: 10
-  _visionAngle: 80
+  _traversableThreshold: 1
+  _visionRange: 8
+  _visionAngle: 70
   _visionLayers:
     serializedVersion: 2
     m_Bits: 769
