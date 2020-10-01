@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48685e6d48304a04496b1c97cc8b31c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitTags: 1
+  _unitTags: 2
   _moveController: {fileID: 5219552658643734024}
   _damageable: {fileID: 4753258251025489057}
   _animationController: {fileID: 9039390534891533461}
@@ -296,6 +296,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  _unit: {fileID: 8202479465019601312}
   _speed: 5
 --- !u!114 &5877053418862834155
 MonoBehaviour:

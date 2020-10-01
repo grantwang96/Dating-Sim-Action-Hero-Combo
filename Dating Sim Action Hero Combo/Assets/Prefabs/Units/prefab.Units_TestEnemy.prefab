@@ -1019,7 +1019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _active: 0
   _stateMachine: {fileID: 2179785060402409991}
-  _scanForTags: 1
+  _scanForTags: 32
   _onHostileFoundState: {fileID: 534584363850015340}
   _visualizedFieldOfView: {fileID: 8835688374701010292}
 --- !u!1 &6371930903067841380

@@ -60,6 +60,10 @@ public class PlayerActionController : IPlayerActionController {
         if (!CanInteract()) {
             return;
         }
+        MonoBehaviourMaster.Instance.OnUpdate += ProcessHeldInteract;
+    }
+
+    private void ProcessHeldInteract() {
         // do interact things
         _currentInteractable.InteractHold();
     }
@@ -70,6 +74,7 @@ public class PlayerActionController : IPlayerActionController {
         }
         // do interact things
         _currentInteractable.InteractEnd();
+        MonoBehaviourMaster.Instance.OnUpdate -= ProcessHeldInteract;
     }
 
     private void OnUnitPositionUpdated(IntVector3 position) {
@@ -81,7 +86,7 @@ public class PlayerActionController : IPlayerActionController {
             }
             // TODO: sort this list by priority if multiple objects are interactable. For now, just use first object
             for (int j = 0; j < tiles[i].Occupants.Count; j++) {
-                IInteractable interactable = (IInteractable)tiles[i].Occupants[i];
+                IInteractable interactable = tiles[i].Occupants[i] as IInteractable;
                 if (interactable != null) {
                     _currentInteractable = interactable;
                     break;

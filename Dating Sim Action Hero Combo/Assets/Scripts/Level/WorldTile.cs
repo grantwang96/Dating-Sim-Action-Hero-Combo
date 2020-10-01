@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldTile : MonoBehaviour
+public class WorldTile : MonoBehaviour, ITileOccupant
 {
     [SerializeField] private string _tileType;
     [SerializeField] private Collider2D _collider;
-
-    private IntVector3 _mapPosition;
+    [SerializeField] private IntVector3 _mapPosition;
 
     private void Start() {
         RegisterTile();
@@ -27,6 +26,7 @@ public class WorldTile : MonoBehaviour
     private void RegisterTile() {
         _mapPosition = LevelDataManager.Instance.WorldToArraySpace(transform.position);
         LevelDataManager.Instance.UpdateTile(_mapPosition.x, _mapPosition.y, _tileType);
+        LevelDataManager.Instance.AddOccupant(_mapPosition, this);
     }
 
     private void InitializeTile() {
@@ -36,5 +36,6 @@ public class WorldTile : MonoBehaviour
 
     private void UnregisterTile() {
         LevelDataManager.Instance.UpdateTile(_mapPosition.x, _mapPosition.y);
+        LevelDataManager.Instance.RemoveOccupant(_mapPosition, this);
     }
 }

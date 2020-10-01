@@ -7,7 +7,7 @@ using System;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Unit : MonoBehaviour, ITileOccupant
 {
-    [SerializeField] private UnitTags _unitTags;
+    [SerializeField] protected UnitTags _unitTags;
     public UnitTags UnitTags => _unitTags;
     
     [SerializeField] protected MoveController _moveController;
@@ -72,5 +72,6 @@ public enum UnitTags {
     Civilian = (1 << 1),
     Law_Enforcement = (1 << 2),
     Enemy = (1 << 3),
-    Date = (1 << 4)
+    Date = (1 << 4),
+    Agent = (1 << 5)
 }

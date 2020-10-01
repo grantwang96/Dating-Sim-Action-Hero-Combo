@@ -117,7 +117,8 @@ public partial class MapService
         while(toBeVisited.Count != 0) {
             count++;
             current = toBeVisited[0];
-            if(current.DistanceFromStart >= minDistance) {
+            ITileInfo currentTile = LevelDataManager.Instance.GetTileAt(current.X, current.Y);
+            if(current.DistanceFromStart >= minDistance && IsTileTraversable(currentTile, occupant, traversableThreshold)) {
                 traversableTargets.Add(new IntVector3(current.X, current.Y));
             }
             toBeVisited.RemoveAt(0);

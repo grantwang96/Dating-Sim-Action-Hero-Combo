@@ -26,12 +26,13 @@ public class PlayerUnit : Unit {
         UnitsManager.Instance.RegisterUnit(this);
         // temp
         UIObject newPlayerHud = UIManager.Instance.CreateNewUIObject(PlayerHudId, UILayerId.HUD);
-        if(newPlayerHud == null) {
-            return;
+        if(newPlayerHud != null) {
+            _playerHud = newPlayerHud;
+            _playerHud.Initialize();
+            _playerHud.Display();
         }
-        _playerHud = newPlayerHud;
-        _playerHud.Initialize();
-        _playerHud.Display();
+        _playerOutfitController.OnOutfitChangeComplete += OnOutfitChanged;
+        OnOutfitChanged();
     }
 
     public override void Dispose() {
@@ -39,5 +40,20 @@ public class PlayerUnit : Unit {
         _playerHud.Hide();
         UIManager.Instance.RemoveUIObject(PlayerHudId);
         _playerOutfitController.Dispose();
+        _playerOutfitController.OnOutfitChangeComplete -= OnOutfitChanged;
+    }
+
+    private void OnOutfitChanged() {
+        switch (_playerOutfitController.OutfitState) {
+            case PlayerOutfitState.Agent:
+                _unitTags = UnitTags.Agent;
+                break;
+            case PlayerOutfitState.Civilian:
+                _unitTags = UnitTags.Civilian;
+                break;
+            default:
+                CustomLogger.Error(nameof(PlayerUnit), $"Could not update unit tags based on outfit state {_playerOutfitController.OutfitState}");
+                break;
+        }
     }
 }

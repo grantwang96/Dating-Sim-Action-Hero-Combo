@@ -35,7 +35,7 @@ public partial class MapService
             return PathStatus.Invalid;
         }
         ITileInfo startingTileInfo = LevelDataManager.Instance.GetTileAt(targetDestination.x, targetDestination.y);
-        if (startingTileInfo != null && startingTileInfo.Occupants.Count > 0 && startingTileInfo.Data.IsSolid) {
+        if (startingTileInfo != null && (startingTileInfo.Occupants.Count > traversableThreshold || startingTileInfo.Data.IsSolid)) {
             CustomLogger.Warn(nameof(MapService), $"Target Destination {targetDestination} Invalid!");
             return PathStatus.Invalid;
         }
