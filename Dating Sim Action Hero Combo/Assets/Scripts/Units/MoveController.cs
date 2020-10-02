@@ -42,10 +42,14 @@ public abstract class MoveController : MonoBehaviour, IUnitComponent {
 
     protected virtual void UpdateMapSpacePosition(IntVector3 position) {
         ITileInfo oldTileInfo = LevelDataManager.Instance.GetTileAt(_mapPosition.x, _mapPosition.y);
-        oldTileInfo.RemoveOccupant(_unit);
+        if(oldTileInfo != null) {
+            oldTileInfo.RemoveOccupant(_unit);
+        }
         _mapPosition = position;
         ITileInfo newTileInfo = LevelDataManager.Instance.GetTileAt(_mapPosition.x, _mapPosition.y);
-        newTileInfo.AddOccupant(_unit);
+        if(newTileInfo != null) {
+            newTileInfo.AddOccupant(_unit);
+        }
         OnMapPositionUpdated?.Invoke(MapPosition);
     }
 

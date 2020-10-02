@@ -44,8 +44,12 @@ public class DateStateManager : IInitializableManager {
         OnDateRatingUpdated?.Invoke();
     } 
 
+    private void OnPlayerAgentSpotted() {
+        // lose the game
+    }
+
     private void OnGameStart() {
-        // SpawnDate();
+        SpawnDate();
     }
 
     private void SpawnDate() {

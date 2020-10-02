@@ -29,6 +29,7 @@ Transform:
   m_Children:
   - {fileID: 8503240196120731930}
   - {fileID: 5090481854654471144}
+  - {fileID: 4230042559694945670}
   m_Father: {fileID: 8397284763255784380}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41,6 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5090481854654471144}
+  - component: {fileID: 479445681133089786}
   m_Layer: 11
   m_Name: Flee
   m_TagString: Untagged
@@ -62,6 +64,22 @@ Transform:
   m_Father: {fileID: 9204869053186968497}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &479445681133089786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 922584533087017088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f20504865a6ca2845a7f341eaecf850a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 0
+  _stateMachine: {fileID: 8919860393749638263}
+  _onArrivedDestination: {fileID: 6466487576237804366}
+  _fleeRadius: 16
 --- !u!1 &2023170329095145310
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +283,7 @@ MonoBehaviour:
     _bools: []
     _ints: []
     _floats: []
-  _onAnimationCompleteState: {fileID: 0}
+  _onAnimationCompleteState: {fileID: 479445681133089786}
 --- !u!1 &3700815656227155722
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +424,7 @@ Animator:
   m_GameObject: {fileID: 5512569929068821090}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: abfa567898217f847af825fedb5e6ea0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -767,6 +785,54 @@ MonoBehaviour:
   _startingState: {fileID: 5963709742471792836}
   _deathState: {fileID: 8930149089034126575}
   _unitMessageAIStateOverrides: []
+--- !u!1 &6604783707984176193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4230042559694945670}
+  - component: {fileID: 6466487576237804366}
+  m_Layer: 11
+  m_Name: Cower
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4230042559694945670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604783707984176193}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 9204869053186968497}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6466487576237804366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604783707984176193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f487bb6885449754bbeda8148ac0774b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 0
+  _stateMachine: {fileID: 8919860393749638263}
+  _minimumIdleTime: 10
+  _maximumIdleTime: 20
+  _onIdleComplete: {fileID: 685600225649851303}
 --- !u!1 &7188267800796792380
 GameObject:
   m_ObjectHideFlags: 0

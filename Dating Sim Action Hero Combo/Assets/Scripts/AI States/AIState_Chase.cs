@@ -29,9 +29,6 @@ public class AIState_Chase : AIState
     private IntVector3 GetClosestAvailableTile() {
         List<IntVector3> positions = MapService.GetTraversableTiles
             (1, _unit.TargetManager.CurrentTarget.MoveController.MapPosition, _unit, _unit.UnitData.TraversableThreshold, 0);
-        for(int i = 0; i < positions.Count; i++) {
-            Debug.Log(positions[i]);
-        }
         if(positions.Count == 0) {
             CustomLogger.Warn(nameof(AIState_Chase), $"Could not find any positions to path to!");
             return _unit.MoveController.MapPosition;
