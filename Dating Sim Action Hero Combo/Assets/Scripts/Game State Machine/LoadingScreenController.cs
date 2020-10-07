@@ -31,13 +31,11 @@ public class LoadingScreenController : IInitializableManager
                 CustomLogger.Error(nameof(LoadingScreenController), $"Could not retrieve loading screen prefab with id {LoadingScreenPrefabId}");
                 success = false;
             } else {
-                Debug.Log("Loading screen initialized!");
                 _loadingScreen.OnShowComplete += ShowLoadingScreenComplete;
                 _loadingScreen.OnHideComplete += HideLoadingScreenComplete;
                 _loadingScreen.HideInstant();
             }
         }
-        Debug.Log("Initialized loading screen controller!");
         initializationCallback?.Invoke(success);
     }
     
@@ -47,12 +45,10 @@ public class LoadingScreenController : IInitializableManager
     }
 
     public void ShowLoadingScreen() {
-        Debug.Log("Show loading screen");
         _loadingScreen?.Display();
     }
 
     public void HideLoadingScreen() {
-        Debug.Log("Hide loading screen");
         _loadingScreen?.Hide();
     }
     

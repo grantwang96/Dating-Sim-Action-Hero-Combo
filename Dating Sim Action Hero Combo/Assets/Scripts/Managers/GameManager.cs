@@ -40,8 +40,7 @@ public class GameManager : IInitializableManager {
 
     // game begins, player is given control, the first quest appears, etc.
     public void StartGame() {
-        QuestManager.Instance.OnAllQuestsCompleted += OnAllQuestsCompleted;
-        PlayerUnit.Instance.OnUnitDefeated += OnPlayerDefeated;
+        SubscribeToGameStartTriggers();
         GameEventsManager.StartGame?.Broadcast();
     }
 
@@ -76,9 +75,22 @@ public class GameManager : IInitializableManager {
         EndGame();
     }
 
+    private void OnPlayerAgentSpotted() {
+        CustomLogger.Log(nameof(GameManager), "Player spotted by date in agent gear! Ending game...");
+        EndGameContext = new EndGameContext(false, EndResult.IdentityDiscovered);
+        EndGame();
+    }
+
+    private void SubscribeToGameStartTriggers() {
+        QuestManager.Instance.OnAllQuestsCompleted += OnAllQuestsCompleted;
+        PlayerUnit.Instance.OnUnitDefeated += OnPlayerDefeated;
+        DateStateManager.Instance.OnPlayerAgentSpotted += OnPlayerAgentSpotted;
+    }
+
     private void UnsubscribeToGameEndTriggers() {
         QuestManager.Instance.OnAllQuestsCompleted -= OnAllQuestsCompleted;
         PlayerUnit.Instance.OnUnitDefeated -= OnPlayerDefeated;
+        DateStateManager.Instance.OnPlayerAgentSpotted -= OnPlayerAgentSpotted;
     }
     
     // called to exit the gameplay state and enter the next state (end result screens, etc.)

@@ -28,11 +28,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3950621380483180121}
+  - {fileID: 947923998275361373}
   - {fileID: 3666831949471313400}
   - {fileID: 4696862002974306655}
   - {fileID: 8575889027775982388}
   - {fileID: 8050986372204387063}
   - {fileID: 3776663784801500238}
+  - {fileID: 4565686095162640820}
   m_Father: {fileID: 7110149550079191899}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -82,7 +84,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _active: 0
   _stateMachine: {fileID: 2179785060402409991}
-  _onCombatNoiseHeard: {fileID: 534584363850015340}
+  _onCombatNoiseHeard: {fileID: 867158758698931361}
   _unitSoundListener: {fileID: 2865325561480287269}
 --- !u!1 &437165490437721180
 GameObject:
@@ -362,6 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitTags: 8
+  _detectableTags: 8
   _moveController: {fileID: 2059632087369443480}
   _damageable: {fileID: 7902114853793484446}
   _animationController: {fileID: 1441907153915782317}
@@ -487,6 +490,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2faa6263ebc390441bc9e5df4d20bd24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1193278332682494538
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2315994102917651724}
+  - component: {fileID: 4236234099018762246}
+  m_Layer: 11
+  m_Name: ListenForCombatNoise
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2315994102917651724
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193278332682494538}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8577450583283243093}
+  m_Father: {fileID: 4565686095162640820}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4236234099018762246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193278332682494538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f4f480ed882887478a9f1ea9307dfea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 0
+  _stateMachine: {fileID: 2179785060402409991}
+  _onCombatNoiseHeard: {fileID: 7999581802499180089}
+  _unitSoundListener: {fileID: 2865325561480287269}
 --- !u!1 &1199420881232602492
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,8 +585,62 @@ MonoBehaviour:
   _stateMachine: {fileID: 2179785060402409991}
   _fullSpeed: 1
   _moveController: {fileID: 2059632087369443480}
-  _onArrivedDestination: {fileID: 8572021680481341551}
+  _onLostTarget: {fileID: 8572021680481341551}
   _onFailedToPath: {fileID: 8572021680481341551}
+  _maxChaseDuration: 6
+--- !u!1 &1767236323950128000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 947923998275361373}
+  - component: {fileID: 867158758698931361}
+  m_Layer: 11
+  m_Name: HeardCombatNoise
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &947923998275361373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767236323950128000}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5442251013545389786}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &867158758698931361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767236323950128000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1821d1718fe20bc41ba63294108eb3a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 0
+  _stateMachine: {fileID: 2179785060402409991}
+  _animationData:
+    _animationName: Alert
+    _triggers: []
+    _resetTriggers: []
+    _bools: []
+    _ints: []
+    _floats: []
+  _onAnimationCompleteState: {fileID: 7999581802499180089}
 --- !u!1 &1804437230832418924
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,7 +670,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5442251013545389786}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9218523668349529241
 MonoBehaviour:
@@ -657,7 +762,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5442251013545389786}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1237924413255895954
 MonoBehaviour:
@@ -733,7 +838,7 @@ GameObject:
   - component: {fileID: 3950621380483180121}
   - component: {fileID: 534584363850015340}
   m_Layer: 11
-  m_Name: Alert
+  m_Name: SpottedEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -953,7 +1058,7 @@ Transform:
   m_Children:
   - {fileID: 8134667933289403371}
   m_Father: {fileID: 5442251013545389786}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3431484489099643684
 MonoBehaviour:
@@ -1020,6 +1125,7 @@ MonoBehaviour:
   _active: 0
   _stateMachine: {fileID: 2179785060402409991}
   _scanForTags: 32
+  _detectablesToScanFor: 32
   _onHostileFoundState: {fileID: 534584363850015340}
   _visualizedFieldOfView: {fileID: 8835688374701010292}
 --- !u!1 &6371930903067841380
@@ -1069,6 +1175,104 @@ MonoBehaviour:
   _active: 0
   _stateMachine: {fileID: 2179785060402409991}
   _onTakeDamage: {fileID: 534584363850015340}
+--- !u!1 &6674954365606669305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4565686095162640820}
+  - component: {fileID: 4019595832008278741}
+  m_Layer: 11
+  m_Name: GeneralScan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4565686095162640820
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6674954365606669305}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2315994102917651724}
+  m_Father: {fileID: 5442251013545389786}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4019595832008278741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6674954365606669305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e81169081a0914d904582a9dc998ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 0
+  _stateMachine: {fileID: 2179785060402409991}
+  _scanForTags: 32
+  _detectablesToScanFor: 32
+  _onHostileFoundState: {fileID: 534584363850015340}
+  _visualizedFieldOfView: {fileID: 8835688374701010292}
+--- !u!1 &6742077314972331129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8577450583283243093}
+  - component: {fileID: 7999581802499180089}
+  m_Layer: 11
+  m_Name: GoToCombatNoiseSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8577450583283243093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6742077314972331129}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2315994102917651724}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7999581802499180089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6742077314972331129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a936fc2b96e94f74d80625355ec275f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 0
+  _stateMachine: {fileID: 2179785060402409991}
+  _fullSpeed: 1
+  _moveController: {fileID: 2059632087369443480}
+  _onArrivedDestination: {fileID: 8572021680481341551}
 --- !u!1 &7545062718647489732
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,7 +1371,7 @@ MonoBehaviour:
   _meshFilter: {fileID: 8307583620043229975}
   _meshRenderer: {fileID: 5233930449287818855}
   _fovResolution: 0.75
-  _edgeResolveIterations: 6
+  _edgeResolveIterations: 10
   _edgeDistanceThreshold: 0.3
   _visualizeOutfitState: 2
 --- !u!1 &8145732519204881098
@@ -1199,7 +1403,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5442251013545389786}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6611180445674927578
 MonoBehaviour:
@@ -1247,7 +1451,7 @@ Transform:
   m_Children:
   - {fileID: 979876005893837050}
   m_Father: {fileID: 5442251013545389786}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &256030247442728648
 MonoBehaviour:
@@ -1264,4 +1468,5 @@ MonoBehaviour:
   _active: 0
   _stateMachine: {fileID: 2179785060402409991}
   _onTargetFound: {fileID: 1237924413255895954}
+  _expectedTags: 32
   _visualizedFieldOfView: {fileID: 8835688374701010292}

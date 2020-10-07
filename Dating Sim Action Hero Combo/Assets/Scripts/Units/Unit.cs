@@ -5,10 +5,11 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Unit : MonoBehaviour, ITileOccupant
+public class Unit : MonoBehaviour, ITileOccupant, IDetectable
 {
     [SerializeField] protected UnitTags _unitTags;
     public UnitTags UnitTags => _unitTags;
+    [SerializeField] protected DetectableTags _detectableTags;
     
     [SerializeField] protected MoveController _moveController;
     [SerializeField] protected UnitDamageable _damageable;
@@ -20,7 +21,10 @@ public class Unit : MonoBehaviour, ITileOccupant
     public MoveController MoveController => _moveController;
     public IDamageable Damageable => _damageable;
     public IAnimationController AnimationController => _animationController;
-    
+
+    public Transform Transform => transform;
+    public DetectableTags DetectableTags => _detectableTags;
+
     public event Action OnUnitInitialized;
     public event Action<Unit> OnUnitDefeated;
 
@@ -52,7 +56,7 @@ public class Unit : MonoBehaviour, ITileOccupant
         _animationController.Dispose();
         UnsubscribeToEvents();
     }
-
+    
     protected virtual void SubscribeToEvents() {
         _damageable.OnDefeated += OnDefeated;
     }

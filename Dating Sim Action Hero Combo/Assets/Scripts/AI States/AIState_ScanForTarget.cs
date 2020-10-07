@@ -7,8 +7,11 @@ public class AIState_ScanForTarget : AIState
     [SerializeField] private AIState _onTargetFound;
     [SerializeField] private FieldOfViewVisualizer _visualizedFieldOfView;
 
+    private DetectableTags _expectedDetectableTags;
+
     public override void Enter(AIStateInitializationData initData = null) {
         base.Enter(initData);
+        _expectedDetectableTags = _unit.TargetManager.CurrentTarget.DetectableTags;
         _visualizedFieldOfView.SetActive(true);
     }
 
@@ -32,6 +35,10 @@ public class AIState_ScanForTarget : AIState
     }
 
     private bool ScanForTarget() {
-        return _unit.TargetManager.ScanForTarget(_unit.TargetManager.CurrentTarget);
+        Unit currentTarget = _unit.TargetManager.CurrentTarget;
+        bool foundTarget = true;
+        foundTarget &= (currentTarget.DetectableTags & _expectedDetectableTags) != 0;
+        foundTarget &= _unit.TargetManager.CanSeeTarget(currentTarget);
+        return foundTarget;
     }
-}
+} 

@@ -16,6 +16,8 @@ public abstract class AIState : MonoBehaviour {
     public bool Active => _active;
 
     public event Action<AIState, AIStateInitializationData> OnReadyToTransitionState;
+    public event Action OnStateEnter;
+    public event Action OnStateExit;
 
     private void Awake() {
         ParentState = transform.parent?.GetComponent<AIState>();
@@ -60,6 +62,7 @@ public abstract class AIState : MonoBehaviour {
             ParentState.Enter(initData);
         }
         _active = true;
+        OnStateEnter?.Invoke();
     }
     
     // start state and initialize some active AI State Data
@@ -81,6 +84,7 @@ public abstract class AIState : MonoBehaviour {
             ParentState.OnReadyToTransitionState -= SetReadyToTransition;
         }
         _active = false;
+        OnStateExit?.Invoke();
     }
 
     // fires ready to transition event for AI State Machine listener

@@ -177,9 +177,9 @@ MonoBehaviour:
   _targetManager: {fileID: 8001835218218258622}
   _meshFilter: {fileID: 2565554324941710410}
   _meshRenderer: {fileID: 8469969336036618239}
-  _fovResolution: 0.5
-  _edgeResolveIterations: 6
-  _edgeDistanceThreshold: 0.5
+  _fovResolution: 0.75
+  _edgeResolveIterations: 10
+  _edgeDistanceThreshold: 0.33
   _visualizeOutfitState: 2
 --- !u!1 &3060193611299450773
 GameObject:
@@ -446,6 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitTags: 16
+  _detectableTags: 16
   _moveController: {fileID: 4793261526594334113}
   _damageable: {fileID: 2570932858114932078}
   _animationController: {fileID: 5733494192104182881}
@@ -926,7 +927,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _active: 0
   _stateMachine: {fileID: 8919860393749638263}
-  _scanForTags: 0
+  _scanForTags: 32
+  _detectablesToScanFor: 32
   _onHostileFoundState: {fileID: 8901644405375807853}
   _visualizedFieldOfView: {fileID: 5365243306701122860}
 --- !u!1 &8775240044141749560

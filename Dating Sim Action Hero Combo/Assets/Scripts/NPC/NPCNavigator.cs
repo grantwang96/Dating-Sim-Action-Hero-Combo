@@ -11,6 +11,7 @@ public class NPCNavigator : MonoBehaviour
     public Vector2 LookInput => GetLookInput();
     public IntVector3 TargetPosition => _targetPosition;
     public Transform LookTarget { get; set; }
+    public IntVector3 PointOfInterest { get; set; }
 
     [SerializeField] private Unit _unit;
     [SerializeField] private NPCMoveController _moveController;

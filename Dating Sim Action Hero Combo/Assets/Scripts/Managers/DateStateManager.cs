@@ -12,7 +12,9 @@ public class DateStateManager : IInitializableManager {
 
     public int DateRating { get; private set; }
 
+    public event Action OnDateSpawned;
     public event Action OnDateRatingUpdated;
+    public event Action OnPlayerAgentSpotted;
 
     private DateData _dateData;
 
@@ -36,6 +38,7 @@ public class DateStateManager : IInitializableManager {
 
     public void Dispose() {
         QuestManager.Instance.OnCurrentDateQuestCompleted -= OnDateQuestCompleted;
+        DespawnDate();
         GameEventsManager.StartGame.Unsubscribe(OnGameStart); // temp: remove this and use configurable actions
     }
 
@@ -44,12 +47,19 @@ public class DateStateManager : IInitializableManager {
         OnDateRatingUpdated?.Invoke();
     } 
 
-    private void OnPlayerAgentSpotted() {
-        // lose the game
+    private void OnDateCurrentTargetSet(Unit unit) {
+        // if this is the player
+        if (unit == PlayerUnit.Instance) {
+            OnPlayerAgentSpotted?.Invoke();
+        }
     }
 
     private void OnGameStart() {
         SpawnDate();
+    }
+
+    private void OnGameOver() {
+        DateUnit.Instance.TargetManager.OnCurrentTargetSet -= OnDateCurrentTargetSet;
     }
 
     private void SpawnDate() {
@@ -65,5 +75,12 @@ public class DateStateManager : IInitializableManager {
         dateUnit.Initialize(_dateData.UnitPrefabId, _dateData);
         dateUnit.transform.position = spawnpoint.position;
         dateUnit.Spawn();
+        dateUnit.TargetManager.OnCurrentTargetSet += OnDateCurrentTargetSet;
+        OnDateSpawned?.Invoke();
+    }
+
+    private void DespawnDate() {
+        DateUnit.Instance.TargetManager.OnCurrentTargetSet -= OnDateCurrentTargetSet;
+        DateUnit.Instance.Despawn();
     }
 }

@@ -25,6 +25,6 @@ public class AIState_RangedAttack : AIState_Attack
     }
 
     public override bool CanAttack() {
-        return _unit.TargetManager.ScanForTarget(_unit.TargetManager.CurrentTarget);
+        return _unit.TargetManager.CanSeeTarget(_unit.TargetManager.CurrentTarget);
     }
 }

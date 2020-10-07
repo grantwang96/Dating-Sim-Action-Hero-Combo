@@ -18,7 +18,8 @@ public class AIState_ListenForCombatNoise : AIState
     }
 
     private void OnCombatNoiseHeard(IntVector3 position, Unit unit) {
-        _unit.TargetManager.OverrideCurrentTarget(unit);
+        _unit.TargetManager.TrySetTarget(unit);
+        _unit.Navigator.PointOfInterest = position;
         SetReadyToTransition(_onCombatNoiseHeard);
     }
 }

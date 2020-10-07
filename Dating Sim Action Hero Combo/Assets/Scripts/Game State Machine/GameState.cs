@@ -25,6 +25,7 @@ public class GameState : MonoBehaviour {
     public bool IsActive { get; protected set; }
     public GameState ParentState { get; protected set; }
     private List<GameState> _childStates = new List<GameState>();
+    public string StateId { get; protected set; }
     
     public event Action OnGameStateEnter;
     public event Action OnGameStateEnterFailed;
@@ -33,15 +34,30 @@ public class GameState : MonoBehaviour {
     public bool Active;
 
     private void Awake() {
-        if (_initialized) { return; }
         LoadParentState();
         LoadChildStates();
+    }
+
+    private void Start() {
+        InitializeId();
+    }
+
+    // initialize StateId and Parent's StateId
+    public void InitializeId() {
+        if (_initialized) {
+            return;
+        }
+        StateId = name;
+        if (ParentState != null) {
+            ParentState.InitializeId();
+            StateId = $"{ParentState.StateId}/{StateId}";
+        }
         _initialized = true;
     }
-    
+
     // attempt to enter this state
     public virtual void Enter() {
-        Debug.Log($"Entering game state {name}");
+        CustomLogger.Log(this.name, $"Entering game state {StateId}");
         IsLoading = true;
         // enter parent state first, if necessary
         if (ParentState != null && !ParentState.IsActive) {
@@ -69,7 +85,6 @@ public class GameState : MonoBehaviour {
     public virtual void Exit(GameState nextState) {
         // check to see if we actually need to exit
         if (nextState.StateOnPath(this)) {
-            Debug.Log($"No need to exit state {name}");
             return;
         }
         // have the parent exit as well if necessary
@@ -80,7 +95,7 @@ public class GameState : MonoBehaviour {
     }
 
     protected virtual void ConfirmExitState() {
-        Debug.Log($"Exiting state {name}...");
+        CustomLogger.Log(this.name, $"Exiting game state {StateId}");
         IsLoading = false;
         IsActive = false;
         Active = false;
@@ -126,7 +141,7 @@ public class GameState : MonoBehaviour {
     }
 
     protected void OnReadyToEnter() {
-        CustomLogger.Log(name, $"Ready to enter {name}");
+        CustomLogger.Log(name, $"Ready to enter {StateId}");
         if (RequiresScene()) {
             // that means a scene transition is necessary and we haven't fully loaded yet
             TryToLoadScene();
@@ -226,7 +241,6 @@ public class GameState : MonoBehaviour {
     private void DeregisterPooledObjectPrefabs() {
         for (int i = 0; i < _pooledObjectPrefabAssets.Count; i++) {
             string poolId = _pooledObjectPrefabAssets[i].PoolId;
-            Debug.Log($"Deregistering {poolId}...");
             PooledObjectManager.Instance.DeregisterPooledObject(poolId);
         }
     }
@@ -252,7 +266,7 @@ public class GameState : MonoBehaviour {
         Active = false;
         IsLoading = false;
         OnGameStateEnterFailed?.Invoke();
-        CustomLogger.Error(this.name, $"Failed to enter state!");
+        CustomLogger.Error(this.name, $"Failed to enter state {StateId}!");
     }
 }
 

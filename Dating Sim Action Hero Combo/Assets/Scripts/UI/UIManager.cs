@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour
         UIObject instancedUIObject = Instantiate(uiObject, _uiLayers[layerId].transform);
         UIObjectEntry newEntry = new UIObjectEntry(layerId, instancedUIObject);
         _activeUI.Add(uiPrefabId, newEntry);
-        Debug.Log($"Creating ui object with prefab id {uiPrefabId}");
+        CustomLogger.Log(nameof(UIManager), $"Creating ui object with prefab id {uiPrefabId}");
         return instancedUIObject;
     }
 

@@ -20,13 +20,12 @@ public partial class MapService
         // setup for checks
         List<TileNode> toBeVisited = new List<TileNode>();
         List<IntVector3> alreadyVisited = new List<IntVector3>();
+        List<IntVector3> traversableTargets = new List<IntVector3>();
 
         if (!LevelDataManager.Instance.IsWithinMap(start)) {
             CustomLogger.Warn(nameof(MapService), $"Starting position '{start}' is out of bounds!");
-            return null;
+            return traversableTargets;
         }
-
-        List<IntVector3> traversableTargets = new List<IntVector3>();
         TileNode current = new TileNode() {
             X = start.x,
             Y = start.y,
@@ -98,13 +97,13 @@ public partial class MapService
         int minDistance = 0) {
         List<TileNode> toBeVisited = new List<TileNode>();
         List<IntVector3> alreadyVisited = new List<IntVector3>();
+        List<IntVector3> traversableTargets = new List<IntVector3>();
 
-        if(!LevelDataManager.Instance.IsWithinMap(start)) {
+        if (!LevelDataManager.Instance.IsWithinMap(start)) {
             CustomLogger.Warn(nameof(MapService), $"Starting position '{start}' is out of bounds!");
-            return null;
+            return traversableTargets;
         }
 
-        List<IntVector3> traversableTargets = new List<IntVector3>();
         TileNode current = new TileNode() {
             X = start.x,
             Y = start.y,

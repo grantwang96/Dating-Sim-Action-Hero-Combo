@@ -26,10 +26,14 @@ public class AIState_Flee : AIState
 
     private IntVector3 GetFleeLocation() {
         // get all available tiles within a radius
+        Vector3 worldPointOfInterest = LevelDataManager.Instance.ArrayToWorldSpace(_unit.Navigator.PointOfInterest.x, _unit.Navigator.PointOfInterest.y);
+        Vector3 direction = (_unit.MoveController.Body.position - worldPointOfInterest).normalized; // get opposite direction
+        Vector3 worldTargetFleePoint = _unit.MoveController.Body.position + direction * _fleeRadius;
+        IntVector3 targetFleePoint = LevelDataManager.Instance.WorldToArraySpace(worldTargetFleePoint);
         List<IntVector3> availableTiles = MapService.GetTraversableTiles(
-            _fleeRadius, _unit.MoveController.MapPosition, _unit, _unit.UnitData.TraversableThreshold, 1);
-        if(availableTiles.Count == 0) {
-            return _stateMachine.Unit.MoveController.MapPosition;
+            _fleeRadius, targetFleePoint, _unit, _unit.UnitData.TraversableThreshold, 1);
+        if (availableTiles.Count == 0) {
+            return _unit.MoveController.MapPosition;
         }
         // iterate thru all the tiles and pick out the best one
         IntVector3 mapPosition = _unit.MoveController.MapPosition;
@@ -57,7 +61,7 @@ public class AIState_Flee : AIState
         }
         return bestTile;
     }
-
+    
     public override void Exit(AIState nextState) {
         base.Exit(nextState);
         _unit.Navigator.OnArrivedFinalDestination -= OnArrivedDestination;

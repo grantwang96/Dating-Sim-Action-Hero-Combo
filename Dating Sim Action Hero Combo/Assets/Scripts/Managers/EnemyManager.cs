@@ -6,7 +6,7 @@ public interface IEnemyManager : IAllianceManager {
 
     IReadOnlyList<EnemyUnit> AllEnemies { get; }
     
-    event Action<Unit> OnEnemySpawned;
+    event Action<NPCUnit> OnEnemySpawned;
     event Action<Unit> OnEnemyDefeated;
 
     void SpawnEnemy(Vector2 position, string enemyType, string overrideId);
@@ -29,7 +29,7 @@ public class EnemyManager : IEnemyManager
     // dictionary of enemies by job <Job, List<EnemyController>;
 
     public IReadOnlyList<EnemyUnit> AllEnemies => _enemyUnits;
-    public event Action<Unit> OnEnemySpawned;
+    public event Action<NPCUnit> OnEnemySpawned;
     public event Action<Unit> OnEnemyDefeated;
     public event Action<NPCUnit, UnitMessage> OnAllianceMessageSent;
 

@@ -20,6 +20,7 @@ public class NPCUIDisplayManager : IInitializableManager {
     public void Initialize(Action<bool> initializationCallback = null) {
 
         EnemyManager.Instance.OnEnemySpawned += OnEnemySpawned;
+        DateStateManager.Instance.OnDateSpawned += OnDateSpawned;
         RegisterPooledObjects();
         initializationCallback?.Invoke(true);
     }
@@ -40,7 +41,7 @@ public class NPCUIDisplayManager : IInitializableManager {
         PooledObjectManager.Instance.DeregisterPooledObject(NPCUIDisplayPrefabId);
     }
 
-    private void OnEnemySpawned(Unit enemy) {
+    private void OnEnemySpawned(NPCUnit enemy) {
         if(!PooledObjectManager.Instance.UsePooledObject(NPCUIDisplayPrefabId, out PooledObject obj)) {
             CustomLogger.Error(nameof(NPCUIDisplayManager), $"Could not get NPC info display object with id {NPCUIDisplayPrefabId}!");
             return;
@@ -55,16 +56,34 @@ public class NPCUIDisplayManager : IInitializableManager {
         };
         npcUIDisplay.Initialize(initData);
         npcUIDisplay.Spawn();
-        enemy.OnUnitDefeated += OnEnemyDefeated;
+        enemy.OnUnitDefeated += OnUnitDefeated;
         _registeredUnits.Add(enemy, npcUIDisplay);
     }
 
-    private void OnEnemyDefeated(Unit enemy) {
+    private void OnDateSpawned() {
+        if (!PooledObjectManager.Instance.UsePooledObject(NPCUIDisplayPrefabId, out PooledObject obj)) {
+            CustomLogger.Error(nameof(NPCUIDisplayManager), $"Could not get NPC info display object with id {NPCUIDisplayPrefabId}!");
+            return;
+        }
+        NPCUIDisplay npcUIDisplay = obj as NPCUIDisplay;
+        if (npcUIDisplay == null) {
+            CustomLogger.Error(nameof(NPCUIDisplayManager), $"Did not receive a {nameof(NPCUIDisplay)} object!");
+            return;
+        }
+        NPCUIDisplayInitializationData initData = new NPCUIDisplayInitializationData() {
+            Unit = DateUnit.Instance
+        };
+        npcUIDisplay.Initialize(initData);
+        npcUIDisplay.Spawn();
+        _registeredUnits.Add(DateUnit.Instance, npcUIDisplay);
+    }
+
+    private void OnUnitDefeated(Unit enemy) {
         if(_registeredUnits.TryGetValue(enemy, out NPCUIDisplay display)) {
             display.Despawn();
             PooledObjectManager.Instance.ReturnPooledObject(NPCUIDisplayPrefabId, display);
             _registeredUnits.Remove(enemy);
-            enemy.OnUnitDefeated -= OnEnemyDefeated;
+            enemy.OnUnitDefeated -= OnUnitDefeated;
         }
     }
 }

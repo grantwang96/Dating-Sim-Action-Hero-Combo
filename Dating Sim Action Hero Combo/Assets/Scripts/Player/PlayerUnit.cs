@@ -47,9 +47,11 @@ public class PlayerUnit : Unit {
         switch (_playerOutfitController.OutfitState) {
             case PlayerOutfitState.Agent:
                 _unitTags = UnitTags.Agent;
+                _detectableTags = DetectableTags.Agent;
                 break;
             case PlayerOutfitState.Civilian:
                 _unitTags = UnitTags.Civilian;
+                _detectableTags = DetectableTags.Civilian;
                 break;
             default:
                 CustomLogger.Error(nameof(PlayerUnit), $"Could not update unit tags based on outfit state {_playerOutfitController.OutfitState}");

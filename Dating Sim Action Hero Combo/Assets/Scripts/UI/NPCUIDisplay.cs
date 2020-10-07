@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class NPCUIDisplay : MonoBehaviour, PooledObject
 {
-    [SerializeField] private Unit _unit;
+    [SerializeField] private NPCUnit _unit;
     [SerializeField] private FillBar _healthBar;
+
+    public NPCUnit Unit => _unit;
 
     public void Initialize(PooledObjectInitializationData initializationData) {
         NPCUIDisplayInitializationData initData = initializationData as NPCUIDisplayInitializationData;
@@ -19,9 +21,7 @@ public class NPCUIDisplay : MonoBehaviour, PooledObject
     }
 
     private void FixedUpdate() {
-        if(_unit != null) {
-            transform.position = _unit.MoveController.Body.position;
-        }
+        SetPosition();
     }
 
     public void Spawn() {
@@ -32,6 +32,12 @@ public class NPCUIDisplay : MonoBehaviour, PooledObject
         gameObject.SetActive(false);
     }
     
+    private void SetPosition() {
+        if (_unit != null) {
+            transform.position = _unit.MoveController.Body.position;
+        }
+    }
+
     private void OnCurrentHealthChanged(int health) {
         _healthBar.UpdateValue((float)health / _unit.Damageable.MaxHealth);
     }
@@ -42,5 +48,5 @@ public class NPCUIDisplay : MonoBehaviour, PooledObject
 }
 
 public class NPCUIDisplayInitializationData : PooledObjectInitializationData {
-    public Unit Unit;
+    public NPCUnit Unit;
 }

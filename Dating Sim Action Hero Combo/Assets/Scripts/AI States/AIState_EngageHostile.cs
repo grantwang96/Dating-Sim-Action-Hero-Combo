@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class AIState_EngageHostile : AIState
 {
-
     [SerializeField] private AIState_Attack _attackState;
     [SerializeField] private AIState _onTargetOutOfRangeState;
     [SerializeField] private AIState _onDisarmedState;
 
     public override void Execute() {
         Unit target = _unit.TargetManager.CurrentTarget;
+        if(target == null) {
+            SetReadyToTransition(_onTargetOutOfRangeState);
+            return;
+        }
         _unit.Navigator.LookTarget = target.transform;
         if (_unit.CombatController.EquippedWeapon == null) {
             // set the controller to run away or find a new weapon

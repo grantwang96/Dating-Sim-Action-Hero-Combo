@@ -29,6 +29,10 @@ public class SceneController : MonoBehaviour {
             CustomLogger.Warn(nameof(SceneController), $"Already loading scene {_nextSceneName}!");
             return false;
         }
+        if(CurrentSceneName == sceneName) {
+            CustomLogger.Log(nameof(SceneController), $"Already in scene {CurrentSceneName}!");
+            return true;
+        }
         _isLoadingScene = true;
         _nextSceneName = sceneName;
         if (requiresLoadingScreen) {
