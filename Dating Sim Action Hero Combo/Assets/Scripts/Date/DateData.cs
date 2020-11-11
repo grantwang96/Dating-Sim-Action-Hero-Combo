@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Date Data")]
+[CreateAssetMenu(menuName = "Unit Data/Date")]
 public class DateData : UnitData
 {
     

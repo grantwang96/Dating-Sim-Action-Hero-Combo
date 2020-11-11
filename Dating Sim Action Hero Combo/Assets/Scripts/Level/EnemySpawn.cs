@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemySpawn : MonoBehaviour
 {
     [SerializeField] private string _id;
+    [SerializeField] private string _patrolLoopId;
     public string Id => _id;
 
     private void Awake() {
@@ -16,6 +17,12 @@ public class EnemySpawn : MonoBehaviour
     }
 
     public void Spawn(string prefabId, string uniqueId = "") {
-        EnemyManager.Instance.SpawnEnemy(transform.position, prefabId, uniqueId);
+        EnemySpawnData spawnData = new EnemySpawnData() {
+            Position = transform.position,
+            EnemyType = prefabId,
+            OverrideId = uniqueId,
+            PatrolLoopId = _patrolLoopId
+        };
+        EnemyManager.Instance.SpawnEnemy(spawnData);
     }
 }

@@ -20,6 +20,10 @@ public class NPCUIDisplay : MonoBehaviour, PooledObject
         _unit.Damageable.OnMaxHealthChanged += OnMaxHealthChanged;
     }
 
+    public void Dispose() {
+        _unit = null;
+    }
+
     private void FixedUpdate() {
         SetPosition();
     }

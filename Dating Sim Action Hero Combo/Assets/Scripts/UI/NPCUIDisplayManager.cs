@@ -32,8 +32,10 @@ public class NPCUIDisplayManager : IInitializableManager {
     }
 
     public void Dispose() {
+        Debug.Log("Disposing of npc ui display manager");
         _registeredUnits.Clear();
         EnemyManager.Instance.OnEnemySpawned -= OnEnemySpawned;
+        DateStateManager.Instance.OnDateSpawned -= OnDateSpawned;
         DeregisterPooledObjects();
     }
 
@@ -78,12 +80,13 @@ public class NPCUIDisplayManager : IInitializableManager {
         _registeredUnits.Add(DateUnit.Instance, npcUIDisplay);
     }
 
-    private void OnUnitDefeated(Unit enemy) {
-        if(_registeredUnits.TryGetValue(enemy, out NPCUIDisplay display)) {
+    private void OnUnitDefeated(Unit unit) {
+        if(_registeredUnits.TryGetValue(unit, out NPCUIDisplay display)) {
+            display.Dispose();
             display.Despawn();
             PooledObjectManager.Instance.ReturnPooledObject(NPCUIDisplayPrefabId, display);
-            _registeredUnits.Remove(enemy);
-            enemy.OnUnitDefeated -= OnUnitDefeated;
+            _registeredUnits.Remove(unit);
+            unit.OnUnitDefeated -= OnUnitDefeated;
         }
     }
 }

@@ -30,7 +30,10 @@ public class TestMonkey : MonoBehaviour
     }
 
     private void TestEnemySpawn() {
-        EnemyManager.Instance.SpawnEnemy(TestStart, _testEnemyType, "");
+        EnemyManager.Instance.SpawnEnemy(new EnemySpawnData() {
+            Position = TestStart,
+            EnemyType = _testEnemyType
+        });
     }
 
     private void GenerateMarkerPrefab() {

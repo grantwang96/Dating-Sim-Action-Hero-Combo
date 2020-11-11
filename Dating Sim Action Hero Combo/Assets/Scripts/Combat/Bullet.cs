@@ -37,6 +37,10 @@ public class Bullet : MonoBehaviour, PooledObject
         _ownerDamageable = initData.Owner.GetComponent<IDamageable>();
     }
 
+    public void Dispose() {
+
+    }
+
     public void Spawn() {
         _trailRenderer.Clear();
         gameObject.SetActive(true);
@@ -67,6 +71,7 @@ public class Bullet : MonoBehaviour, PooledObject
     }
 
     public void Despawn() {
+        Dispose();
         _isLive = false;
         _rigidbody.isKinematic = false;
         gameObject.SetActive(false);

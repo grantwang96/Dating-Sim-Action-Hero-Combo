@@ -6,21 +6,16 @@ public class DateUnit : NPCUnit, PooledObject {
 
     public static DateUnit Instance { get; private set; }
 
-    public void Initialize(PooledObjectInitializationData initializationData) {
-
-    }
-
-    public override void Initialize(string unitId, UnitData data) {
+    public override void Initialize(PooledObjectInitializationData initializationData) {
         Instance = this;
-        base.Initialize(unitId, data);
+        base.Initialize(initializationData);
     }
 
-    public void Despawn() {
+    public override void Despawn() {
         gameObject.SetActive(false);
-        PooledObjectManager.Instance.ReturnPooledObject(this.name, this);
     }
 
-    public void Spawn() {
+    public override void Spawn() {
         gameObject.SetActive(true);
     }
 

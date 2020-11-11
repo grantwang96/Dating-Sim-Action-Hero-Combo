@@ -18,6 +18,7 @@ public class GameLevelDataController : MonoBehaviour
     }
 
     private void LoadAllGameLevelDatas() {
+        _gameLevelDatasById.Clear();
         for(int i = 0; i < _allGameLevelDatas.Count; i++) {
             _gameLevelDatasById.Add(_allGameLevelDatas[i].name, _allGameLevelDatas[i]);
         }

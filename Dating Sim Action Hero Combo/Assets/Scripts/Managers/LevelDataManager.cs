@@ -23,6 +23,9 @@ public interface ILevelDataManager : IInitializableManager {
     void RegisterNPCSpawnPoint(string id, Transform transform);
     void DeregisterNPCSpawnPoint(string id);
     bool TryGetNPCSpawnPoint(string id, out Transform spawnpoint);
+    void RegisterPatrolLoop(string id, PatrolLoop patrolLoop);
+    void DeregisterPatrolLoop(string id);
+    bool TryGetPatrolLoop(string id, out PatrolLoop patrolLoop);
 }
 
 public enum PathStatus {
@@ -42,6 +45,7 @@ public class LevelDataManager : ILevelDataManager {
     private readonly Dictionary<string, EnemySpawn> _enemySpawnPoints = new Dictionary<string, EnemySpawn>();
     private readonly Dictionary<string, TileData> _tileConfig = new Dictionary<string, TileData>();
     private readonly Dictionary<string, Transform> _npcSpawnPoints = new Dictionary<string, Transform>();
+    private readonly Dictionary<string, PatrolLoop> _patrolLoops = new Dictionary<string, PatrolLoop>();
     private ITileInfo[][] _tiles;
 
     private static ILevelDataManager GetOrSetInstance() {
@@ -59,6 +63,9 @@ public class LevelDataManager : ILevelDataManager {
 
     public void Dispose() {
         _enemySpawnPoints.Clear();
+        _npcSpawnPoints.Clear();
+        _patrolLoops.Clear();
+        _tileConfig.Clear();
     }
 
     private void LoadTileConfig() {
@@ -179,5 +186,23 @@ public class LevelDataManager : ILevelDataManager {
 
     public bool TryGetNPCSpawnPoint(string id, out Transform spawnpoint) {
         return _npcSpawnPoints.TryGetValue(id, out spawnpoint);
+    }
+
+    public void RegisterPatrolLoop(string id, PatrolLoop patrolLoop) {
+        if (_patrolLoops.ContainsKey(id)) {
+            return;
+        }
+        _patrolLoops.Add(id, patrolLoop);
+    }
+
+    public void DeregisterPatrolLoop(string id) {
+        if (_patrolLoops.ContainsKey(id)) {
+            return;
+        }
+        _patrolLoops.Remove(id);
+    }
+
+    public bool TryGetPatrolLoop(string id, out PatrolLoop patrolLoop) {
+        return _patrolLoops.TryGetValue(id, out patrolLoop);
     }
 }

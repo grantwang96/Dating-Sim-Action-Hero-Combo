@@ -40,6 +40,7 @@ public class GameManager : IInitializableManager {
 
     // game begins, player is given control, the first quest appears, etc.
     public void StartGame() {
+        Debug.Log($"[{nameof(GameManager)}]: Starting game...");
         SubscribeToGameStartTriggers();
         GameEventsManager.StartGame?.Broadcast();
     }

@@ -39,7 +39,7 @@ public class UnitsManager : IUnitsManager
     public void Dispose() {
         for(int i = 0; i < _allUnits.Count; i++) {
             Unit unit = _allUnits[i];
-            unit.Dispose();
+            unit.Despawn();
         }
         _allUnits.Clear();
         _unitsByTags.Clear();

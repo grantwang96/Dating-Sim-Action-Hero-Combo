@@ -71,8 +71,11 @@ public class DateStateManager : IInitializableManager {
             CustomLogger.Error(nameof(DateStateManager), $"Could not retrieve pooled object with id \"{_dateData.UnitPrefabId}\"");
             return;
         }
+        DateInitializationData initData = new DateInitializationData();
+        initData.OverrideUniqueId = _dateData.UnitPrefabId;
+        initData.UnitData = _dateData;
         DateUnit dateUnit = pooledObject as DateUnit;
-        dateUnit.Initialize(_dateData.UnitPrefabId, _dateData);
+        dateUnit.Initialize(initData);
         dateUnit.transform.position = spawnpoint.position;
         dateUnit.Spawn();
         dateUnit.TargetManager.OnCurrentTargetSet += OnDateCurrentTargetSet;
@@ -82,5 +85,12 @@ public class DateStateManager : IInitializableManager {
     private void DespawnDate() {
         DateUnit.Instance.TargetManager.OnCurrentTargetSet -= OnDateCurrentTargetSet;
         DateUnit.Instance.Despawn();
+        PooledObjectManager.Instance.ReturnPooledObject(_dateData.UnitPrefabId, DateUnit.Instance);
+        PooledObjectManager.Instance.DeregisterPooledObject(_dateData.UnitPrefabId);
     }
+}
+
+public class DateInitializationData : UnitInitializationData
+{
+
 }

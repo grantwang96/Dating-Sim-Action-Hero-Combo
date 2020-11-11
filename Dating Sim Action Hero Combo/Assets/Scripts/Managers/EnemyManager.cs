@@ -4,15 +4,20 @@ using UnityEngine;
 
 public interface IEnemyManager : IAllianceManager {
 
-    IReadOnlyList<EnemyUnit> AllEnemies { get; }
-    
     event Action<NPCUnit> OnEnemySpawned;
     event Action<Unit> OnEnemyDefeated;
 
-    void SpawnEnemy(Vector2 position, string enemyType, string overrideId);
+    void SpawnEnemy(EnemySpawnData spawnData);
     void DespawnEnemy(EnemyUnit controller);
 }
 
+public class EnemySpawnData
+{
+    public Vector2 Position;
+    public string EnemyType;
+    public string OverrideId;
+    public string PatrolLoopId;
+}
 /// <summary>
 /// Manages spawning and messaging of hostile units
 /// </summary>
@@ -25,10 +30,8 @@ public class EnemyManager : IEnemyManager
     private static IEnemyManager _instance;
 
     private Dictionary<string, EnemyData> _enemyDataConfig = new Dictionary<string, EnemyData>();
-    private List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
-    // dictionary of enemies by job <Job, List<EnemyController>;
+    private readonly Dictionary<string, IEnemyInfo> _enemyUnitsById = new Dictionary<string, IEnemyInfo>();
 
-    public IReadOnlyList<EnemyUnit> AllEnemies => _enemyUnits;
     public event Action<NPCUnit> OnEnemySpawned;
     public event Action<Unit> OnEnemyDefeated;
     public event Action<NPCUnit, UnitMessage> OnAllianceMessageSent;
@@ -42,21 +45,21 @@ public class EnemyManager : IEnemyManager
 
     #region INITIALIZATION
     public void Initialize(Action<bool> initializationCallback = null) {
-        _enemyUnits.Clear();
+        _enemyUnitsById.Clear();
         LoadEnemyConfig();
         initializationCallback?.Invoke(true);
     }
 
     private void RemoveAllEnemies() {
-        for (int i = 0; i < _enemyUnits.Count; i++) {
-            RemoveEnemyDespawnTimer(_enemyUnits[i]);
-            _enemyUnits[i].Despawn();
+        foreach(KeyValuePair<string, IEnemyInfo> keyPair in _enemyUnitsById) {
+            RemoveEnemyDespawnTimer(keyPair.Value.Unit);
+            keyPair.Value.Unit.Despawn();
         }
     }
 
     public void Dispose() {
         RemoveAllEnemies();
-        _enemyUnits.Clear();
+        _enemyUnitsById.Clear();
         _enemyDataConfig.Clear();
     }
 
@@ -69,10 +72,10 @@ public class EnemyManager : IEnemyManager
     }
     #endregion
     
-    public void SpawnEnemy(Vector2 position, string enemyType, string overrideId) {
+    public void SpawnEnemy(EnemySpawnData spawnData) {
         EnemyData data;
-        if (!_enemyDataConfig.TryGetValue(enemyType, out data)) {
-            CustomLogger.Error(nameof(EnemyManager), $"Could not retrieve {nameof(EnemyData)} from id {enemyType}");
+        if (!_enemyDataConfig.TryGetValue(spawnData.EnemyType, out data)) {
+            CustomLogger.Error(nameof(EnemyManager), $"Could not retrieve {nameof(EnemyData)} from id {spawnData.EnemyType}");
             return;
         }
 
@@ -81,7 +84,7 @@ public class EnemyManager : IEnemyManager
         if (!PooledObjectManager.Instance.UsePooledObject(data.UnitPrefabId, out pooledObject)) {
             PooledObjectManager.Instance.RegisterPooledObject(data.UnitPrefabId, 1);
             CustomLogger.Log(nameof(EnemyManager), $"{data.UnitPrefabId} not yet registered with object pool. Registering now...");
-            SpawnEnemy(position, enemyType, overrideId);
+            SpawnEnemy(spawnData);
             return;
         }
         EnemyUnit unit = pooledObject as EnemyUnit;
@@ -90,21 +93,25 @@ public class EnemyManager : IEnemyManager
             return;
         }
         // prep unit
-        unit.transform.position = position;
-        unit.Initialize(overrideId, data);
+        unit.transform.position = spawnData.Position;
+        UnitInitializationData initData = new UnitInitializationData() {
+            OverrideUniqueId = spawnData.OverrideId,
+            UnitData = data
+        };
+        unit.Initialize(initData);
         unit.CombatController.SetWeapon(data.EquippedWeapon);
         AddUnitListeners(unit);
         unit.Spawn();
         UnitsManager.Instance.RegisterUnit(unit);
 
         // add enemy controller to list and dictionary
-        _enemyUnits.Add(unit);
+        _enemyUnitsById.Add(unit.UnitId, new EnemyInfo(unit.UnitId, spawnData.PatrolLoopId, unit));
         OnEnemySpawned?.Invoke(unit);
     }
 
     public void DespawnEnemy(EnemyUnit unit) {
         // remove from all listings
-        _enemyUnits.Remove(unit);
+        _enemyUnitsById.Remove(unit.UnitId);
         unit.Despawn();
         string timerId = string.Format(DespawnUnitId, unit.UnitId);
         if(TimerManager.Instance.TryGetTimer(timerId, out TimerObject _)) {
@@ -132,15 +139,15 @@ public class EnemyManager : IEnemyManager
         }
         RemoveUnitListeners(enemy);
         AddEnemyDespawnTimer(enemy);
-         OnEnemyDefeated?.Invoke(unit);
+        OnEnemyDefeated?.Invoke(unit);
     }
 
-    private void AddEnemyDespawnTimer(EnemyUnit enemy) {
+    private void AddEnemyDespawnTimer(Unit enemy) {
         string id = string.Format(DespawnUnitId, enemy.UnitId);
         TimerManager.Instance.AddTimer(new DespawnEnemyTimer(enemy, id, DespawnTime));
     }
 
-    private void RemoveEnemyDespawnTimer(EnemyUnit enemy) {
+    private void RemoveEnemyDespawnTimer(Unit enemy) {
         string timerId = string.Format(DespawnUnitId, enemy.UnitId);
         TimerManager.Instance.RemoveTimer(timerId);
     }
@@ -161,9 +168,9 @@ public class EnemyManager : IEnemyManager
 
 public class DespawnEnemyTimer : TimerObject {
 
-    private EnemyUnit _unit;
+    private Unit _unit;
 
-    public DespawnEnemyTimer(EnemyUnit unit, string id, float duration) : base(id, duration) {
+    public DespawnEnemyTimer(Unit unit, string id, float duration) : base(id, duration) {
         _unit = unit;
     }
 

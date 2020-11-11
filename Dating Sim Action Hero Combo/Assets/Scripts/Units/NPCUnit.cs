@@ -20,9 +20,17 @@ public abstract class NPCUnit : Unit
     public event Action<NPCUnit, UnitMessage> OnUnitMessageSent;
     public event Action<NPCUnit, UnitMessage> OnUnitMessageReceived;
 
+    /*
     public override void Initialize(string unitId, UnitData data) {
         _collider.radius = .5f; // replace with UnitData field
         base.Initialize(unitId, data);
+        _targetManager.Initialize();
+    }
+    */
+
+    public override void Initialize(PooledObjectInitializationData initializationData) {
+        base.Initialize(initializationData);
+        _collider.radius = .5f; // replace with UnitData field
         _targetManager.Initialize();
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ConfigurableActionsTrigger : GameStateListener
 {
     [SerializeField] private List<ConfigurableGameAction> _gameActions = new List<ConfigurableGameAction>();
-    [SerializeField] private string _onCompleteTransitionId;
+    [SerializeField] private string _onActionCompleteTransitionId;
 
     private int _currentIndex;
     private IConfiguredGameActionState _currentActionState;
@@ -21,10 +21,10 @@ public class ConfigurableActionsTrigger : GameStateListener
             return;
         }
         ConfigurableGameAction gameAction = _gameActions[_currentIndex];
+        _currentIndex++;
         _currentActionState = gameAction.CreateActionState();
         _currentActionState.OnComplete += OnActionCompleted;
         _currentActionState.Execute();
-        _currentIndex++;
     }
 
     private void OnActionCompleted() {
@@ -34,6 +34,8 @@ public class ConfigurableActionsTrigger : GameStateListener
 
     private void OnAllActionsCompleted() {
         _currentActionState = null;
-        GameStateManager.Instance.HandleTransition(_onCompleteTransitionId);
+        if (!string.IsNullOrEmpty(_onActionCompleteTransitionId)) {
+            GameStateManager.Instance.HandleTransition(_onActionCompleteTransitionId);
+        }
     }
 }

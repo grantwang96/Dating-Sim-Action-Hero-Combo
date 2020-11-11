@@ -30,14 +30,18 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
         Instance = this;
         _civilianSet = new PlayerCivilianController(_unit);
         _combatSet = new PlayerCombatController(_unit);
-        SetActionController(_outfitState);
-        SubscribeToEvents();
+        GameEventsManager.StartGame.Subscribe(OnGameplayEntered);
+        GameEventsManager.ExitGame.Subscribe(OnGameExited);
+        GameEventsManager.PauseMenu.Subscribe(OnPauseMenu);
+        OnGameplayEntered();
     }
 
     public void Dispose() {
-        _civilianSet.SetActive(false);
-        _combatSet.SetActive(false);
-        UnsubscribeToEvents();
+        OnGameplayExited();
+        GameEventsManager.StartGame.Unsubscribe(OnGameplayEntered);
+        GameEventsManager.ExitGame.Unsubscribe(OnGameExited);
+        GameEventsManager.PauseMenu.Unsubscribe(OnPauseMenu);
+        Instance = null;
     }
     
     private void SubscribeToEvents() {
@@ -94,5 +98,31 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
             default:
                 break;
         }
+    }
+
+    private void OnPauseMenu(bool paused) {
+        if (paused) {
+            OnGameplayExited();
+        } else {
+            OnGameplayEntered();
+        }
+    }
+
+    private void OnGameplayEntered() {
+        SetActionController(_outfitState);
+        SubscribeToEvents();
+    }
+
+    private void OnGameplayExited() {
+        _civilianSet.SetActive(false);
+        _combatSet.SetActive(false);
+        UnsubscribeToEvents();
+    }
+
+    private void OnGameExited() {
+        GameEventsManager.StartGame.Unsubscribe(OnGameplayEntered);
+        GameEventsManager.ExitGame.Unsubscribe(OnGameExited);
+        GameEventsManager.PauseMenu.Unsubscribe(OnPauseMenu);
+        OnGameplayExited();
     }
 }

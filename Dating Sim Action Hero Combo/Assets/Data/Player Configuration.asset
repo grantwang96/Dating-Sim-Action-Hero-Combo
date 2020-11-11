@@ -15,4 +15,4 @@ MonoBehaviour:
   _maxHealth: 100
   _totalAmmoClips: 5
   _currentLoadout: {fileID: 11400000, guid: a2c2b11dd23dea144aa58d99734c8ecc, type: 2}
-  _playerUnitData: {fileID: 11400000, guid: bc1335ad02027ff4aa482d81f6c447b5, type: 2}
+  _playerUnitData: {fileID: 11400000, guid: fa1ef2823d3ceca418b68addf65d46a8, type: 2}

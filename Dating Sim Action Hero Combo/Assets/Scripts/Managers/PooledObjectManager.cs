@@ -101,7 +101,6 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
         }
         _objectPool[objectId].AvailableObjects.AddRange(objsToDespawn);
         // remove all existing pooled objects
-        Debug.Log($"Pool Id: {objectId}");
         foreach (PooledObject pooledObject in _objectPool[objectId].AvailableObjects) {
             GameObject go = _objectPool[objectId].GameObjects[pooledObject];
             Destroy(go);

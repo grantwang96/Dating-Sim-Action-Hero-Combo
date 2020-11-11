@@ -27,15 +27,10 @@ public class PlayerStateController {
     private PlayerStateController(PlayerConfig config) {
         // TODO: create save system to persist/retrieve information about current loadout and state before entering a combat level
         _config = config;
-        PlayerUnit.OnPlayerUnitInstanceSet += OnPlayerUnitSpawned;
     }
 
     private void ResetController() {
 
-    }
-
-    private void OnPlayerUnitSpawned() {
-        PlayerUnit.Instance.Initialize(PlayerConfig.PlayerUnitId, _config.UnitData);
     }
 
     private void OnGameEnded() {

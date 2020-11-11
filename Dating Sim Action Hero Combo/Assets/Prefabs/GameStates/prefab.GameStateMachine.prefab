@@ -391,10 +391,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestingCombat
       objectReference: {fileID: 0}
+    - target: {fileID: 3079820104193573571, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _onActionCompleteTransitionId
+      value: start_game
+      objectReference: {fileID: 0}
     - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
       propertyPath: _pooledObjectPrefabAssets.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
@@ -408,29 +413,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
-      propertyPath: _pooledObjectPrefabAssets.Array.data[0].PoolId
+      propertyPath: _transitions.Array.data[0]._gameState
+      value: 
+      objectReference: {fileID: 750352673871108065}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].PoolId
       value: TestEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
-      propertyPath: _pooledObjectPrefabAssets.Array.data[0].InitialCount
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].InitialCount
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
-        type: 3}
-      propertyPath: _pooledObjectPrefabAssets.Array.data[1].PoolId
-      value: WeaponSoundBox
-      objectReference: {fileID: 0}
-    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
-        type: 3}
-      propertyPath: _pooledObjectPrefabAssets.Array.data[1].InitialCount
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
-        type: 3}
-      propertyPath: _transitions.Array.data[0]._gameState
-      value: 
-      objectReference: {fileID: 750352673871108065}
     - target: {fileID: 5046883551229957879, guid: 888a20dadba65fb44b2938b9ab178cb1,
         type: 3}
       propertyPath: _transitions.Array.data[1]._gameState

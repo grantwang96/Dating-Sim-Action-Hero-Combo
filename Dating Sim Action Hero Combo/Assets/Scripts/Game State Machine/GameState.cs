@@ -200,8 +200,8 @@ public class GameState : MonoBehaviour {
 
     protected void OnManagersInitializationComplete() {
         RegisterPooledObjectPrefabs();
-        RegisterUIPrefabs();
         OnStateEnterComplete();
+        RegisterUIPrefabs();
     }
 
     protected virtual void OnStateEnterComplete() {

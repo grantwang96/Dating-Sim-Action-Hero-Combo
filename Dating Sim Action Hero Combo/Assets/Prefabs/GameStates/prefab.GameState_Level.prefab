@@ -76,6 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1007542431373690138}
   - component: {fileID: 3780461068881760412}
+  - component: {fileID: 4721349449221547404}
   m_Layer: 0
   m_Name: prefab.GameState_Level
   m_TagString: Untagged
@@ -123,9 +124,27 @@ MonoBehaviour:
     _gameState: {fileID: 266837248563864133}
   _sceneName: 
   _requiresLoadingScreen: 0
-  _pooledObjectPrefabAssets: []
+  _pooledObjectPrefabAssets:
+  - PoolId: Player
+    InitialCount: 1
   _uiPrefabs: []
   Active: 0
+--- !u!114 &4721349449221547404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007542431373690139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023c4541f2ccfe645aa73060f7e4e6ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameState: {fileID: 3780461068881760412}
+  _gameActions:
+  - {fileID: 11400000, guid: def8248fe1146f14c8e28d5a14e5b52c, type: 2}
+  _onActionCompleteTransitionId: 
 --- !u!1 &2560195954981493086
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +248,9 @@ MonoBehaviour:
   _sceneName: 
   _requiresLoadingScreen: 0
   _pooledObjectPrefabAssets: []
-  _uiPrefabs: []
+  _uiPrefabs:
+  - _uiPrefabId: PlayerHud
+    _layerId: 0
   Active: 0
 --- !u!114 &2920390192416350281
 MonoBehaviour:
@@ -312,7 +333,7 @@ MonoBehaviour:
   _gameState: {fileID: 0}
   _gameActions:
   - {fileID: 11400000, guid: c7d7a5f4b82963b4dac8cb23e5078bcf, type: 2}
-  _onCompleteTransitionId: start_game
+  _onActionCompleteTransitionId: 
 --- !u!1 &8186513472718072404
 GameObject:
   m_ObjectHideFlags: 0

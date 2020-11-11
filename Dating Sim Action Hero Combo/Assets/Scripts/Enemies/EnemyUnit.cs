@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyUnit : NPCUnit, PooledObject {
+public class EnemyUnit : NPCUnit {
 
-    public void Initialize(PooledObjectInitializationData initializationData) {
-        
+    public override void Spawn() {
+        gameObject.SetActive(true);
+        SubscribeToAllianceManager();
     }
 
-    public void Despawn() {
+    public override void Despawn() {
         gameObject.SetActive(false);
-        PooledObjectManager.Instance.ReturnPooledObject(this.name, this);
+        UnsubscribeToAllianceManager();
     }
 
     protected override void OnDefeated() {
-        EnemyManager.Instance.OnAllianceMessageSent -= OnAllianceMessageSent;
+        UnsubscribeToAllianceManager();
         base.OnDefeated();
-    }
-
-    public void Spawn() {
-        gameObject.SetActive(true);
-        EnemyManager.Instance.OnAllianceMessageSent += OnAllianceMessageSent;
     }
 
     protected override void SubscribeToAllianceManager() {

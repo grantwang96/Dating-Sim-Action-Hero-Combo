@@ -5,8 +5,10 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Unit : MonoBehaviour, ITileOccupant, IDetectable
+public abstract class Unit : MonoBehaviour, ITileOccupant, IDetectable, PooledObject
 {
+    private const int UniqueIdLength = 10;
+
     [SerializeField] protected UnitTags _unitTags;
     public UnitTags UnitTags => _unitTags;
     [SerializeField] protected DetectableTags _detectableTags;
@@ -40,9 +42,18 @@ public class Unit : MonoBehaviour, ITileOccupant, IDetectable
         UnsubscribeToEvents();
     }
 
-    public virtual void Initialize(string unitId, UnitData unitData) {
-        UnitId = unitId;
-        UnitData = unitData;
+    public virtual void Initialize(PooledObjectInitializationData initializationData) {
+        UnitInitializationData initData = initializationData as UnitInitializationData;
+        if (initData == null) {
+            Debug.LogError($"[{name}]: Initialization data was not of type {nameof(UnitInitializationData)}!");
+            return;
+        }
+        if (!string.IsNullOrEmpty(initData.OverrideUniqueId)) {
+            UnitId = initData.OverrideUniqueId;
+        } else {
+            UnitId = GenerateUniqueUnitId(initData.UnitData.UnitPrefabId);
+        }
+        UnitData = initData.UnitData;
         _damageable.Initialize(); // to prevent race condition
         _moveController.Initialize();
         _animationController.Initialize();
@@ -56,7 +67,10 @@ public class Unit : MonoBehaviour, ITileOccupant, IDetectable
         _animationController.Dispose();
         UnsubscribeToEvents();
     }
-    
+
+    public abstract void Spawn();
+    public abstract void Despawn();
+
     protected virtual void SubscribeToEvents() {
         _damageable.OnDefeated += OnDefeated;
     }
@@ -65,9 +79,19 @@ public class Unit : MonoBehaviour, ITileOccupant, IDetectable
         _damageable.OnDefeated -= OnDefeated;
     }
 
+    protected static string GenerateUniqueUnitId(string prefix) {
+        return $"{prefix}_{StringGenerator.RandomString(UniqueIdLength)}";
+    }
+
     protected virtual void OnDefeated() {
         OnUnitDefeated?.Invoke(this);
     }
+}
+
+public class UnitInitializationData : PooledObjectInitializationData
+{
+    public string OverrideUniqueId;
+    public UnitData UnitData;
 }
 
 [System.Flags]

@@ -9,17 +9,11 @@ public class PlayerUnit : Unit {
 
     public static PlayerUnit Instance { get; private set; }
 
-    public static event Action OnPlayerUnitInstanceSet;
-
     [SerializeField] private PlayerOutfitController _playerOutfitController;
 
     private UIObject _playerHud;
 
-    protected override void Awake() {
-        Instance = this;
-        OnPlayerUnitInstanceSet?.Invoke();
-    }
-
+    /*
     public override void Initialize(string unitId, UnitData unitData) {
         base.Initialize(unitId, unitData);
         _playerOutfitController.Initialize();
@@ -34,6 +28,7 @@ public class PlayerUnit : Unit {
         _playerOutfitController.OnOutfitChangeComplete += OnOutfitChanged;
         OnOutfitChanged();
     }
+    */
 
     public override void Dispose() {
         base.Dispose();
@@ -41,6 +36,29 @@ public class PlayerUnit : Unit {
         UIManager.Instance.RemoveUIObject(PlayerHudId);
         _playerOutfitController.Dispose();
         _playerOutfitController.OnOutfitChangeComplete -= OnOutfitChanged;
+    }
+
+    public override void Initialize(PooledObjectInitializationData initializationData) {
+        base.Initialize(initializationData);
+        PlayerInitializationData initData = initializationData as PlayerInitializationData;
+        if(initData == null) {
+            Debug.LogError($"[{nameof(PlayerUnit)}]: Did not receive player initialization data!");
+            return;
+        }
+        Instance = this;
+        _playerOutfitController.Initialize();
+        UnitsManager.Instance.RegisterUnit(this);
+        _playerOutfitController.OnOutfitChangeComplete += OnOutfitChanged;
+        OnOutfitChanged();
+        Debug.Log($"[{nameof(PlayerUnit)}]: Initialized player character!");
+    }
+
+    public override void Spawn() {
+        gameObject.SetActive(true);
+    }
+
+    public override void Despawn() {
+        gameObject.SetActive(true);
     }
 
     private void OnOutfitChanged() {
@@ -58,4 +76,8 @@ public class PlayerUnit : Unit {
                 break;
         }
     }
+}
+
+public class PlayerInitializationData : UnitInitializationData {
+    
 }

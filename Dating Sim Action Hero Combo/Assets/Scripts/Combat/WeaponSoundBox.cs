@@ -26,6 +26,10 @@ public class WeaponSoundBox : MonoBehaviour, PooledObject
         _startPosition = initData.StartPosition;
         _source = initData.Source;
     }
+
+    public void Dispose() {
+
+    }
     
     private void FixedUpdate() {
         if (_finishedGrowing) {
