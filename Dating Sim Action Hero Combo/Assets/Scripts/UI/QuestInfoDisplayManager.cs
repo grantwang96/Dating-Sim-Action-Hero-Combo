@@ -19,6 +19,7 @@ public class QuestInfoDisplayManager : IInitializableManager {
 
     public void Initialize(Action<bool> initializationCallback = null) {
         GameEventsManager.StartGame?.Subscribe(OnGameStart);
+        GameEventsManager.ExitGame?.Subscribe(OnExitGame);
         GameEventsManager.EndGameResults?.Subscribe(OnEnterEndGameResults);
         CustomLogger.Log(nameof(QuestManager), $"Initializing {nameof(QuestInfoDisplayManager)}");
         initializationCallback?.Invoke(true);
@@ -41,10 +42,15 @@ public class QuestInfoDisplayManager : IInitializableManager {
     private void OnEnterEndGameResults() {
         _currentQuestInfoDisplay?.Hide();
     }
+
+    private void OnExitGame() {
+        _currentQuestInfoDisplay?.Hide();
+    }
     
     public void Dispose() {
         GameEventsManager.StartGame?.Unsubscribe(OnGameStart);
         GameEventsManager.EndGameResults?.Unsubscribe(OnEnterEndGameResults);
+        GameEventsManager.ExitGame?.Unsubscribe(OnExitGame);
         UIManager.Instance.RemoveUIObject(QuestInfoDisplayId);
     }
 }

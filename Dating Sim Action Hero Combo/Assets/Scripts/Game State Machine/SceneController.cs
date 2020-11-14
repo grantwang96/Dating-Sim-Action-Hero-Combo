@@ -66,14 +66,14 @@ public class SceneController : MonoBehaviour {
     private void OnLoadingScreenHideComplete() {
         LoadingScreenController.Instance.OnLoadingScreenHideComplete -= OnLoadingScreenHideComplete;
         _isLoadingScene = false;
-        Debug.Log("Scene load complete!");
+        // Debug.Log("Scene load complete!");
         OnSceneLoaded?.Invoke(_nextSceneName);
     }
 
     private void LoadSceneInstant(string sceneName) {
         _isLoadingScene = false;
         SceneManager.LoadScene(sceneName);
-        Debug.Log("Scene load complete!");
+        // Debug.Log("Scene load complete!");
         OnSceneLoaded?.Invoke(_nextSceneName);
     }
 

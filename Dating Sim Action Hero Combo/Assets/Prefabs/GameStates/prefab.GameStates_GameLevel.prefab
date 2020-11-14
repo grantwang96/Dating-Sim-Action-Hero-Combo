@@ -1,0 +1,276 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1625152386514902284
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7968709161244134104}
+  - component: {fileID: 1167422017983590949}
+  m_Layer: 0
+  m_Name: Gameplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7968709161244134104
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1625152386514902284}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8311889446602376111}
+  m_Father: {fileID: 8666044117144025766}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1167422017983590949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1625152386514902284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df162d9da20e534faba8ae82fb1d6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transitions: []
+  _sceneName: 
+  _requiresLoadingScreen: 0
+  _pooledObjectPrefabAssets:
+  - PoolId: WeaponSoundBox
+    InitialCount: 30
+  - PoolId: Bullet
+    InitialCount: 30
+  _uiPrefabs: []
+  Active: 0
+--- !u!1 &1787770788232706031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5581668814127270146}
+  - component: {fileID: 9082977131080845532}
+  m_Layer: 0
+  m_Name: LevelStagingArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5581668814127270146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787770788232706031}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8666044117144025766}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9082977131080845532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787770788232706031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c974899130b92d41ae67ea37afe7771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transitions:
+  - _transitionName: start_game
+    _gameState: {fileID: 1522646687119067943}
+  - _transitionName: exit_level_staging
+    _gameState: {fileID: 0}
+  _sceneName: LevelStagingArea
+  _requiresLoadingScreen: 0
+  _pooledObjectPrefabAssets: []
+  _uiPrefabs:
+  - _uiPrefabId: LevelStagingArea
+    _layerId: 1
+  Active: 0
+--- !u!1 &2743222991660950733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8666044117144025766}
+  - component: {fileID: 3997074373238939130}
+  m_Layer: 0
+  m_Name: prefab.GameStates_GameLevel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8666044117144025766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743222991660950733}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5581668814127270146}
+  - {fileID: 7968709161244134104}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3997074373238939130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743222991660950733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c974899130b92d41ae67ea37afe7771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transitions:
+  - _transitionName: enter_level_staging
+    _gameState: {fileID: 9082977131080845532}
+  _sceneName: 
+  _requiresLoadingScreen: 0
+  _pooledObjectPrefabAssets: []
+  _uiPrefabs: []
+  Active: 0
+--- !u!1001 &9124928264444577461
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7968709161244134104}
+    m_Modifications:
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1007542431373690139, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: m_Name
+      value: Core
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].PoolId
+      value: WeaponSoundBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[1].InitialCount
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[2].PoolId
+      value: Bullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 3780461068881760412, guid: 888a20dadba65fb44b2938b9ab178cb1,
+        type: 3}
+      propertyPath: _pooledObjectPrefabAssets.Array.data[2].InitialCount
+      value: 30
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 888a20dadba65fb44b2938b9ab178cb1, type: 3}
+--- !u!4 &8311889446602376111 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1007542431373690138, guid: 888a20dadba65fb44b2938b9ab178cb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 9124928264444577461}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1522646687119067943 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7747254522984811922, guid: 888a20dadba65fb44b2938b9ab178cb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 9124928264444577461}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c974899130b92d41ae67ea37afe7771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

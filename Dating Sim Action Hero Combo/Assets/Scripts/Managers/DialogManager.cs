@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public class DialogManager : IInitializableManager
 {
@@ -56,6 +57,7 @@ public class DialogManager : IInitializableManager
     }
 
     public void EnqueueDialog(IReadOnlyList<DialogData> dialogsToQueue) {
+        Debug.Log("Enqueuing dialog...");
         for (int i = 0; i < dialogsToQueue.Count; i++) {
             _dialogsToShow.Enqueue(dialogsToQueue[i]);
         }

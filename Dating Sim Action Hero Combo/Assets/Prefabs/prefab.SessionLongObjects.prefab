@@ -989,6 +989,12 @@ MonoBehaviour:
   - AssetId: EndResultsScreen
     Prefab: {fileID: 2137687708572706493, guid: d769bee10a1fa154bb0d274cf974f1ac,
       type: 3}
+  - AssetId: LevelStagingArea
+    Prefab: {fileID: 3948712245705347557, guid: 6d3cf91c898fa55458e92d2dc0f2db38,
+      type: 3}
+  - AssetId: MainMenu
+    Prefab: {fileID: 4421202070776492415, guid: 84dee5531aa48bf46a1ff31e03045989,
+      type: 3}
 --- !u!1 &8139055063800222702
 GameObject:
   m_ObjectHideFlags: 0

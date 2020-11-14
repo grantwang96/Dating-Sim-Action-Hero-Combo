@@ -8,7 +8,7 @@ public class QuestInfoDisplay : UIObject {
     [SerializeField] private float _questTransitionTime;
     [SerializeField] private QuestUI _missionQuestUI;
     [SerializeField] private QuestUI _dateQuestUI;
-    
+
     public override bool Initialize() {
         // subscribe to quest updates
         QuestManager.Instance.OnCurrentMissionQuestUpdated += OnMissionQuestUpdated;
@@ -18,9 +18,12 @@ public class QuestInfoDisplay : UIObject {
     }
 
     public override void CleanUp() {
+        Debug.Log("Removing quest info display...");
         Hide();
         QuestManager.Instance.OnCurrentMissionQuestUpdated -= OnMissionQuestUpdated;
         QuestManager.Instance.OnCurrentDateQuestUpdated -= OnDateQuestUpdated;
+        _missionQuestUI.CleanUp();
+        _dateQuestUI.CleanUp();
         base.CleanUp();
     }
 

@@ -26,6 +26,7 @@ public abstract class QuestObjectiveState {
     public event Action<QuestObjectiveState> OnProgressUpdated;
 
     public QuestObjectiveState(QuestObjectiveData data) {
+        Status = QuestObjectiveStatus.Ongoing;
         ObjectiveDescription = data.ObjectiveDescription;
     }
     

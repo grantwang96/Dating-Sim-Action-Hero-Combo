@@ -25,7 +25,9 @@ public class FieldOfViewVisualizer : MonoBehaviour
     }
 
     private void OnDestroy() {
-        PlayerOutfitController.Instance.OnOutfitChangeStarted -= OnPlayerOutfitChanged;
+        if(PlayerOutfitController.Instance != null) {
+            PlayerOutfitController.Instance.OnOutfitChangeStarted -= OnPlayerOutfitChanged;
+        }
     }
 
     private void OnPlayerOutfitChanged(PlayerOutfitState newOutfitState) {

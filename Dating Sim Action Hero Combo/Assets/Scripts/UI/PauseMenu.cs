@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PauseMenu : UIObject
 {
     [SerializeField] private string _resumeGameTransitionId;
+    [SerializeField] private string _mainMenuTransitionId;
     [SerializeField] private Button _resumeButton;
     [SerializeField] private Button _quitButton;
 
@@ -36,6 +37,6 @@ public class PauseMenu : UIObject
     }
 
     private void OnQuitBtnPressed() {
-        GameManager.Instance.ExitGame();
+        GameStateManager.Instance.HandleTransition(_mainMenuTransitionId);
     }
 }

@@ -32,10 +32,9 @@ public class PlayerUnit : Unit {
 
     public override void Dispose() {
         base.Dispose();
-        _playerHud.Hide();
-        UIManager.Instance.RemoveUIObject(PlayerHudId);
         _playerOutfitController.Dispose();
         _playerOutfitController.OnOutfitChangeComplete -= OnOutfitChanged;
+        Instance = null;
     }
 
     public override void Initialize(PooledObjectInitializationData initializationData) {

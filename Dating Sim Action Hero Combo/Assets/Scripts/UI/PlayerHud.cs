@@ -17,12 +17,6 @@ public class PlayerHud : UIObject
     [SerializeField] private int _fullClip;
     
     public override bool Initialize() {
-        _currentHealth = PlayerUnit.Instance.Damageable.Health;
-        _maxHealth = PlayerUnit.Instance.Damageable.MaxHealth;
-        _healthBar.UpdateValue((float)_currentHealth / _maxHealth);
-
-        _ammo = PlayerCombatController.Instance.EquippedWeapon.CurrentClip;
-        _fullClip = PlayerCombatController.Instance.EquippedWeapon.Data.ClipSize;
         return base.Initialize();
     }
     
@@ -66,8 +60,14 @@ public class PlayerHud : UIObject
         PlayerCombatController.Instance.OnAmmoUpdated += OnAmmoUpdated;
         PlayerCombatController.Instance.OnReloadStarted += OnReloadStarted;
         PlayerCombatController.Instance.OnReloadFinished += OnReloadFinished;
-        OnHealthChanged(PlayerUnit.Instance.Damageable.Health);
-        OnAmmoUpdated(PlayerCombatController.Instance.EquippedWeapon.CurrentClip);
+        _currentHealth = PlayerUnit.Instance.Damageable.Health;
+        _maxHealth = PlayerUnit.Instance.Damageable.MaxHealth;
+        _healthBar.UpdateValueInstant((float)_currentHealth / _maxHealth);
+        _ammo = PlayerCombatController.Instance.EquippedWeapon.CurrentClip;
+        _fullClip = PlayerCombatController.Instance.EquippedWeapon.Data.ClipSize;
+        _ammoBar.UpdateValueInstant((float)_ammo / _fullClip);
+        // OnHealthChanged(PlayerUnit.Instance.Damageable.Health);
+        // OnAmmoUpdated(PlayerCombatController.Instance.EquippedWeapon.CurrentClip);
         OnOutfitChangeComplete();
         gameObject.SetActive(true);
     }

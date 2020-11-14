@@ -57,7 +57,7 @@ public class GameState : MonoBehaviour {
 
     // attempt to enter this state
     public virtual void Enter() {
-        CustomLogger.Log(this.name, $"Entering game state {StateId}");
+        // CustomLogger.Log(this.name, $"Entering game state {StateId}");
         IsLoading = true;
         // enter parent state first, if necessary
         if (ParentState != null && !ParentState.IsActive) {
@@ -95,7 +95,7 @@ public class GameState : MonoBehaviour {
     }
 
     protected virtual void ConfirmExitState() {
-        CustomLogger.Log(this.name, $"Exiting game state {StateId}");
+        // CustomLogger.Log(this.name, $"Exiting game state {StateId}");
         IsLoading = false;
         IsActive = false;
         Active = false;
@@ -141,7 +141,7 @@ public class GameState : MonoBehaviour {
     }
 
     protected void OnReadyToEnter() {
-        CustomLogger.Log(name, $"Ready to enter {StateId}");
+        // CustomLogger.Log(name, $"Ready to enter {StateId}");
         if (RequiresScene()) {
             // that means a scene transition is necessary and we haven't fully loaded yet
             TryToLoadScene();
@@ -158,6 +158,7 @@ public class GameState : MonoBehaviour {
             return;
         }
         SceneController.Instance.OnSceneLoaded += OnSceneLoaded;
+
     }
 
     private void OnSceneLoaded(string sceneName) {
@@ -169,7 +170,7 @@ public class GameState : MonoBehaviour {
 
     // when the game the state is ready to initialize (scene has been loaded, parents are ready, etc.)
     protected virtual void OnStateEnterSuccess() {
-        CustomLogger.Log(name, $"Successfully entered state {name}!");
+        // CustomLogger.Log(name, $"Successfully entered state {name}!");
         IsLoading = false;
         IsActive = true;
         Active = true;

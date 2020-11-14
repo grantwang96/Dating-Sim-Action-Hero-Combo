@@ -19,6 +19,15 @@ public class QuestUI : MonoBehaviour {
     private readonly Queue<QuestState> _queuedQuestsToDisplay = new Queue<QuestState>();
     private readonly List<ObjectiveUI> _objectives = new List<ObjectiveUI>();
 
+    public void CleanUp() {
+        if(_currentQuestState != null) {
+            UnsubscribeFromQuest();
+        }
+        for(int i = 0; i < _objectives.Count; i++) {
+            _objectives[i].CleanUp();
+        }
+    }
+
     public void SetQuestInfo(QuestState questState) {
         // if a quest is still currently being displayed, queue it
         if (_currentQuestState != null) {

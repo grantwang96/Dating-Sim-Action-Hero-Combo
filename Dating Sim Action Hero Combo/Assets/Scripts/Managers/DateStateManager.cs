@@ -15,6 +15,7 @@ public class DateStateManager : IInitializableManager {
     public event Action OnDateSpawned;
     public event Action OnDateRatingUpdated;
     public event Action OnPlayerAgentSpotted;
+    public event Action OnDateDefeated;
 
     private DateData _dateData;
 
@@ -79,6 +80,7 @@ public class DateStateManager : IInitializableManager {
         dateUnit.transform.position = spawnpoint.position;
         dateUnit.Spawn();
         dateUnit.TargetManager.OnCurrentTargetSet += OnDateCurrentTargetSet;
+        dateUnit.OnUnitDefeated += DateDefeated;
         OnDateSpawned?.Invoke();
     }
 
@@ -87,6 +89,11 @@ public class DateStateManager : IInitializableManager {
         DateUnit.Instance.Despawn();
         PooledObjectManager.Instance.ReturnPooledObject(_dateData.UnitPrefabId, DateUnit.Instance);
         PooledObjectManager.Instance.DeregisterPooledObject(_dateData.UnitPrefabId);
+    }
+
+    private void DateDefeated(Unit unit) {
+        DateUnit.Instance.OnUnitDefeated -= DateDefeated;
+        OnDateDefeated?.Invoke();
     }
 }
 

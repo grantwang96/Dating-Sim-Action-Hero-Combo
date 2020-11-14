@@ -35,14 +35,15 @@ public class GameManager : IInitializableManager {
     }
 
     public void Dispose() {
-
+        UnsubscribeToGameEndTriggers();
+        GameEventsManager.ExitGame?.Broadcast();
     }
 
     // game begins, player is given control, the first quest appears, etc.
     public void StartGame() {
         Debug.Log($"[{nameof(GameManager)}]: Starting game...");
-        SubscribeToGameStartTriggers();
         GameEventsManager.StartGame?.Broadcast();
+        SubscribeToGameStartTriggers();
     }
 
     public void EndGame() {
@@ -57,7 +58,7 @@ public class GameManager : IInitializableManager {
         GameStateManager.Instance.HandleTransition(GameExitTransition);
     }
 
-    public void TogglePauseGame() {
+    public void TogglePauseGame() { 
         GamePaused = !GamePaused;
         GameEventsManager.PauseMenu?.Broadcast(GamePaused);
     }
@@ -82,16 +83,24 @@ public class GameManager : IInitializableManager {
         EndGame();
     }
 
+    private void OnDateDefeated() {
+        Debug.Log($"[{nameof(GameManager)}]: Date defeated! Ending game...");
+        EndGameContext = new EndGameContext(false, EndResult.DateDefeated);
+        EndGame();
+    }
+
     private void SubscribeToGameStartTriggers() {
         QuestManager.Instance.OnAllQuestsCompleted += OnAllQuestsCompleted;
         PlayerUnit.Instance.OnUnitDefeated += OnPlayerDefeated;
         DateStateManager.Instance.OnPlayerAgentSpotted += OnPlayerAgentSpotted;
+        DateStateManager.Instance.OnDateDefeated += OnDateDefeated;
     }
 
     private void UnsubscribeToGameEndTriggers() {
         QuestManager.Instance.OnAllQuestsCompleted -= OnAllQuestsCompleted;
         PlayerUnit.Instance.OnUnitDefeated -= OnPlayerDefeated;
         DateStateManager.Instance.OnPlayerAgentSpotted -= OnPlayerAgentSpotted;
+        DateStateManager.Instance.OnDateDefeated -= OnDateDefeated;
     }
     
     // called to exit the gameplay state and enter the next state (end result screens, etc.)
@@ -116,7 +125,8 @@ public enum EndResult {
     AllQuestsCompleted,
     PlayerDefeated,
     IdentityDiscovered,
-    DateTurnedAway
+    DateTurnedAway,
+    DateDefeated
 }
 
 public static partial class GameEventsManager {

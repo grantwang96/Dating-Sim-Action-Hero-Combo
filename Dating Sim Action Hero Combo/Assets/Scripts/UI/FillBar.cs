@@ -23,6 +23,9 @@ public class FillBar : MonoBehaviour
     }
 
     public void UpdateValue(float percentage) {
+        if (_isLerping) {
+            UpdateValueInstant(_percentage);
+        }
         _percentage = Mathf.Clamp(percentage, 0f, 1f);
         _isLerping = true;
     }

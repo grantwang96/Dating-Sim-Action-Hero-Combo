@@ -29,6 +29,9 @@ public class DespawnPlayerActionState : IConfiguredGameActionState
             return;
         }
         string playerPrefabId = _playerConfig.UnitData.UnitPrefabId;
+        PlayerUnit.Instance.Despawn();
+        PlayerUnit.Instance.Dispose();
         PooledObjectManager.Instance.ReturnPooledObject(playerPrefabId, PlayerUnit.Instance);
+        OnComplete?.Invoke();
     }
 }

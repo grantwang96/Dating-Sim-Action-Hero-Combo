@@ -33,6 +33,7 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
         GameEventsManager.StartGame.Subscribe(OnGameplayEntered);
         GameEventsManager.ExitGame.Subscribe(OnGameExited);
         GameEventsManager.PauseMenu.Subscribe(OnPauseMenu);
+        GameEventsManager.EndGame.Subscribe(OnGameEnded);
         OnGameplayEntered();
     }
 
@@ -41,6 +42,9 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
         GameEventsManager.StartGame.Unsubscribe(OnGameplayEntered);
         GameEventsManager.ExitGame.Unsubscribe(OnGameExited);
         GameEventsManager.PauseMenu.Unsubscribe(OnPauseMenu);
+        GameEventsManager.EndGame.Unsubscribe(OnGameEnded);
+        OnOutfitChangeStarted = null;
+        OnOutfitChangeComplete = null;
         Instance = null;
     }
     
@@ -120,6 +124,13 @@ public class PlayerOutfitController : MonoBehaviour, IUnitComponent
     }
 
     private void OnGameExited() {
+        GameEventsManager.StartGame.Unsubscribe(OnGameplayEntered);
+        GameEventsManager.ExitGame.Unsubscribe(OnGameExited);
+        GameEventsManager.PauseMenu.Unsubscribe(OnPauseMenu);
+        OnGameplayExited();
+    }
+
+    private void OnGameEnded(EndGameContext context) {
         GameEventsManager.StartGame.Unsubscribe(OnGameplayEntered);
         GameEventsManager.ExitGame.Unsubscribe(OnGameExited);
         GameEventsManager.PauseMenu.Unsubscribe(OnPauseMenu);

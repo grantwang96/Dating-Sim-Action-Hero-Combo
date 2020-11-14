@@ -91,15 +91,14 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
             return;
         }
         // despawn all currently active pooled objects
-        List<PooledObject> objsToDespawn = new List<PooledObject>();
+        List<PooledObject> objsToRemove = new List<PooledObject>();
         for(int i = 0; i < _objectPool[objectId].InUseObjects.Count; i++) {
             PooledObject pooledObject = _objectPool[objectId].InUseObjects[i];
-            objsToDespawn.Add(pooledObject);
+            pooledObject.Despawn();
+            pooledObject.Dispose();
+            objsToRemove.Add(pooledObject);
         }
-        for(int i = 0; i < objsToDespawn.Count; i++) {
-            objsToDespawn[i].Despawn();
-        }
-        _objectPool[objectId].AvailableObjects.AddRange(objsToDespawn);
+        _objectPool[objectId].AvailableObjects.AddRange(objsToRemove);
         // remove all existing pooled objects
         foreach (PooledObject pooledObject in _objectPool[objectId].AvailableObjects) {
             GameObject go = _objectPool[objectId].GameObjects[pooledObject];

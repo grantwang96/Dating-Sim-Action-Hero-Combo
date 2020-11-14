@@ -24,6 +24,10 @@ public class ObjectiveUI : MonoBehaviour
         OnObjectiveProgressUpdated(objectiveState);
     }
 
+    public void CleanUp() {
+        CleanUpObjectiveState();
+    }
+
     private void CleanUpObjectiveState() {
         _questObjectiveState.OnProgressUpdated -= OnObjectiveProgressUpdated;
         _questObjectiveState = null;
@@ -31,6 +35,9 @@ public class ObjectiveUI : MonoBehaviour
 
     private void OnObjectiveProgressUpdated(QuestObjectiveState objectiveState) {
         _objectiveDescription.text = objectiveState.ObjectiveDescription;
+        if(objectiveState.Status == QuestObjectiveStatus.Invalid) {
+            Debug.LogError($"[{nameof(ObjectiveUI)}]: Invalid objective state!");
+        }
         _incompleteImage.enabled = objectiveState.Status == QuestObjectiveStatus.Ongoing;
         _completedImage.enabled = objectiveState.Status == QuestObjectiveStatus.Completed;
         _failedImage.enabled = objectiveState.Status == QuestObjectiveStatus.Failed;
