@@ -9,6 +9,7 @@ public interface IEnemyManager : IAllianceManager {
 
     void SpawnEnemy(EnemySpawnData spawnData);
     void DespawnEnemy(EnemyUnit controller);
+    bool TryGetEnemyInfo(string id, out IEnemyInfo enemyInfo);
 }
 
 public class EnemySpawnData
@@ -118,6 +119,10 @@ public class EnemyManager : IEnemyManager
             TimerManager.Instance.RemoveTimer(timerId);
         }
         UnitsManager.Instance.DeregisterUnit(unit);
+    }
+
+    public bool TryGetEnemyInfo(string id, out IEnemyInfo enemyInfo) {
+        return _enemyUnitsById.TryGetValue(id, out enemyInfo);
     }
 
     // listen for unit events like being defeated or sending messages

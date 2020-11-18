@@ -54,6 +54,10 @@ public class QuestState {
         for (int i = 0; i < _questData.Objectives.Count; i++) {
             QuestObjectiveData objectiveData = _questData.Objectives[i];
             QuestObjectiveState objectiveState = objectiveData.CreateState();
+            if(objectiveState == null) {
+                Debug.LogError($"[{QuestName}]: Failed to create quest objective state for objective data {objectiveData.name}!");
+                return;
+            }
             objectiveState.OnCompleted += OnObjectiveCompleted;
             objectiveState.OnFailed += OnObjectiveFailed;
             objectiveState.OnProgressUpdated += OnObjectiveProgressUpdated;
@@ -88,7 +92,6 @@ public class QuestState {
         objectiveState.OnCompleted -= OnObjectiveCompleted;
         objectiveState.OnFailed -= OnObjectiveFailed;
         objectiveState.OnProgressUpdated -= OnObjectiveProgressUpdated;
-        _objectiveStates.Remove(objectiveState);
     }
 
     private void FireOnComplete() {

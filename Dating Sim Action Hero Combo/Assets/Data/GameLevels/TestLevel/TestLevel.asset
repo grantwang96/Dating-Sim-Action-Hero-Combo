@@ -15,6 +15,7 @@ MonoBehaviour:
   _mapData: {fileID: 11400000, guid: cd712f0ef69271749b9ace8cdecd38ea, type: 2}
   _missionQuestDatas:
   - {fileID: 11400000, guid: 93e4d1105910f0847b65b5c98241d09a, type: 2}
+  - {fileID: 11400000, guid: c657ca9e9c1979b4a94958ce80b747ea, type: 2}
   _dateQuestdatas: []
   _enemyDatas:
   - {fileID: 11400000, guid: bc1335ad02027ff4aa482d81f6c447b5, type: 2}

@@ -61,6 +61,10 @@ public abstract class AIState : MonoBehaviour {
             ParentState.OnReadyToTransitionState += SetReadyToTransition;
             ParentState.Enter(initData);
         }
+        OnEnter();
+    }
+
+    protected virtual void OnEnter() {
         _active = true;
         OnStateEnter?.Invoke();
     }
@@ -83,6 +87,9 @@ public abstract class AIState : MonoBehaviour {
             ParentState.Exit(nextState);
             ParentState.OnReadyToTransitionState -= SetReadyToTransition;
         }
+    }
+
+    protected virtual void OnExit() {
         _active = false;
         OnStateExit?.Invoke();
     }

@@ -26,6 +26,9 @@ public interface ILevelDataManager : IInitializableManager {
     void RegisterPatrolLoop(string id, PatrolLoop patrolLoop);
     void DeregisterPatrolLoop(string id);
     bool TryGetPatrolLoop(string id, out PatrolLoop patrolLoop);
+    void RegisterInteractable(string id, IInteractable interactable);
+    void UnregisterInteractable(string id);
+    bool TryGetInteractable(string id, out IInteractable interactable);
 }
 
 public enum PathStatus {
@@ -46,6 +49,7 @@ public class LevelDataManager : ILevelDataManager {
     private readonly Dictionary<string, TileData> _tileConfig = new Dictionary<string, TileData>();
     private readonly Dictionary<string, Transform> _npcSpawnPoints = new Dictionary<string, Transform>();
     private readonly Dictionary<string, PatrolLoop> _patrolLoops = new Dictionary<string, PatrolLoop>();
+    private readonly Dictionary<string, IInteractable> _interactables = new Dictionary<string, IInteractable>();
     private ITileInfo[][] _tiles;
 
     private static ILevelDataManager GetOrSetInstance() {
@@ -66,6 +70,7 @@ public class LevelDataManager : ILevelDataManager {
         _npcSpawnPoints.Clear();
         _patrolLoops.Clear();
         _tileConfig.Clear();
+        _interactables.Clear();
     }
 
     private void LoadTileConfig() {
@@ -204,5 +209,23 @@ public class LevelDataManager : ILevelDataManager {
 
     public bool TryGetPatrolLoop(string id, out PatrolLoop patrolLoop) {
         return _patrolLoops.TryGetValue(id, out patrolLoop);
+    }
+
+    public void RegisterInteractable(string id, IInteractable interactable) {
+        if (_interactables.ContainsKey(id)) {
+            return;
+        }
+        _interactables.Add(id, interactable);
+    }
+
+    public void UnregisterInteractable(string id) {
+        if (_interactables.ContainsKey(id)) {
+            return;
+        }
+        _interactables.Remove(id);
+    }
+
+    public bool TryGetInteractable(string id, out IInteractable interactable) {
+        return _interactables.TryGetValue(id, out interactable);
     }
 }
