@@ -4,14 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMoveController : MoveController {
-
-    public static PlayerMoveController Instance { get; private set; }
-
+    
     [SerializeField] private float _speed;
-
-    private void Awake() {
-        Instance = this;
-    }
     
     protected override void ProcessMovement() {
         Vector2 moveInput = InputController.Instance.GameplayActionMap[InputStrings.MoveKey].ReadValue<Vector2>();
@@ -30,6 +24,9 @@ public class PlayerMoveController : MoveController {
 
     protected override void ProcessRotation() {
         if (CameraController.Instance.MainCamera == null) {
+            return;
+        }
+        if (!InputController.Instance.GameplayActionMap.enabled) {
             return;
         }
         Vector2 dir = GetLookDirection();
