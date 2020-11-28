@@ -5,6 +5,7 @@ using UnityEngine;
 public class AIState_ScanForTarget : AIState
 {
     [SerializeField] private AIState _onTargetFound;
+    [SerializeField] private AIState _onTargetLost;
     [SerializeField] private FieldOfViewVisualizer _visualizedFieldOfView;
 
     private DetectableTags _expectedDetectableTags;
@@ -22,7 +23,6 @@ public class AIState_ScanForTarget : AIState
             OnFoundHostile();
             return;
         }
-        return;
     }
     
     protected override void OnExit() {
@@ -36,6 +36,10 @@ public class AIState_ScanForTarget : AIState
 
     private bool ScanForTarget() {
         Unit currentTarget = _unit.TargetManager.CurrentTarget;
+        if(currentTarget == null) {
+            SetReadyToTransition(_onTargetLost);
+            return false;
+        }
         bool foundTarget = true;
         foundTarget &= (currentTarget.DetectableTags & _expectedDetectableTags) != 0;
         foundTarget &= _unit.TargetManager.CanSeeTarget(currentTarget);

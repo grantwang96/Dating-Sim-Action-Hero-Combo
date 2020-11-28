@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestGun
   m_EditorClassIdentifier: 
   _weaponActivateTime: 3
-  _cooldownTime: 0.1
+  _cooldownTime: 0.3
   _isRanged: 1
   _clipSize: 12
   _ammoPerUse: 1

@@ -22,7 +22,6 @@ public abstract class NPCUnit : Unit
     
     public override void Initialize(PooledObjectInitializationData initializationData) {
         base.Initialize(initializationData);
-        _collider.radius = .5f; // replace with UnitData field
         _targetManager.Initialize();
     }
 

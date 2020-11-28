@@ -21,7 +21,7 @@ public class AIState_EngageHostile : AIState
             return;
         }
         if (_attackState.CanAttack()) {
-            // set ranged attack state
+            // set attack state
             SetReadyToTransition(_attackState);
         } else {
             SetReadyToTransition(_onTargetOutOfRangeState);

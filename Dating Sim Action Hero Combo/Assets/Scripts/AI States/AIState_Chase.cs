@@ -54,18 +54,24 @@ public class AIState_Chase : AIState
         base.Execute();
         _currentChaseDuration += Time.deltaTime;
         if(_currentChaseDuration >= _maxChaseDuration) {
-            _unit.Navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
-            SetReadyToTransition(_onLostTarget);
+            OnLostTarget();
         }
     }
 
     public override void Exit(AIState nextState) {
         base.Exit(nextState);
+        _unit.Navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
         _unit.Navigator.ClearDestination();
     }
 
     private void OnArrivedFinalDestination() {
         _unit.Navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
         SetPathToTarget();
+    }
+
+    private void OnLostTarget() {
+        _unit.TargetManager.ClearCurrentTarget();
+        _unit.Navigator.OnArrivedFinalDestination -= OnArrivedFinalDestination;
+        SetReadyToTransition(_onLostTarget);
     }
 }

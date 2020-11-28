@@ -86,7 +86,7 @@ public class NPCTargetManager : MonoBehaviour {
         if(!IsWithinVisionRange(_visionRange, _unit.MoveController.Body.position, target.MoveController.Body.position)) {
             return false;
         }
-        return ScanCast(target, target.MoveController.Body, _visionRange, _visionLayers);
+        return ScanCast(target, _unit.MoveController.Body, _visionRange, _visionLayers);
     }
 
     // attempt to set the current unit target
@@ -94,6 +94,12 @@ public class NPCTargetManager : MonoBehaviour {
         if (CanSeeTarget(target)) {
             OverrideCurrentTarget(target);
         }
+    }
+
+    public void ClearCurrentTarget() {
+        CurrentTarget = null;
+        CurrentDetectable = null;
+        OnCurrentTargetSet?.Invoke(null);
     }
 
     // overrides the current target without scanning
