@@ -13,14 +13,14 @@ public class AIState_SingleAnimation : AIState {
         _unit.AnimationController.UpdateState(_animationData);
         _unit.AnimationController.OnAnimationStatusUpdated += OnAnimationStatusUpdated;
     }
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         StartAnimation();
     }
-
-    public override void Exit(AIState nextState) {
-        base.Exit(nextState);
+    
+    protected override void OnExit() {
+        base.OnExit();
         _unit.AnimationController.OnAnimationStatusUpdated -= OnAnimationStatusUpdated;
     }
 

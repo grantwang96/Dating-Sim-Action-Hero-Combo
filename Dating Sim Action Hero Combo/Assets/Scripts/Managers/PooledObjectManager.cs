@@ -43,7 +43,6 @@ public class PooledObjectManager : MonoBehaviour, IPooledObjectManager
     public bool RegisterPooledObject(string poolId, int count, Action<bool> OnRegisterComplete = null) {
         PooledObjectEntry entry;
         if (_objectPool.TryGetValue(poolId, out entry)) {
-            CloneToPool(poolId, entry.BaseResource, count);
             return true;
         }
         GameObject storedPrefab = AssetManager.Instance.GetAsset(poolId);

@@ -6,14 +6,14 @@ public class AIState_ListenForCombatNoise : AIState
 {
     [SerializeField] private AIState _onCombatNoiseHeard;
     [SerializeField] private UnitSoundListener _unitSoundListener;
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         _unitSoundListener.OnCombatNoiseHeard += OnCombatNoiseHeard;
     }
-
-    public override void Exit(AIState nextState) {
-        base.Exit(nextState);
+    
+    protected override void OnExit() {
+        base.OnExit();
         _unitSoundListener.OnCombatNoiseHeard -= OnCombatNoiseHeard;
     }
 

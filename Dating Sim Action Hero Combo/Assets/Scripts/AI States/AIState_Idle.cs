@@ -11,11 +11,11 @@ public class AIState_Idle : AIState {
     private float _currentTime;
 
     [SerializeField] private AIState _onIdleComplete;
-
-    public override void Enter(AIStateInitializationData initData = null) {
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         _duration = Random.Range(_minimumIdleTime, _maximumIdleTime);
         _currentTime = 0f;
-        base.Enter(initData);
     }
 
     public override void Execute() {

@@ -87,6 +87,7 @@ public abstract class AIState : MonoBehaviour {
             ParentState.Exit(nextState);
             ParentState.OnReadyToTransitionState -= SetReadyToTransition;
         }
+        OnExit();
     }
 
     protected virtual void OnExit() {

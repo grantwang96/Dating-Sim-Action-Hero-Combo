@@ -11,9 +11,9 @@ public class AIState_Chase : AIState
     [SerializeField] private float _maxChaseDuration;
 
     private float _currentChaseDuration;
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         _currentChaseDuration = 0f;
         SetPathToTarget();
     }

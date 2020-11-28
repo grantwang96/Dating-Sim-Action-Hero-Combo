@@ -10,14 +10,14 @@ public class AIState_Wander : AIState
     [SerializeField] private int _wanderRangeMax;
 
     [SerializeField] private AIState _onArrivedDestination;
-
-    public override void Enter(AIStateInitializationData initData = null) {
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         // Get path to next destination here
         if (_moveController == null) {
             return;
         }
         GetNextWanderPosition();
-        base.Enter(initData);
     }
 
     private void GetNextWanderPosition() {
@@ -37,10 +37,10 @@ public class AIState_Wander : AIState
         float speed = _fullSpeed ? _unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
         _moveController.SetSpeed(speed);
     }
-
-    public override void Exit(AIState nextState) {
+    
+    protected override void OnExit() {
         _unit.Navigator.ClearDestination();
-        base.Exit(nextState);
+        base.OnExit();
     }
 
     private void OnArrivedFinalDestination() {

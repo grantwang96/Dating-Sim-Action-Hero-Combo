@@ -10,9 +10,9 @@ public class AIState_Scan : AIState {
     [SerializeField] private FieldOfViewVisualizer _visualizedFieldOfView;
 
     private List<Unit> _detectedUnits = new List<Unit>();
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         _visualizedFieldOfView.SetActive(true);
         _unit.TargetManager.OnCurrentTargetSet += OnCurrentTargetSet;
     }
@@ -22,9 +22,9 @@ public class AIState_Scan : AIState {
         // ScanAll();
         GeneralScan();
     }
-
-    public override void Exit(AIState nextState) {
-        base.Exit(nextState);
+    
+    protected override void OnExit() {
+        base.OnExit();
         _visualizedFieldOfView.SetActive(false);
         _unit.TargetManager.OnCurrentTargetSet -= OnCurrentTargetSet;
     }

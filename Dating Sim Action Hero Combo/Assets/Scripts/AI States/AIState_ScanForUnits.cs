@@ -6,9 +6,9 @@ public class AIState_ScanForUnits : AIState
 {
     [SerializeField] private AIState _onUnitFound;
     [SerializeField] private GameObject _visualzedFieldOfView;
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         _visualzedFieldOfView.SetActive(true);
     }
 
@@ -21,9 +21,9 @@ public class AIState_ScanForUnits : AIState
         }
         return;
     }
-
-    public override void Exit(AIState nextState) {
-        base.Exit(nextState);
+    
+    protected override void OnExit() {
+        base.OnExit();
         _visualzedFieldOfView.SetActive(false);
     }
 

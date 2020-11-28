@@ -8,9 +8,9 @@ public class AIState_ScanForTarget : AIState
     [SerializeField] private FieldOfViewVisualizer _visualizedFieldOfView;
 
     private DetectableTags _expectedDetectableTags;
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         _expectedDetectableTags = _unit.TargetManager.CurrentTarget.DetectableTags;
         _visualizedFieldOfView.SetActive(true);
     }
@@ -24,9 +24,9 @@ public class AIState_ScanForTarget : AIState
         }
         return;
     }
-
-    public override void Exit(AIState nextState) {
-        base.Exit(nextState);
+    
+    protected override void OnExit() {
+        base.OnExit();
         _visualizedFieldOfView.SetActive(false);
     }
 

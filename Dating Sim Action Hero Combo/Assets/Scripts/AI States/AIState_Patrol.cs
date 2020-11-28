@@ -58,6 +58,7 @@ public class AIState_Patrol : AIState
     protected override void OnExit() {
         base.OnExit();
         _unit.Navigator.OnArrivedFinalDestination -= OnArrivedDestination;
+        _unit.Navigator.ClearDestination();
     }
 
     private int GetNearestPatrolPointIndex() {

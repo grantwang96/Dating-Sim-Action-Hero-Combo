@@ -29,7 +29,7 @@ public class NPCTargetManager : MonoBehaviour {
     private Collider2D[] _foundColliders = new Collider2D[MaxFoundTargets];
 
     private readonly Dictionary<IDetectable, DetectedTarget> _detectedTargets = new Dictionary<IDetectable, DetectedTarget>();
-    
+
     public void Initialize() {
         _visionAngle = _unit.UnitData.VisionAngle;
         _visionRange = _unit.UnitData.VisionRange;
@@ -42,7 +42,7 @@ public class NPCTargetManager : MonoBehaviour {
         for (int i = 0; i < foundCollidersCount; i++) {
             Collider2D collider = _foundColliders[i];
             Unit unit = collider.GetComponent<Unit>();
-            if(unit != null && unit != _unit) {
+            if (unit != null && unit != _unit) {
                 if (UnitUtils.ContainsTag(unit.UnitTags, unitTags) &&
                     Scan(unit, _unit.MoveController.Body.transform, _visionRange, _visionLayers, _visionAngle)) {
                     foundUnits.Add(unit);
@@ -54,11 +54,11 @@ public class NPCTargetManager : MonoBehaviour {
     public void GeneralScan(DetectableTags detectableTags = 0) {
         // get all colliders within the vision radius
         int foundCollidersCount = Physics2D.OverlapCircleNonAlloc(_unit.MoveController.Body.position, _visionRange, _foundColliders, _targetLayers);
-        for(int i = 0; i < foundCollidersCount; i++) {
+        for (int i = 0; i < foundCollidersCount; i++) {
             Collider2D collider = _foundColliders[i];
             IDetectable detectable = collider.GetComponent<IDetectable>();
             // ensure that this collider is a detectable
-            if(detectable == null) {
+            if (detectable == null) {
                 continue;
             }
             // ensure that this detectable matches at least one of the tags and can be seen
@@ -83,7 +83,10 @@ public class NPCTargetManager : MonoBehaviour {
 
     // this function searches for a specific target
     public bool CanSeeTarget(Unit target) {
-        return Scan(target, _unit.MoveController.Body.transform, _visionRange, _visionLayers, _visionAngle);
+        if(!IsWithinVisionRange(_visionRange, _unit.MoveController.Body.position, target.MoveController.Body.position)) {
+            return false;
+        }
+        return ScanCast(target, target.MoveController.Body, _visionRange, _visionLayers);
     }
 
     // attempt to set the current unit target
@@ -96,7 +99,7 @@ public class NPCTargetManager : MonoBehaviour {
     // overrides the current target without scanning
     public void OverrideCurrentTarget(Unit newTarget) {
         CurrentTarget = newTarget;
-        if(!_detectedTargets.TryGetValue(newTarget, out DetectedTarget entry)) {
+        if (!_detectedTargets.TryGetValue(newTarget, out DetectedTarget entry)) {
             _detectedTargets.Add(newTarget, new DetectedTarget() {
                 Target = newTarget,
                 DetectedThisFrame = true,
@@ -111,13 +114,13 @@ public class NPCTargetManager : MonoBehaviour {
 
     private void ProcessDetectedTargets() {
         // if there is a current focused target
-        if(CurrentDetectable != null) {
+        if (CurrentDetectable != null) {
             ProcessCurrentDetectable();
             return;
         }
         // check all detected targets
         var itemsToRemove = new List<DetectedTarget>();
-        foreach(KeyValuePair<IDetectable, DetectedTarget> keyPair in _detectedTargets) {
+        foreach (KeyValuePair<IDetectable, DetectedTarget> keyPair in _detectedTargets) {
             DetectedTarget entry = keyPair.Value;
             entry.DetectionValue += entry.DetectedThisFrame ? Time.deltaTime : -Time.deltaTime;
             // if this target has reached the detection threshold
@@ -130,7 +133,7 @@ public class NPCTargetManager : MonoBehaviour {
                 HighestDetectedTarget = entry;
             }
             // if this has reached 0 detection
-            if(entry.DetectionValue <= 0f && !entry.DetectedThisFrame) {
+            if (entry.DetectionValue <= 0f && !entry.DetectedThisFrame) {
                 itemsToRemove.Add(entry);
             }
             // reset the entry
@@ -142,13 +145,11 @@ public class NPCTargetManager : MonoBehaviour {
         }
     }
 
-
-
     // checks whether a given target is seen and updates their detection values accordingly
     private void ProcessDetectedTargetEntry(DetectedTarget entry) {
         entry.DetectedThisFrame = Scan(entry.Target, _unit.MoveController.Body.transform, _visionRange, _visionLayers, _visionAngle);
         entry.DetectionValue += entry.DetectedThisFrame ? Time.deltaTime : -Time.deltaTime;
-        if(entry.DetectionValue > MaxDetection) {
+        if (entry.DetectionValue > MaxDetection) {
             entry.DetectionValue = MaxDetection;
         }
     }
@@ -156,7 +157,7 @@ public class NPCTargetManager : MonoBehaviour {
     // processes whether the current detectable can be seen
     private void ProcessCurrentDetectable() {
         ProcessDetectedTargetEntry(CurrentDetectable);
-        if(CurrentDetectable.DetectionValue < DetectionThreshold) {
+        if (CurrentDetectable.DetectionValue < DetectionThreshold) {
             CurrentDetectable = null;
         }
     }
@@ -179,13 +180,13 @@ public class NPCTargetManager : MonoBehaviour {
         Vector2 otherPosition = target.transform.position;
         // ensure the target distance is within range
         float distance = Vector2.Distance(unitPosition, otherPosition);
-        if (distance > visionRange) {
+        if(!IsWithinVisionRange(visionRange, unitPosition, otherPosition)) {
             return found;
         }
         // ensure the target's direction is within the view cone
         Vector2 direction = otherPosition - unitPosition;
         float angle = Vector2.Angle(unitTransform.transform.up, direction);
-        if (angle > visionAngle) {
+        if (!IsWithinVisionAngle(visionAngle, unitTransform, otherPosition)) {
             return found;
         }
         // target within range, make a raycast
@@ -236,6 +237,19 @@ public class NPCTargetManager : MonoBehaviour {
             }
         }
         return found;
+    }
+
+    private static bool IsWithinVisionRange(float visionRange, Vector3 originPosition, Vector3 targetPosition) {
+        float distance = Vector2.Distance(originPosition, targetPosition);
+        return distance <= visionRange;
+    }
+
+    private static bool IsWithinVisionAngle(float visionAngle, Transform unitTransform, Vector2 targetPosition) {
+        Vector2 unitPosition = unitTransform.position;
+        // ensure the target's direction is within the view cone
+        Vector2 direction = targetPosition - unitPosition;
+        float angle = Vector2.Angle(unitTransform.up, direction);
+        return angle <= visionAngle;
     }
 }
 

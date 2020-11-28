@@ -8,9 +8,9 @@ public class AIState_GoToPointOfInterest : AIState {
     [SerializeField] private NPCMoveController _moveController;
 
     [SerializeField] private AIState _onArrivedDestination;
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         float speed = _fullSpeed ? _stateMachine.Unit.UnitData.RunSpeed : _unit.UnitData.WalkSpeed;
         // Get path to next destination here
         if (_moveController == null) {

@@ -5,14 +5,14 @@ using UnityEngine;
 public class AIState_ListenForDamage : AIState
 {
     [SerializeField] private AIState _onTakeDamage;
-
-    public override void Enter(AIStateInitializationData initData = null) {
-        base.Enter(initData);
+    
+    protected override void OnEnter() {
+        base.OnEnter();
         _unit.Damageable.OnTakeDamage += OnTakeDamage;
     }
-
-    public override void Exit(AIState nextState) {
-        base.Exit(nextState);
+    
+    protected override void OnExit() {
+        base.OnExit();
         _unit.Damageable.OnTakeDamage -= OnTakeDamage;
     }
 

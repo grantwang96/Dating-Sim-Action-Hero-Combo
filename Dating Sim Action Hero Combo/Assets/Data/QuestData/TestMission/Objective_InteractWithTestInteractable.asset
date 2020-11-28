@@ -13,4 +13,11 @@ MonoBehaviour:
   m_Name: Objective_InteractWithTestInteractable
   m_EditorClassIdentifier: 
   _objectiveDescription: Interact with the test interactable
-  _interactableId: TestInteractable
+  _interactableEntries:
+  - _interactableId: TestInteractable
+    _interactablePrefabId: 
+    _requiresSpawn: 0
+    _location:
+      x: 0
+      y: 0
+      z: 0
