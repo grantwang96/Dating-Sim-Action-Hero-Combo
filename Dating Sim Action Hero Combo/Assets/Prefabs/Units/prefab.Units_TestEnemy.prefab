@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3666831949471313400}
-  - {fileID: 3950621380483180121}
+  - {fileID: 2666112260550122482}
   - {fileID: 4696862002974306655}
   - {fileID: 8575889027775982388}
   - {fileID: 8050986372204387063}
@@ -907,8 +907,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 5442251013545389786}
-  m_RootOrder: 1
+  m_Father: {fileID: 2666112260550122482}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &534584363850015340
 MonoBehaviour:
@@ -1274,6 +1274,55 @@ MonoBehaviour:
   _active: 0
   _stateMachine: {fileID: 2179785060402409991}
   _onTakeDamage: {fileID: 534584363850015340}
+--- !u!1 &6609608312379898184
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2666112260550122482}
+  - component: {fileID: 5250654037456342641}
+  m_Layer: 11
+  m_Name: LookAtTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2666112260550122482
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6609608312379898184}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3950621380483180121}
+  m_Father: {fileID: 5442251013545389786}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5250654037456342641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6609608312379898184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6958a581476b8114eb320c80895445c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 0
+  _stateMachine: {fileID: 2179785060402409991}
+  _npcTargetManager: {fileID: 3159067064120213722}
+  _navigator: {fileID: 8757977236862389393}
+  _onCantFindTarget: {fileID: 7999581802499180089}
 --- !u!1 &6674954365606669305
 GameObject:
   m_ObjectHideFlags: 0
@@ -1567,6 +1616,7 @@ MonoBehaviour:
   _active: 0
   _stateMachine: {fileID: 2179785060402409991}
   _onTargetFound: {fileID: 1237924413255895954}
+  _onTargetLost: {fileID: 0}
   _visualizedFieldOfView: {fileID: 8835688374701010292}
 --- !u!1 &8852906078544309697
 GameObject:
